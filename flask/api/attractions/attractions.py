@@ -43,10 +43,14 @@ def get_all_attractions():
         }
         keyword = request.values.get("keyword")
         if keyword != None:
-            query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.category.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
-            print(query_list)
+            # 判斷一下有沒有資料
+            query_check = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).all()
+            if query_check == []:
+                return jsonify(error="true",message="沒有此關鍵字能找到的資訊")
+            query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
             # 如果有資料
             for data in query_list:
+                print(data)
                 image_urls = []
                 for image in data.images:
                     image_urls.append(image.image_url)
