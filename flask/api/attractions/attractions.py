@@ -46,7 +46,7 @@ def get_all_attractions():
             # 判斷一下有沒有資料
             query_check = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).all()
             if query_check == []:
-                return jsonify(error="true",message="沒有此關鍵字能找到的資訊")
+                return jsonify(error="true",message="沒有此關鍵字能找到的資訊"),400
             query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
             # 如果有資料
             for data in query_list:
@@ -77,8 +77,8 @@ def get_all_attractions():
                 "data" : [],
             }
             page_data["data"].append("null")
-            return jsonify(page_data)
-        return jsonify(error="true",message=f"{ex}")
+            return jsonify(page_data),400
+        return jsonify(error="true",message=f"{ex}"),500
 
 # 根據景點編號取得景點資料
 @attractions.route("api/attraction/<attractionId>",methods=["GET"])
@@ -87,7 +87,7 @@ def get_attraction(attractionId):
         query = Attraction.query.filter(Attraction.id==attractionId).first()
         # 錯誤可能
         if query == None:
-            return jsonify(error="true",message="沒有此景點編號")
+            return jsonify(error="true",message="沒有此景點編號"),400
         image_urls = []
         for image in query.images:
             image_urls.append(image.image_url)
@@ -107,7 +107,7 @@ def get_attraction(attractionId):
         }
         return jsonify(attraction)
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}")
+        return jsonify(error="true",message=f"{ex}"),500
         
 
 # 取得景點分類名稱列表
@@ -124,4 +124,4 @@ def get_attraction_categories():
         }
         return jsonify(category_data)
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}")
+        return jsonify(error="true",message=f"{ex}"),500
