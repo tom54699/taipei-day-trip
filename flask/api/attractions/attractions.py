@@ -10,18 +10,15 @@ attractions = Blueprint("attractions",
 @attractions.route("api/attractions",methods=["GET"])
 def get_all_attractions():
     try:
-        # 取得頁數
+        # 取得頁數 使用paginate()
         page = request.values.get("page")
-        page = int(page)
-        range_start = 1 + page*12
-        range_end = 12 + page*12
-        # and
-        query_list = Attraction.query.filter(range_start<=Attraction.id,Attraction.id<=range_end).all()
+        page = int(page)+1
+        pages = Attraction.query.paginate(page=page,per_page=12)
         page_data = {
-            "nextPage": page+1,
+            "nextPage": page,
             "data" : [],
         }
-        for data in query_list:
+        for data in pages:
             image_urls = []
             for image in data.images:
                 image_urls.append(image.image_url)
@@ -41,22 +38,45 @@ def get_all_attractions():
 
         # 如果有keyword搜尋
         selected_page_data = {
-            "nextPage": page+1,
+            "nextPage": page,
             "data" : [],
         }
         keyword = request.values.get("keyword")
         if keyword != None:
-            for data in page_data["data"]:
-                if data["category"] == keyword:
-                    selected_page_data["data"].append(data)
+            query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.category.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
+            print(query_list)
+            # 如果有資料
+            for data in query_list:
+                image_urls = []
+                for image in data.images:
+                    image_urls.append(image.image_url)
+                attraction = {
+                    "id" : data.id,
+                    "name" : data.name,
+                    "category" : data.category,
+                    "description" : data.description,
+                    "address" : data.address,
+                    "transport" : data.transport,
+                    "mrt" : data.mrt,
+                    "lat" : data.lat,
+                    "lng" : data.lng,
+                    "images" : image_urls
+                }
+                selected_page_data["data"].append(attraction)
             return jsonify(selected_page_data)
-            #query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.category.like("%"+f"{keyword}"+"%"))).all()
-
         return jsonify(page_data)
     except Exception as ex:
+        # 如果沒資料
+        if str(ex) =="404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.":
+            page_data = {
+                "nextPage": page,
+                "data" : [],
+            }
+            page_data["data"].append("null")
+            return jsonify(page_data)
         return jsonify(error="true",message=f"{ex}")
 
-# 根據景點標號取得景點資料
+# 根據景點編號取得景點資料
 @attractions.route("api/attraction/<attractionId>",methods=["GET"])
 def get_attraction(attractionId):
     try:
@@ -68,16 +88,18 @@ def get_attraction(attractionId):
         for image in query.images:
             image_urls.append(image.image_url)
         attraction = {
-            "id" :query.id,
-            "name" : query.name,
-            "category" : query.category,
-            "description" : query.description,
-            "address" : query.address,
-            "transport" :query.transport,
-            "mrt" : query.mrt,
-            "lat" : query.lat,
-            "lng" : query.lng,
-            "images" : image_urls
+            "data": {
+                "id" :query.id,
+                "name" : query.name,
+                "category" : query.category,
+                "description" : query.description,
+                "address" : query.address,
+                "transport" :query.transport,
+                "mrt" : query.mrt,
+                "lat" : query.lat,
+                "lng" : query.lng,
+                "images" : image_urls
+            }
         }
         return jsonify(attraction)
     except Exception as ex:
