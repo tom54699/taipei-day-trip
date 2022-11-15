@@ -1,4 +1,4 @@
-"""
+
 from flask import *
 app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
@@ -19,4 +19,3 @@ def thankyou():
 	return render_template("thankyou.html")
 
 app.run(port=3000)
-"""
