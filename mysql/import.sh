@@ -1,0 +1,1 @@
+mysql -uroot -p"$MYSQL_ROOT_PASSWORD" taipei_attractions --default-character-set=utf8 < /var/lib/taipei_attractions.sql
