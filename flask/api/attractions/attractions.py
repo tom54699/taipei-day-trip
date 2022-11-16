@@ -1,6 +1,7 @@
 from flask import Flask,Blueprint,jsonify,request
 from api.models.attractions_model import Attraction,Image
 from sqlalchemy import or_,and_
+
 attractions = Blueprint("attractions",
     __name__,
     static_folder='static',
@@ -43,14 +44,12 @@ def get_all_attractions():
         }
         keyword = request.values.get("keyword")
         if keyword != None:
-            # 判斷一下有沒有資料
-            query_check = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).all()
-            if query_check == []:
-                return jsonify(error="true",message="沒有此關鍵字能找到的資訊"),400
             query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
+            # 判斷一下有沒有資料
+            if query_list.items == []:
+                return jsonify(error="true",message="沒有此關鍵字能找到的資訊"),400
             # 如果有資料
             for data in query_list:
-                print(data)
                 image_urls = []
                 for image in data.images:
                     image_urls.append(image.image_url)

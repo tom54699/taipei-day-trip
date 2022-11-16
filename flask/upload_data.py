@@ -40,15 +40,14 @@ with app.app_context():
                 transport=transport,
                 mrt=mrt,
                 lat=lat,
-                
                 lng=lng,
                 images=image_urls
             )
+            # print(attraction_data.images[0].image_url)
             attractions.append(attraction_data)
-        #print(attractions[0].images)
+        print(attractions[0].images)
             
 
         db.session.add_all(attractions)
         db.session.add_all(image_urls)
-        
         db.session.commit()
