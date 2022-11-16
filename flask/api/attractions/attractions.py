@@ -14,11 +14,18 @@ def get_all_attractions():
         # 取得頁數 使用paginate()
         page = request.values.get("page")
         page = int(page)+1
-        pages = Attraction.query.paginate(page=page,per_page=12)
+        pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
         page_data = {
             "nextPage": page,
             "data" : [],
         }
+        # 頁數判斷
+        if page >= pages.pages:
+            page_data["nextPage"] = "null"
+        # 判斷有無資料
+        if pages.items == []:
+            page_data["data"].append("null")
+            return jsonify(page_data),400
         for data in pages:
             image_urls = []
             for image in data.images:
@@ -45,6 +52,9 @@ def get_all_attractions():
         keyword = request.values.get("keyword")
         if keyword != None:
             query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
+            # 頁數判斷
+            if page >= query_list.pages:
+                selected_page_data["nextPage"] = "null"
             # 判斷一下有沒有資料
             if query_list.items == []:
                 return jsonify(error="true",message="沒有此關鍵字能找到的資訊"),400
@@ -76,6 +86,7 @@ def get_all_attractions():
                 "data" : [],
             }
             page_data["data"].append("null")
+            page_data["nextPage"] = "null"
             return jsonify(page_data),400
         return jsonify(error="true",message=f"{ex}"),500
 
