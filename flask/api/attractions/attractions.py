@@ -21,7 +21,7 @@ def get_all_attractions():
         }
         # 頁數判斷
         if page >= pages.pages:
-            page_data["nextPage"] = "null"
+            page_data["nextPage"] = None
         # 判斷有無資料
         if pages.items == []:
             page_data["data"].append("null")
@@ -86,7 +86,7 @@ def get_all_attractions():
                 "data" : [],
             }
             page_data["data"].append("null")
-            page_data["nextPage"] = "null"
+            page_data["nextPage"] = None
             return jsonify(page_data),400
         return jsonify(error="true",message=f"{ex}"),500
 
