@@ -54,7 +54,7 @@ def get_all_attractions():
             query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
             # 頁數判斷
             if page >= query_list.pages:
-                selected_page_data["nextPage"] = "null"
+                selected_page_data["nextPage"] = None
             # 判斷一下有沒有資料
             if query_list.items == []:
                 return jsonify(error="true",message="沒有此關鍵字能找到的資訊"),400
