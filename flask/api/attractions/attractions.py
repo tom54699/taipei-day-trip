@@ -11,58 +11,49 @@ attractions = Blueprint("attractions",
 @attractions.route("api/attractions",methods=["GET"])
 def get_all_attractions():
     try:
-        # 取得頁數 使用paginate()
         page = request.values.get("page")
+        keyword = request.values.get("keyword")
         page_data = {
             "nextPage": page,
             "data" : [],
         }
-        # 如果沒有輸入page參數
-        if page == None:
+        # 如果沒有輸入page參數 或 如果page小於0 或 如果page不是數字
+        if page == None or page.isdigit() != True or int(page)<0:
             page_data["nextPage"] = None
+            page_data["data"].append("參數錯誤，無法搜尋資料")
             return jsonify(page_data),400
         page = int(page)+1
-        pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
-        # 頁數判斷
-        if page >= pages.pages:
-            page_data["nextPage"] = None
-        # 判斷有無資料
-        if pages.items == []:
-            #page_data["data"].append("null")
-            return jsonify(page_data),400
-        for data in pages:
-            image_urls = []
-            for image in data.images:
-                image_urls.append(image.image_url)
-            attraction = {
-                "id" : data.id,
-                "name" : data.name,
-                "category" : data.category,
-                "description" : data.description,
-                "address" : data.address,
-                "transport" : data.transport,
-                "mrt" : data.mrt,
-                "lat" : data.lat,
-                "lng" : data.lng,
-                "images" : image_urls
-            }
-            page_data["data"].append(attraction)
-
-        # 如果有keyword搜尋
-        selected_page_data = {
-            "nextPage": page,
-            "data" : [],
-        }
-        keyword = request.values.get("keyword")
-        if keyword != None:
-            query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12)
+        # 有無keyword
+        if keyword == None:
+            pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
+            # 頁數判斷，如果下一頁沒有資料就顯示null
+            if page >= pages.pages:
+                page_data["nextPage"] = None
+            # 如果沒資料，不用再寫判斷式，data會自動留空
+            for data in pages:
+                image_urls = []
+                for image in data.images:
+                    image_urls.append(image.image_url)
+                attraction = {
+                    "id" : data.id,
+                    "name" : data.name,
+                    "category" : data.category,
+                    "description" : data.description,
+                    "address" : data.address,
+                    "transport" : data.transport,
+                    "mrt" : data.mrt,
+                    "lat" : data.lat,
+                    "lng" : data.lng,
+                    "images" : image_urls
+                }
+                page_data["data"].append(attraction)
+            return jsonify(page_data)
+        else:
+            query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12,error_out=False)
             # 頁數判斷
             if page >= query_list.pages:
-                selected_page_data["nextPage"] = None
-            # 判斷一下有沒有資料
-            if query_list.items == []:
-                return jsonify(error="true",message="沒有此關鍵字能找到的資訊"),400
-            # 如果有資料
+                page_data["nextPage"] = None
+            # 如果沒資料，不用再寫判斷式，data會自動留空
             for data in query_list:
                 image_urls = []
                 for image in data.images:
@@ -79,19 +70,9 @@ def get_all_attractions():
                     "lng" : data.lng,
                     "images" : image_urls
                 }
-                selected_page_data["data"].append(attraction)
-            return jsonify(selected_page_data)
-        return jsonify(page_data)
+                page_data["data"].append(attraction)
+            return jsonify(page_data)
     except Exception as ex:
-        # 如果沒資料
-        if str(ex) =="404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.":
-            page_data = {
-                "nextPage": page,
-                "data" : [],
-            }
-            #page_data["data"].append("null")
-            page_data["nextPage"] = None
-            return jsonify(page_data),400
         return jsonify(error="true",message=f"{ex}"),500
 
 # 根據景點編號取得景點資料
