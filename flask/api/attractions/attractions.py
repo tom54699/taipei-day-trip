@@ -13,12 +13,16 @@ def get_all_attractions():
     try:
         # 取得頁數 使用paginate()
         page = request.values.get("page")
-        page = int(page)+1
-        pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
         page_data = {
             "nextPage": page,
             "data" : [],
         }
+        # 如果沒有輸入page參數
+        if page == None:
+            page_data["nextPage"] = None
+            return jsonify(page_data),400
+        page = int(page)+1
+        pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
         # 頁數判斷
         if page >= pages.pages:
             page_data["nextPage"] = None
