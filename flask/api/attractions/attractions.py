@@ -24,7 +24,7 @@ def get_all_attractions():
             page_data["nextPage"] = None
         # 判斷有無資料
         if pages.items == []:
-            page_data["data"].append("null")
+            #page_data["data"].append("null")
             return jsonify(page_data),400
         for data in pages:
             image_urls = []
@@ -85,7 +85,7 @@ def get_all_attractions():
                 "nextPage": page,
                 "data" : [],
             }
-            page_data["data"].append("null")
+            #page_data["data"].append("null")
             page_data["nextPage"] = None
             return jsonify(page_data),400
         return jsonify(error="true",message=f"{ex}"),500
