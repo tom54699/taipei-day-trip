@@ -1,9 +1,9 @@
 from api import create_app,db
-import time
-time.sleep(15)
+
 
 
 app = create_app()
+
 
 @app.cli.command("createdb")
 def createdb():
@@ -12,7 +12,7 @@ def createdb():
     db.create_all()
 
 if __name__ == '__main__':
-  app.run(port=3000,debug=True,host="0.0.0.0")
+  app.run(port=3000,host="0.0.0.0")
 
 
 

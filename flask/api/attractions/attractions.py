@@ -2,6 +2,7 @@ from flask import Flask,Blueprint,jsonify,request
 from api.models.attractions_model import Attraction,Image
 from sqlalchemy import or_,and_
 
+
 attractions = Blueprint("attractions",
     __name__,
     static_folder='static',
@@ -26,52 +27,30 @@ def get_all_attractions():
         # 有無keyword
         if keyword == None:
             pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
-            # 頁數判斷，如果下一頁沒有資料就顯示null
-            if page >= pages.pages:
-                page_data["nextPage"] = None
-            # 如果沒資料，不用再寫判斷式，data會自動留空
-            for data in pages:
-                image_urls = []
-                for image in data.images:
-                    image_urls.append(image.image_url)
-                attraction = {
-                    "id" : data.id,
-                    "name" : data.name,
-                    "category" : data.category,
-                    "description" : data.description,
-                    "address" : data.address,
-                    "transport" : data.transport,
-                    "mrt" : data.mrt,
-                    "lat" : data.lat,
-                    "lng" : data.lng,
-                    "images" : image_urls
-                }
-                page_data["data"].append(attraction)
-            return jsonify(page_data)
         else:
-            query_list = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12,error_out=False)
-            # 頁數判斷
-            if page >= query_list.pages:
-                page_data["nextPage"] = None
-            # 如果沒資料，不用再寫判斷式，data會自動留空
-            for data in query_list:
-                image_urls = []
-                for image in data.images:
-                    image_urls.append(image.image_url)
-                attraction = {
-                    "id" : data.id,
-                    "name" : data.name,
-                    "category" : data.category,
-                    "description" : data.description,
-                    "address" : data.address,
-                    "transport" : data.transport,
-                    "mrt" : data.mrt,
-                    "lat" : data.lat,
-                    "lng" : data.lng,
-                    "images" : image_urls
-                }
-                page_data["data"].append(attraction)
-            return jsonify(page_data)
+            pages = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12,error_out=False)
+        # 頁數判斷，如果下一頁沒有資料就顯示null
+        if page >= pages.pages:
+            page_data["nextPage"] = None
+        # 如果沒資料，不用再寫判斷式，data會自動留空
+        for data in pages:
+            image_urls = []
+            for image in data.images:
+                image_urls.append(image.image_url)
+            attraction = {
+                "id" : data.id,
+                "name" : data.name,
+                "category" : data.category,
+                "description" : data.description,
+                "address" : data.address,
+                "transport" : data.transport,
+                "mrt" : data.mrt,
+                "lat" : data.lat,
+                "lng" : data.lng,
+                "images" : image_urls
+            }
+            page_data["data"].append(attraction)
+        return jsonify(page_data),200
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
 
@@ -100,7 +79,7 @@ def get_attraction(attractionId):
                 "images" : image_urls
             }
         }
-        return jsonify(attraction)
+        return jsonify(attraction),200
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
         
@@ -117,6 +96,6 @@ def get_attraction_categories():
         category_data = {
             "data" : categories
         }
-        return jsonify(category_data)
+        return jsonify(category_data),200
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
