@@ -49,3 +49,11 @@ export function generateStructure(data_length){
     }
 }
 
+export function noPageGenerate(){
+    let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
+    let noDataBox = document.createElement("img")
+    //noDataBox.textContent = "查詢無相關資料"
+    noDataBox.setAttribute("class","noData")
+    noDataBox.setAttribute("src","/static/pic/404.png")
+    attractionMainBoxNode[0].appendChild(noDataBox)
+}

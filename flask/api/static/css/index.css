@@ -123,7 +123,8 @@ nav>div>div>div:nth-child(2){
     background: url(/static/pic/welcome.png);
     background-repeat: no-repeat;
     background-size: cover;
-    filter:saturate(1.3)
+    filter:saturate(1.3);
+    z-index: 10;
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -357,11 +358,10 @@ main{
 
 /* attractions group */
 .attractionBox{
-    width: min(90%,1200px);
+    width: min(99%,1200px);
     height: 100%;
-    display: flex;flex-wrap: wrap;justify-content:space-around;
+    display: flex;flex-wrap: wrap;justify-content:space-evenly;
     gap: 30px;
-    z-index: -10;
 
 }
 
@@ -378,7 +378,7 @@ main{
     /* Secondary Color/Gray 20 */
     border: 1px solid #E8E8E8;
     border-radius: 5px; 
-    margin-left: 5.5px;
+    /*margin-left: 5.5px;*/
 }
 /* details */
 .cardsInfo{
@@ -567,6 +567,8 @@ footer>div>div{
 }
 
 /*-------------------------------------------------------------------------*/
+
+
 @media (max-width:1200px){
     main>section{
         width: 960px;
@@ -719,7 +721,7 @@ footer>div>div{
     nav>div>h2{
         padding-left: 10px;
     }
-    /**/
+    
     .sloganBar{
         width: 340px; 
         top: 76px; 
@@ -732,7 +734,7 @@ footer>div>div{
     .slogan,.slogan>h1,.slogan>div{
         width: 320px;  
     }
-    /**/
+    
     .banner{
         width: 360px;
     }
@@ -745,7 +747,7 @@ footer>div>div{
     .sloganInput>input{
         color: #000000;
     }
-    /**/
+    
     .categoriesList{
         width: 322px;
         height: 162px;
@@ -753,7 +755,7 @@ footer>div>div{
     .categoriesList>div{
         width: 98px;
     }
-    /**/
+    
     main{
         min-height: 605px;
     }

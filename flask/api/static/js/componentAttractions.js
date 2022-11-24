@@ -1,4 +1,4 @@
-import {generateStructure} from "./generatePages.js"
+import {generateStructure,noPageGenerate} from "./generatePages.js"
 import {fetchAttractionPageData} from "./fetchLocation.js"
 import {generateCategories} from "./inputQuery.js"
 let nextPage
@@ -86,7 +86,12 @@ window.addEventListener("load",async(e) => {
 
 // 輸入關鍵字
 cardCategoryInput.addEventListener("input", e => {
-    queryAttractionInput = e.target.value  
+    console.log(e.target.value.trim() === "")
+    if(e.target.value.trim() === ""){
+        queryAttractionInput = undefined
+    }else{
+        queryAttractionInput = e.target.value  
+    }
 })
 
 
@@ -94,6 +99,7 @@ cardCategoryInput.addEventListener("input", e => {
 let sloganBtn=document.getElementById("sloganBtn");
 sloganBtn.addEventListener("click", async() => {
     keyword = queryAttractionInput
+    console.log(keyword)
     fetchName = []
     fetchMrt = []
     fetchCategories = []
@@ -101,19 +107,21 @@ sloganBtn.addEventListener("click", async() => {
     // 把畫面清空
     let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
     attractionMainBoxNode[0].innerHTML = ""
-    await fetchAttractionPageData(0,keyword).then(data=>{
-        if(data["data"].length == 0){
-            let noDataBox = document.createElement("img")
-            //noDataBox.textContent = "查詢無相關資料"
-            noDataBox.setAttribute("class","noData")
-            noDataBox.setAttribute("src","/static/pic/404.png")
-            attractionMainBoxNode[0].appendChild(noDataBox)
-        }else{
-            let attractionBox = document.createElement("section")
-            attractionBox.setAttribute("class","attractionBox")
-            attractionMainBoxNode[0].appendChild(attractionBox)
-        }
-    })
+    if(keyword== undefined){
+        console.log("運行")
+        noPageGenerate()
+    }else{
+    console.log("運行1")
+        await fetchAttractionPageData(0,keyword).then(data=>{
+            if(data["data"].length == 0){
+                noPageGenerate()
+            }else{
+                let attractionBox = document.createElement("section")
+                attractionBox.setAttribute("class","attractionBox")
+                attractionMainBoxNode[0].appendChild(attractionBox)
+            }
+        })
+    }
     // noData畫面 
     generateAttractions(0,keyword)
 })
