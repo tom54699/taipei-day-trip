@@ -3,7 +3,7 @@
 
 export async function fetchAttractionPageData(page=0,keyword=""){
     try{
-        const response = await fetch(`https://taipeitrip.hopto.org/api/attractions?page=${page}&keyword=${keyword}`);
+        const response = await fetch(`/api/attractions?page=${page}&keyword=${keyword}`);
         let data = await response.json()
         return data
     }
@@ -14,7 +14,7 @@ export async function fetchAttractionPageData(page=0,keyword=""){
 
 export async function fetchCategoryData(page=0,keyword=""){
     try{
-        const response = await fetch("https://taipeitrip.hopto.org/api/categories");
+        const response = await fetch("/api/categories");
         let data = await response.json()
         return data
     }
