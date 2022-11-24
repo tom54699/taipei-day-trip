@@ -5,10 +5,10 @@ import {generateCategories} from "./inputQuery.js"
 let isLoading = false
 let nextPage 
 let keyword 
-let fetchName=[]
-let fetchMrt=[]
-let fetchCategories=[]
-let fetchImg=[]
+let fetchName = []
+let fetchMrt = []
+let fetchCategories = []
+let fetchImg = []
 
 export async function generateAttractions(page = 0,keyword=""){
     isLoading = true
@@ -19,7 +19,7 @@ export async function generateAttractions(page = 0,keyword=""){
         if(data["nextPage"] == null){
             nextPage = null
         }else{
-            nextPage =Number(data["nextPage"])+1
+            nextPage = Number(data["nextPage"])+1
         }
         let startId = Number(page)*12
         let endId = startId+data_length
@@ -62,7 +62,7 @@ export async function generateAttractions(page = 0,keyword=""){
             categoryNode[i].appendChild(category)
         }
         // 清空input的值
-        if (cardCategoryInput.value !="") {
+        if (cardCategoryInput.value != "") {
             cardCategoryInput.value = "";
         }
         isLoading = false
@@ -109,7 +109,7 @@ sloganBtn.addEventListener("click", async() => {
     // 把畫面清空
     let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
     attractionMainBoxNode[0].innerHTML = ""
-    if(keyword== undefined){
+    if(keyword == undefined){
         noPageGenerate()
     }else{
         await fetchAttractionPageData(0,keyword).then(data=>{
@@ -125,11 +125,6 @@ sloganBtn.addEventListener("click", async() => {
     }
 })
 
-/*
-document.addEventListener("scroll", () => {
-    observer.observe(scroll);
-})
-*/
 
 // 卷軸滾動判斷
 let scroll = document.getElementById("footer")
@@ -149,5 +144,5 @@ let observer = new IntersectionObserver(callback, {
     root: null,
     rootMargin: "0px",
     threshold: 1,
-  });
+});
 
