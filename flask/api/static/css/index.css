@@ -301,7 +301,6 @@ input{
 .categoriesList{
     position: absolute;
     width: 100%;
-    min-height: 162px;
     left: 0px;
     top: 51px;
     /* Additional Color/White */
@@ -322,6 +321,8 @@ input{
     width: 120px;
     height: 40px;
     text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
     z-index: 10;
 }
 /* 養生溫泉 */
