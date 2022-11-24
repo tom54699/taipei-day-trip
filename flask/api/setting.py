@@ -17,6 +17,7 @@ class BaseConfig:
     'pool_timeout': 900,
     'pool_size': 5,
     'max_overflow': 5,
-}  
+    }  
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     # session設定
     SECRET_KEY = os.getenv("SECRET_KEY")
