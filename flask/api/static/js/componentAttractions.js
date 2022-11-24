@@ -1,7 +1,9 @@
 import {generateStructure,noPageGenerate} from "./generatePages.js"
 import {fetchAttractionPageData} from "./fetchLocation.js"
 import {generateCategories} from "./inputQuery.js"
-let nextPage
+
+let isLoading = false
+let nextPage 
 let keyword 
 let fetchName=[]
 let fetchMrt=[]
@@ -9,6 +11,7 @@ let fetchCategories=[]
 let fetchImg=[]
 
 export async function generateAttractions(page = 0,keyword=""){
+    isLoading = true
     await fetchAttractionPageData(page,keyword).then(data=>{
         // 定義拿到的資料
         console.log(data)
@@ -62,14 +65,14 @@ export async function generateAttractions(page = 0,keyword=""){
         if (cardCategoryInput.value !="") {
             cardCategoryInput.value = "";
         }
+        isLoading = false
     })
     return nextPage
 }
 let queryAttractionInput
 // 首次載入
 window.addEventListener("load",async(e) => {
-    document.body.scrollTop = 0;
-    observer.unobserve(scroll)
+    observer.observe(scroll)
     await generateAttractions(nextPage)
     await generateCategories()
     // 景點分類名稱填入搜尋框
@@ -99,7 +102,6 @@ cardCategoryInput.addEventListener("input", e => {
 let sloganBtn=document.getElementById("sloganBtn");
 sloganBtn.addEventListener("click", async() => {
     keyword = queryAttractionInput
-    console.log(keyword)
     fetchName = []
     fetchMrt = []
     fetchCategories = []
@@ -123,30 +125,29 @@ sloganBtn.addEventListener("click", async() => {
     }
 })
 
-
+/*
 document.addEventListener("scroll", () => {
     observer.observe(scroll);
 })
+*/
 
 // 卷軸滾動判斷
-let scroll = document.getElementById("scroll")
+let scroll = document.getElementById("footer")
 let callback = async function ([obj]) {
-    if(obj.time < 500){
-        observer.disconnect()
-    }else{
-        if(obj.isIntersecting == true){
+    if(obj.isIntersecting){
+        console.log(isLoading)
+        if(isLoading == false){
             nextPage = await generateAttractions(nextPage,keyword)
-            if(nextPage == null){
-                observer.disconnect()
-                // 輸入值刪除
-                keyword = ""
-            }
+        }
+        if(nextPage == null){
+            // 輸入值刪除
+            keyword = ""
         }
     }
 };
 let observer = new IntersectionObserver(callback, {
     root: null,
-    rootMargin: "5px",
+    rootMargin: "0px",
     threshold: 1,
   });
 

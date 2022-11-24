@@ -21,7 +21,7 @@ def get_all_attractions():
         # 如果沒有輸入page參數 或 如果page小於0 或 如果page不是數字
         if page == None or page.isdigit() != True or int(page)<0:
             page_data["nextPage"] = None
-            page_data["data"].append("參數錯誤，無法搜尋資料")
+            #page_data["data"].append("參數錯誤，無法搜尋資料")
             return jsonify(page_data),400
         page = int(page)+1
         # 有無keyword
