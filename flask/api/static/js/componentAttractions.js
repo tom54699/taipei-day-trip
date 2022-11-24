@@ -108,10 +108,8 @@ sloganBtn.addEventListener("click", async() => {
     let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
     attractionMainBoxNode[0].innerHTML = ""
     if(keyword== undefined){
-        console.log("運行")
         noPageGenerate()
     }else{
-    console.log("運行1")
         await fetchAttractionPageData(0,keyword).then(data=>{
             if(data["data"].length == 0){
                 noPageGenerate()
@@ -119,11 +117,10 @@ sloganBtn.addEventListener("click", async() => {
                 let attractionBox = document.createElement("section")
                 attractionBox.setAttribute("class","attractionBox")
                 attractionMainBoxNode[0].appendChild(attractionBox)
+                generateAttractions(0,keyword)
             }
         })
     }
-    // noData畫面 
-    generateAttractions(0,keyword)
 })
 
 
@@ -138,7 +135,6 @@ let callback = async function ([obj]) {
         observer.disconnect()
     }else{
         if(obj.isIntersecting == true){
-            console.log("執行")
             nextPage = await generateAttractions(nextPage,keyword)
             if(nextPage == null){
                 observer.disconnect()
