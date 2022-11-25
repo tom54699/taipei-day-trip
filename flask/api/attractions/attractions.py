@@ -1,4 +1,4 @@
-from flask import Flask,Blueprint,jsonify,request
+from flask import Flask,Blueprint,jsonify,request,render_template
 from api.models.attractions_model import Attraction,Image
 from sqlalchemy import or_,and_
 
@@ -7,6 +7,10 @@ attractions = Blueprint("attractions",
     __name__,
     static_folder='static',
     template_folder='templates')
+
+@attractions.route("api/attractions",methods=["GET"])
+def attraction_page():
+    return render_template("attraction.html")
 
 # 取得景點資料列表
 @attractions.route("api/attractions",methods=["GET"])
