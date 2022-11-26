@@ -143,15 +143,16 @@ main>section{
     opacity: 0.75;    
 }
 /* Button / circle */
-.attractionImg>div:nth-child(3){
+.dotBox{
     display:flex;
     margin-bottom: 13px;
-    width: 72px; height: 12px;
+    height: 12px;
     display: flex; justify-content: space-around;
     opacity: 0.75;
 }
 
-.attractionImg>div:nth-child(3)>div{
+.dot{
+    margin: 0.2rem;
     width: 12px; height: 12px;
     background: url(/static/pic/circle.png);
     background-repeat: no-repeat;
