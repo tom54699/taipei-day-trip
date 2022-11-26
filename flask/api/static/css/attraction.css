@@ -6,6 +6,9 @@
     box-sizing: auto;
     text-decoration: none;
 }
+a{
+    color: #448899;
+}
 
 input:focus{
     outline:none;/*input標籤聚焦不出現預設邊框:*/
@@ -42,7 +45,7 @@ nav>div{
 }
 
 /* 台北一日遊 */
-nav>div>h2{
+nav>div>h2>a{
     width: 150px;
     height: 34px;
     /* Header 2 - Bold 30(34) */
@@ -107,39 +110,40 @@ main>section{
     display: flex; justify-content: space-around; flex-wrap: wrap;
 }
 /* picture current */
-section>div:nth-child(1){
+.attractionImg{
     position: relative;
     width: min(100%, 540px);
     height: 400px;
     border-radius: 5px;
-    background: url(/flask/api/static/pic/img.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     display: flex; flex-direction: column; align-items: center;justify-content: flex-end;
+    cursor: pointer;
 }
 /* Button / left arrow */
-section>div:nth-child(1)>div:nth-child(1){
+.attractionImg>div:nth-child(1){
     position: absolute;
     width: 36px; height: 36px;
     top: 185px; left:10px;
-    background: url(/flask/api/static/pic/btn_leftArrow.png);
+    background: url(/static/pic/btn_leftArrow.png);
     background-repeat: no-repeat;
     background-size: cover;
-    opacity: 0.75;     
+    opacity: 0.75;   
+    cursor: pointer;  
 }
 /* Button / right arrow */
-section>div:nth-child(1)>div:nth-child(2){
+.attractionImg>div:nth-child(2){
     position: absolute;
     width: 36px; height: 36px;
     top: 185px; right: 10px;
-    background: url(/flask/api/static/pic/btn_rightArrow.png);
+    background: url(/static/pic/btn_rightArrow.png);
     background-repeat: no-repeat;
     background-size: cover; 
     opacity: 0.75;    
 }
 /* Button / circle */
-section>div:nth-child(1)>div:nth-child(3){
+.attractionImg>div:nth-child(3){
     display:flex;
     margin-bottom: 13px;
     width: 72px; height: 12px;
@@ -147,9 +151,9 @@ section>div:nth-child(1)>div:nth-child(3){
     opacity: 0.75;
 }
 
-section>div:nth-child(1)>div:nth-child(3)>div{
+.attractionImg>div:nth-child(3)>div{
     width: 12px; height: 12px;
-    background: url(/flask/api/static/pic/circle.png);
+    background: url(/static/pic/circle.png);
     background-repeat: no-repeat;
     background-size: cover;    
 }
@@ -165,7 +169,7 @@ section>div:nth-child(1)>div:nth-child(3)>div{
 }
 
 /* 平安鐘 */
-.attractionProfileBox>div:nth-child(1){
+.attractionName{
     width: 100%; height: 33px;
     font-weight: 700;
     font-size: 24px;
@@ -174,7 +178,7 @@ section>div:nth-child(1)>div:nth-child(3)>div{
 }
 
 /* 公共藝術 at 忠孝復興 */
-.attractionProfileBox>div:nth-child(2){
+.attractionCategory{
     width: 100%; min-height: 22px;
     margin-top: 15px;
     font-weight: 500;
@@ -340,7 +344,7 @@ article{
     display: flex;flex-direction: column; align-items: center;
 }
 
-article>section{
+.attractionDescription{
     width: min(100%, 1180px);
     margin-top: 10px;
     min-height: 96px;
@@ -360,7 +364,7 @@ main>article>div:nth-child(2),main>article>div:nth-child(4){
     color: #666666;
 }
 /* 臺北市 大安區忠孝東路4段 */
-main>article>div:nth-child(3){
+.attractionAddress{
     width: min(100%, 1180px);
     height: 24px;
     font-weight: 400;
@@ -368,8 +372,8 @@ main>article>div:nth-child(3){
     line-height: 23px;
     color: #666666;
 }
-/* 捷運站名 */
-main>article>div:nth-child(5){
+/* 交通方式介紹 */
+.attractionTransport{
     width: min(100%, 1180px);
     margin-bottom: 80px ;
     min-height: 48px;

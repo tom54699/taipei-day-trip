@@ -24,3 +24,15 @@ export async function fetchCategoryData(page=0,keyword=""){
 }
 
 
+export async function fetchAttraction(id=1){
+    try{
+        const response = await fetch(`https://taipeidaytrip.ddns.net/api/attraction/${id}`);
+        let data = await response.json()
+        return data
+    }
+    catch(err){
+        console.log("fetch failed:",err)
+    }
+}
+
+

@@ -9,6 +9,7 @@ let fetchName = []
 let fetchMrt = []
 let fetchCategories = []
 let fetchImg = []
+let fetchId = []
 
 export async function generateAttractions(page = 0,keyword=""){
     isLoading = true
@@ -25,6 +26,8 @@ export async function generateAttractions(page = 0,keyword=""){
         let endId = startId+data_length
      
         for(let i=0;i<data_length;i++){
+            let newFetchId = data["data"][i]["id"]
+            fetchId.push(newFetchId)
             let newFetchName = data["data"][i]["name"]
             fetchName.push(newFetchName)
             let newFetchMrt = data["data"][i]["mrt"]
@@ -38,7 +41,7 @@ export async function generateAttractions(page = 0,keyword=""){
         // 準備產生畫面
 
         // 畫面結構
-        generateStructure(data_length)
+        generateStructure(data_length,fetchId)
         // 註冊
         let picNode=document.getElementsByClassName("cardsImage")
         let nameNode=document.getElementsByClassName("cardName")
@@ -50,9 +53,8 @@ export async function generateAttractions(page = 0,keyword=""){
             let name=document.createElement("div")
             let mrt=document.createElement("div")
             let category=document.createElement("div")
-            let img_url=fetchImg[i]
 
-            image.setAttribute("src",`${img_url}`)
+            image.setAttribute("src",`${fetchImg[i]}`)
             name.textContent=fetchName[i]
             mrt.textContent=fetchMrt[i]
             category.textContent=fetchCategories[i]
@@ -71,7 +73,7 @@ export async function generateAttractions(page = 0,keyword=""){
 }
 let queryAttractionInput
 // 首次載入
-window.addEventListener("load",async(e) => {
+window.addEventListener("DOMContentLoaded",async(e) => {
     observer.observe(scroll)
     await generateAttractions(nextPage)
     await generateCategories()
@@ -99,13 +101,14 @@ cardCategoryInput.addEventListener("input", e => {
 
 
 // 按下搜尋按鈕
-let sloganBtn=document.getElementById("sloganBtn");
+let sloganBtn = document.getElementById("sloganBtn");
 sloganBtn.addEventListener("click", async() => {
     keyword = queryAttractionInput
     fetchName = []
     fetchMrt = []
     fetchCategories = []
     fetchImg = []
+    fetchId = []
     // 把畫面清空
     let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
     attractionMainBoxNode[0].innerHTML = ""

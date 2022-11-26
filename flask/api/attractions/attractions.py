@@ -8,8 +8,8 @@ attractions = Blueprint("attractions",
     static_folder='static',
     template_folder='templates')
 
-@attractions.route("api/attractions",methods=["GET"])
-def attraction_page():
+@attractions.route("/attractions/<id>",methods=["GET"])
+def attraction_page(id):
     return render_template("attraction.html")
 
 # 取得景點資料列表

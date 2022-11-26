@@ -1,18 +1,18 @@
 // 首頁景點的架構
 
-export function generateStructure(data_length){
+export function generateStructure(data_length,fetchId){
     // Node
     let attractionBoxNode=document.getElementsByClassName("attractionBox")
     let cardsNode = document.getElementsByClassName("cards")
     let cardsNameNode = document.getElementsByClassName("cardsName")
     let cardsInfoNode = document.getElementsByClassName("cardsInfo")
     let cardInfoNode = document.getElementsByClassName("cardInfo")
-
     // Generate Structure
     let cardsNodeLength = cardsNode.length
     for(let i=cardsNodeLength;i<cardsNodeLength+data_length;i++){
         let cards = document.createElement("a")
         cards.setAttribute("class","cards")
+        cards.setAttribute("href",`/attractions/${fetchId[i]}`)
         attractionBoxNode[0].appendChild(cards)
 
         let cardsImage=document.createElement("div")
