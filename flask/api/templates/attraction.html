@@ -9,8 +9,8 @@
     <link rel="stylesheet" type="text/css" href="/static/css/attraction.css">
     <link rel="shortcut icon" href="/static/pic/flag.png" />
 </head>
-<body>
-    <!--Navigation-->
+<body> 
+    <!-- Navigation -->
     <nav>
         <div>
             <h2><a href="/">台北一日遊 </a></h2>
@@ -23,12 +23,14 @@
     <hr class="separator1"/>
     <main>
         <section>
-            <div class="attractionImg">
+            <!-- 圖片 -->
+            <div id="attractionImg" class="attractionImg fade">
                 <div id="leftArrow"></div>
                 <div id="rightArrow"></div>
                 <div class="dotBox">
                 </div>
             </div>
+            <!-- 預定行程 -->
             <div class="attractionProfileBox">
                 <div class="attractionName"></div>
                 <div class="attractionCategory"></div>
@@ -52,7 +54,7 @@
                     </div>
                     <div>
                         <div>導覽費用：</div>
-                        <div>新台幣 2000 元</div>
+                        <div id="tourFee">新台幣 2000 元</div>
                     </div>
                     <div>
                         <div id="bookingAttractionButton">開始預約行程</div>
@@ -61,14 +63,17 @@
             </div>
         </section>
         <hr class="separator2"/>
+        <!-- Info -->
         <article>
             <section class="attractionDescription"></section>
             <div>景點地址：</div>
             <div class="attractionAddress"></div>
+            <!--<iframe id="googleMap" class="googleMap" frameborder="0" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>-->
             <div>交通方式：</div>
             <div class="attractionTransport"></div>
         </article>
     </main>
+    <!-- Footer -->
     <footer id=footer>
         <div>
             <div>COPYRIGHT © 2021 台北一日遊</div>

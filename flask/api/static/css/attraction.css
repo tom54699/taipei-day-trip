@@ -98,6 +98,7 @@ nav>div>div>div:nth-child(2){
     line-height: 13px;
     color: #666666;
 }
+
 /*----------------------------------------------------------------------------*/
 main{
     display: flex;justify-content: center; align-items: center; flex-direction: column;
@@ -121,6 +122,14 @@ main>section{
     display: flex; flex-direction: column; align-items: center;justify-content: flex-end;
     cursor: pointer;
 }
+.fade{
+    animation: fade 1.2s;
+}
+@keyframes fade{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
+
 /* Button / left arrow */
 .attractionImg>div:nth-child(1){
     position: absolute;
@@ -363,6 +372,11 @@ main>article>div:nth-child(2),main>article>div:nth-child(4){
     font-size: 16px;
     line-height: 23px;
     color: #666666;
+}
+.googleMap{
+    width: 600px;
+    height: 450px;
+
 }
 /* 臺北市 大安區忠孝東路4段 */
 .attractionAddress{

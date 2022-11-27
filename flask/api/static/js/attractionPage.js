@@ -36,7 +36,7 @@ export async function generateAttraction(id){
         let attractionDescriptionNode = document.getElementsByClassName("attractionDescription")
         let attractionAddressNode = document.getElementsByClassName("attractionAddress")
         let attractionTransportNode = document.getElementsByClassName("attractionTransport")
-
+        let googleMap = document.getElementById("googleMap")
         /* Add Data To Node */
         attractionImgNode[0].style.backgroundImage = `url(${fetchImg[0]})`
         attractionNameNode[0].textContent = fetchName
@@ -44,6 +44,7 @@ export async function generateAttraction(id){
         attractionDescriptionNode[0].textContent = fetchDescription
         attractionAddressNode[0].textContent = fetchAddress
         attractionTransportNode[0].textContent = fetchTransport
+        //googleMap.src = `https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${fetchAddress}&z=16&output=embed&t=`
 
         /* Add Dot */
         for(let i=0;i<imageLength;i++){
@@ -81,7 +82,7 @@ let rightArrow = document.getElementById("rightArrow");
 let dot = document.getElementsByClassName("dot")
 
 rightArrow.addEventListener("click", () => {
-    let attractionImgNode = document.getElementsByClassName("attractionImg")
+    let attractionImg = document.getElementById("attractionImg")
     imgId = imgId +1
     if(imgId >= imageLength){
         imgId = 0
@@ -95,11 +96,16 @@ rightArrow.addEventListener("click", () => {
         dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)" 
     }
     console.log(imgId)
-    attractionImgNode[0].style.backgroundImage = `url(${fetchImg[imgId]})`
+    attractionImg.style.backgroundImage = `url(${fetchImg[imgId]})`
+    /* fade */
+    attractionImg.classList.remove("fade")
+    setTimeout(function(){
+        attractionImg.classList.add("fade")
+      }, 0);
 })
 
 leftArrow.addEventListener("click", () => {
-    let attractionImgNode = document.getElementsByClassName("attractionImg")
+    let attractionImg = document.getElementById("attractionImg")
     imgId = imgId -1
     if(imgId < 0){
         imgId = imageLength-1
@@ -113,6 +119,31 @@ leftArrow.addEventListener("click", () => {
         dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)" 
     }
     console.log(imgId)
-    attractionImgNode[0].style.backgroundImage = `url(${fetchImg[imgId]})`
+    attractionImg.style.backgroundImage = `url(${fetchImg[imgId]})`
+    /* fade */
+    attractionImg.classList.remove("fade")
+    setTimeout(function(){
+        attractionImg.classList.add("fade")
+        }, 0);
 })
 
+
+/* 上下半天按鈕切換 */
+let morning = document.getElementById("morning")
+let afternoon = document.getElementById("afternoon")
+let tourFee = document.getElementById("tourFee")
+
+morning.addEventListener("click",() => {
+    checkTourTime()
+})
+afternoon.addEventListener("click",() => {
+    checkTourTime()
+})
+
+function checkTourTime(){
+    if(morning.checked == true){
+        tourFee.textContent = "新台幣 2000 元"
+    }else if(afternoon.checked == true){
+        tourFee.textContent = "新台幣 2500 元"
+    }
+}
