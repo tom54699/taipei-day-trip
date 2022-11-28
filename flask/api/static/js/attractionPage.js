@@ -43,7 +43,7 @@ export async function generateAttraction(id){
         attractionDescriptionNode[0].textContent = fetchDescription
         attractionAddressNode[0].textContent = fetchAddress
         attractionTransportNode[0].textContent = fetchTransport
-        //googleMap.src = `https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${fetchAddress}&z=16&output=embed&t=`
+        googleMap.src = `https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${fetchAddress}&z=16&output=embed&t=`
         for(let i=0;i<imageLength;i++){
             let image = document.createElement("img")
             image.setAttribute("src",`${fetchImg[i]}`)
