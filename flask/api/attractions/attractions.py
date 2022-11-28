@@ -8,7 +8,7 @@ attractions = Blueprint("attractions",
     static_folder='static',
     template_folder='templates')
 
-@attractions.route("/attractions/<id>",methods=["GET"])
+@attractions.route("/attraction/<id>",methods=["GET"])
 def attraction_page(id):
     return render_template("attraction.html")
 
