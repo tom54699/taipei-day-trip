@@ -1,14 +1,18 @@
 import {generateStructure,noPageGenerate} from "./generatePages.js"
 import {fetchAttractionPageData} from "./fetchLocation.js"
 import {generateCategories} from "./inputQuery.js"
-let nextPage
+
+let isLoading = false
+let nextPage 
 let keyword 
-let fetchName=[]
-let fetchMrt=[]
-let fetchCategories=[]
-let fetchImg=[]
+let fetchName = []
+let fetchMrt = []
+let fetchCategories = []
+let fetchImg = []
+let fetchId = []
 
 export async function generateAttractions(page = 0,keyword=""){
+    isLoading = true
     await fetchAttractionPageData(page,keyword).then(data=>{
         // 定義拿到的資料
         console.log(data)
@@ -16,12 +20,14 @@ export async function generateAttractions(page = 0,keyword=""){
         if(data["nextPage"] == null){
             nextPage = null
         }else{
-            nextPage =Number(data["nextPage"])+1
+            nextPage = Number(data["nextPage"])+1
         }
         let startId = Number(page)*12
         let endId = startId+data_length
      
         for(let i=0;i<data_length;i++){
+            let newFetchId = data["data"][i]["id"]
+            fetchId.push(newFetchId)
             let newFetchName = data["data"][i]["name"]
             fetchName.push(newFetchName)
             let newFetchMrt = data["data"][i]["mrt"]
@@ -35,21 +41,20 @@ export async function generateAttractions(page = 0,keyword=""){
         // 準備產生畫面
 
         // 畫面結構
-        generateStructure(data_length)
+        generateStructure(data_length,fetchId)
         // 註冊
-        let picNode=document.getElementsByClassName("cardsImage")
-        let nameNode=document.getElementsByClassName("cardName")
-        let mrtNode=document.getElementsByClassName("cardMrt")
-        let categoryNode=document.getElementsByClassName("cardCategory")
+        let picNode = document.getElementsByClassName("cardsImage")
+        let nameNode = document.getElementsByClassName("cardName")
+        let mrtNode = document.getElementsByClassName("cardMrt")
+        let categoryNode = document.getElementsByClassName("cardCategory")
         // 建立後面12張
-        for(let i=startId;i<endId;i++){
-            let image=document.createElement("img")
-            let name=document.createElement("div")
-            let mrt=document.createElement("div")
-            let category=document.createElement("div")
-            let img_url=fetchImg[i]
+        for(let i = startId;i<endId;i++){
+            let image = document.createElement("img")
+            let name = document.createElement("div")
+            let mrt = document.createElement("div")
+            let category = document.createElement("div")
 
-            image.setAttribute("src",`${img_url}`)
+            image.setAttribute("src",`${fetchImg[i]}`)
             name.textContent=fetchName[i]
             mrt.textContent=fetchMrt[i]
             category.textContent=fetchCategories[i]
@@ -59,17 +64,17 @@ export async function generateAttractions(page = 0,keyword=""){
             categoryNode[i].appendChild(category)
         }
         // 清空input的值
-        if (cardCategoryInput.value !="") {
+        if (cardCategoryInput.value != "") {
             cardCategoryInput.value = "";
         }
+        isLoading = false
     })
     return nextPage
 }
 let queryAttractionInput
 // 首次載入
-window.addEventListener("load",async(e) => {
-    document.body.scrollTop = 0;
-    observer.unobserve(scroll)
+window.addEventListener("DOMContentLoaded",async(e) => {
+    observer.observe(scroll)
     await generateAttractions(nextPage)
     await generateCategories()
     // 景點分類名稱填入搜尋框
@@ -96,22 +101,20 @@ cardCategoryInput.addEventListener("input", e => {
 
 
 // 按下搜尋按鈕
-let sloganBtn=document.getElementById("sloganBtn");
+let sloganBtn = document.getElementById("sloganBtn");
 sloganBtn.addEventListener("click", async() => {
     keyword = queryAttractionInput
-    console.log(keyword)
     fetchName = []
     fetchMrt = []
     fetchCategories = []
     fetchImg = []
+    fetchId = []
     // 把畫面清空
     let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
     attractionMainBoxNode[0].innerHTML = ""
-    if(keyword== undefined){
-        console.log("運行")
+    if(keyword == undefined){
         noPageGenerate()
     }else{
-    console.log("運行1")
         await fetchAttractionPageData(0,keyword).then(data=>{
             if(data["data"].length == 0){
                 noPageGenerate()
@@ -119,38 +122,30 @@ sloganBtn.addEventListener("click", async() => {
                 let attractionBox = document.createElement("section")
                 attractionBox.setAttribute("class","attractionBox")
                 attractionMainBoxNode[0].appendChild(attractionBox)
+                generateAttractions(0,keyword)
             }
         })
     }
-    // noData畫面 
-    generateAttractions(0,keyword)
 })
 
-
-document.addEventListener("scroll", () => {
-    observer.observe(scroll);
-})
 
 // 卷軸滾動判斷
-let scroll = document.getElementById("scroll")
+let scroll = document.getElementById("footer")
 let callback = async function ([obj]) {
-    if(obj.time < 500){
-        observer.disconnect()
-    }else{
-        if(obj.isIntersecting == true){
-            console.log("執行")
+    if(obj.isIntersecting){
+        console.log(isLoading)
+        if(isLoading == false){
             nextPage = await generateAttractions(nextPage,keyword)
-            if(nextPage == null){
-                observer.disconnect()
-                // 輸入值刪除
-                keyword = ""
-            }
+        }
+        if(nextPage == null){
+            // 輸入值刪除
+            keyword = ""
         }
     }
 };
 let observer = new IntersectionObserver(callback, {
     root: null,
-    rootMargin: "5px",
+    rootMargin: "0px",
     threshold: 1,
-  });
+});
 

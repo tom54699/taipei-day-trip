@@ -7,6 +7,9 @@
     box-sizing: auto;
     text-decoration: none;
 }
+a{
+    color: #448899;
+}
 input{
     border: none;
     appearance:none;
@@ -23,6 +26,7 @@ body{
     background: #FFFFFF;
     position: relative; 
     font-family: "Noto Sans TC", sans-serif;
+    display: flex; flex-direction: column; align-items: center;
 }
 
 /* [Desktop] Navigation */
@@ -47,7 +51,7 @@ nav>div{
 }
 
 /* 台北一日遊 */
-nav>div>h2{
+nav>div>h2>a{
     width: 150px;
     height: 34px;
     /* Header 2 - Bold 30(34) */
@@ -105,6 +109,117 @@ nav>div>div>div:nth-child(2){
     font-size: 16px;
     line-height: 13px;
     color: #666666;
+}
+/*----------------------------------------------------------------------------*/
+
+.dialogMask{
+    position: absolute;
+    width: 1920px; height: 100%;
+    left: 0px; top: 0px;
+    background: #000000;
+    opacity: 0.25;
+    z-index: 40;
+}
+/* Dialog / signin */
+.loginBox{
+    width: min(95%,340px); height: 275px;
+    display: flex; flex-direction: column; align-items: center;
+    position: fixed; top: 80px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 6px;
+    z-index: 50;
+}
+/* decorator bar */
+.loginBox>div:nth-child(1){
+    width: min(100%,340px); height: 10px; 
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-radius: 6px 6px 0px 0px;
+}
+/* main */
+.loginMainBox{
+    width: min(100%,310px); height: 235px;
+    margin-top: 15px;
+    position: relative;
+    display: flex; flex-direction: column;
+}
+/* icon / close */
+.loginMainBox>div:nth-child(1),.registerMainBox>div:nth-child(1){
+    position: absolute; top: 2px; right: 2px;
+    width: 16px; height: 16px;
+    background: url(/static/pic/icon_close.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+/* 登入會員帳號 */
+.loginMainBox>div:nth-child(2),.registerMainBox>div:nth-child(2){
+    width: min(100%,310px); height: 27px;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    color: #666666;
+    text-align: center;
+}
+.loginMainBox>input,.registerMainBox>input{
+    box-sizing: border-box;
+    width: min(100%,310px); height: 47px;
+    margin-top: 10px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    color: #757575;
+    text-indent: 15px;
+}
+/* Button [forDialog] */
+.loginMainBox>div:nth-child(5),.registerMainBox>div:nth-child(6){
+    box-sizing: border-box;
+    width: min(100%,310px); height: 47px;
+    margin-top: 10px;
+    background: #448899;
+    border-radius: 5px;
+    display: flex; justify-content: center; align-items: center;
+}
+.loginMainBox>div:nth-child(5)>div,.registerMainBox>div:nth-child(6)>div{
+    width: min(100%,270px); height: 27px;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 27px;
+    color: #FFFFFF;
+    text-align: center;
+}
+/* 還沒有帳戶？點此註冊 */
+.loginMainBox>div:nth-child(6),.registerMainBox>div:nth-child(7){
+    width: min(100%,310px); height: 22px;
+    margin-top: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #666666;
+    text-align: center;
+}
+.registerBox{
+    width: min(95%,340px); height: 332px;
+    display: flex; flex-direction: column; align-items: center;
+    position: fixed; top: 80px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 6px;
+    z-index: 50; 
+}
+.registerMainBox{
+    width: min(100%,310px); height: 292px;
+    margin-top: 15px;
+    position: relative;
+    display: flex; flex-direction: column;
+}
+
+.none {
+    display: none !important;
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -301,7 +416,6 @@ input{
 .categoriesList{
     position: absolute;
     width: 100%;
-    min-height: 162px;
     left: 0px;
     top: 51px;
     /* Additional Color/White */
@@ -322,6 +436,8 @@ input{
     width: 120px;
     height: 40px;
     text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
     z-index: 10;
 }
 /* 養生溫泉 */
@@ -557,14 +673,6 @@ footer>div>div{
     color: #FFFFFF; 
 }
 
-.scroll{
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 1%;
-    bottom:0;
-    z-index: -10;
-}
 
 /*-------------------------------------------------------------------------*/
 

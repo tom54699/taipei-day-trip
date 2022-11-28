@@ -11,19 +11,43 @@
 
 </head>
 <body>
-    <!--Navigation-->
+    <!-- Navigation -->
     <nav>
         <div>
-            <h2>台北一日遊 </h2>
+            <h2><a href="/">台北一日遊 </a></h2>
             <div>
                 <div><a class="navButton1">預定行程</a></div>
-                <div><a class="navButton2">登入/註冊</a></div>
+                <div><a id="navButton" class="navButton2">登入/註冊</a></div>
             </div>
         </div>  
     </nav>
-    <!--Banner-->
+    <!-- Login -->
+    <div class="dialogMask none"></div>
+    <div class="loginBox none"> 
+        <div></div>
+        <div class="loginMainBox">
+            <div></div>
+            <div>登入會員帳號</div>
+            <input type="email" placeholder="輸入電子信箱"/>
+            <input type="password" placeholder="輸入密碼"/>
+            <div><div>登入帳戶</div></div>
+            <div>還沒有帳戶？點此註冊</div>
+        </div>
+    </div>
+    <div class="registerBox none">
+        <div class="registerMainBox">
+            <div></div>
+            <div>登入會員帳號</div>
+            <input type="text" placeholder="輸入姓名"/>
+            <input type="email" placeholder="輸入電子信箱"/>
+            <input type="password" placeholder="輸入密碼"/>
+            <div><div>註冊新帳戶</div></div>
+            <div>已經有帳戶了？點此登入</div>
+        </div>
+    </div>
+    <!-- Banner -->
     <div class="banner">
-        <!--slogan-->
+        <!-- slogan -->
         <section class="sloganBar">
             <div>
                 <div class="slogan">
@@ -34,7 +58,7 @@
                     <div>
                         <div class="sloganInput">
                             <input id="cardCategoryInput" type="text" placeholder="輸入景點名稱查詢"/>
-                            <!--Categories List-->
+                            <!-- Categories List -->
                             <div class="categoriesList">
                             </div>
                         </div>
@@ -46,19 +70,18 @@
             </div>
         </section>
     </div>
-    <!--Attractions-->
+    <!-- Attractions -->
     <main class="attractionMainBox">
         <section class="attractionBox">
                   
         </section>
     </main>
-    <!--Footer-->
+    <!-- Footer -->
     <footer id=footer>
         <div>
             <div>COPYRIGHT © 2021 台北一日遊</div>
         </div>
     </footer>
-    <div id=scroll></div>
     <script type="module" src="/static/js/componentAttractions.js"></script>
 </body>
 </html>
