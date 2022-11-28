@@ -521,7 +521,7 @@ footer>div>div{
     main>article{
         width: 330px;
     }     
-    section>div:nth-child(1)>div:nth-child(1),section>div:nth-child(1)>div:nth-child(1){
+    section>div:nth-child(1)>div:nth-child(1),section>div:nth-child(1)>div:nth-child(2){
         top: 157px;
     }
     .attractionProfileBox>div:nth-child(3)>div:nth-child(2){

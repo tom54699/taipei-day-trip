@@ -3,7 +3,7 @@
 
 export async function fetchAttractionPageData(page=0,keyword=""){
     try{
-        const response = await fetch(`/api/attractions?page=${page}&keyword=${keyword}`);
+        const response = await fetch(`https://taipeitrip.ddns.net/api/attractions?page=${page}&keyword=${keyword}`);
         let data = await response.json()
         return data
     }
@@ -14,7 +14,7 @@ export async function fetchAttractionPageData(page=0,keyword=""){
 
 export async function fetchCategoryData(page=0,keyword=""){
     try{
-        const response = await fetch("/api/categories");
+        const response = await fetch("https://taipeitrip.ddns.net/api/categories");
         let data = await response.json()
         return data
     }
@@ -26,7 +26,7 @@ export async function fetchCategoryData(page=0,keyword=""){
 
 export async function fetchAttraction(id=1){
     try{
-        const response = await fetch(`/api/attraction/${id}`);
+        const response = await fetch(`https://taipeitrip.ddns.net/api/attraction/${id}`);
         let data = await response.json()
         return data
     }
