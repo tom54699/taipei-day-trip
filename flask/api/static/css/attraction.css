@@ -351,8 +351,7 @@ input[type=radio]{
 /* 分隔線 */
 hr{
     box-sizing: border-box;
-    height: 1px;
-    background: #E8E8E8;
+    border: 1px solid #E8E8E8;
     width: 100%;
 }
 .separator2{
