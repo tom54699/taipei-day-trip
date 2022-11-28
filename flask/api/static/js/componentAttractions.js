@@ -43,16 +43,16 @@ export async function generateAttractions(page = 0,keyword=""){
         // 畫面結構
         generateStructure(data_length,fetchId)
         // 註冊
-        let picNode=document.getElementsByClassName("cardsImage")
-        let nameNode=document.getElementsByClassName("cardName")
-        let mrtNode=document.getElementsByClassName("cardMrt")
-        let categoryNode=document.getElementsByClassName("cardCategory")
+        let picNode = document.getElementsByClassName("cardsImage")
+        let nameNode = document.getElementsByClassName("cardName")
+        let mrtNode = document.getElementsByClassName("cardMrt")
+        let categoryNode = document.getElementsByClassName("cardCategory")
         // 建立後面12張
-        for(let i=startId;i<endId;i++){
-            let image=document.createElement("img")
-            let name=document.createElement("div")
-            let mrt=document.createElement("div")
-            let category=document.createElement("div")
+        for(let i = startId;i<endId;i++){
+            let image = document.createElement("img")
+            let name = document.createElement("div")
+            let mrt = document.createElement("div")
+            let category = document.createElement("div")
 
             image.setAttribute("src",`${fetchImg[i]}`)
             name.textContent=fetchName[i]

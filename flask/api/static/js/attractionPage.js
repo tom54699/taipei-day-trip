@@ -31,22 +31,29 @@ export async function generateAttraction(id){
         /* Define Node */
         let dotBoxNode=document.getElementsByClassName("dotBox")
         let attractionNameNode = document.getElementsByClassName("attractionName")
-        let attractionImgNode = document.getElementsByClassName("attractionImg")
+        let attractionImgBoxNode = document.getElementsByClassName("attractionImgBox")
         let attractionCategoryNode = document.getElementsByClassName("attractionCategory")
         let attractionDescriptionNode = document.getElementsByClassName("attractionDescription")
         let attractionAddressNode = document.getElementsByClassName("attractionAddress")
         let attractionTransportNode = document.getElementsByClassName("attractionTransport")
         let googleMap = document.getElementById("googleMap")
         /* Add Data To Node */
-        attractionImgNode[0].style.backgroundImage = `url(${fetchImg[0]})`
         attractionNameNode[0].textContent = fetchName
         attractionCategoryNode[0].textContent = `${fetchCategories} at ${fetchMrt}`
         attractionDescriptionNode[0].textContent = fetchDescription
         attractionAddressNode[0].textContent = fetchAddress
         attractionTransportNode[0].textContent = fetchTransport
         //googleMap.src = `https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${fetchAddress}&z=16&output=embed&t=`
-
-        /* Add Dot */
+        for(let i=0;i<imageLength;i++){
+            let image = document.createElement("img")
+            image.setAttribute("src",`${fetchImg[i]}`)
+            image.setAttribute("class","attractionImg fade")
+            if(i != 0){
+                image.setAttribute("class","attractionImg fade none")
+            }
+            attractionImgBoxNode[0].appendChild(image)
+        }
+        /* Add Dot*/
         for(let i=0;i<imageLength;i++){
             let dot = document.createElement("section")
             dot.setAttribute("class","dot")
@@ -82,7 +89,7 @@ let rightArrow = document.getElementById("rightArrow");
 let dot = document.getElementsByClassName("dot")
 
 rightArrow.addEventListener("click", () => {
-    let attractionImg = document.getElementById("attractionImg")
+    let attractionImg = document.getElementsByClassName("attractionImg")
     imgId = imgId +1
     if(imgId >= imageLength){
         imgId = 0
@@ -90,22 +97,19 @@ rightArrow.addEventListener("click", () => {
     if(imgId == 0){
         dot[imageLength-1].style.backgroundImage = "url(/static/pic/circle.png)"
         dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)" 
+        attractionImg[imageLength-1].classList.add("none")
+        attractionImg[imgId].classList.remove("none")
 
     }else{
         dot[imgId-1].style.backgroundImage = "url(/static/pic/circle.png)"
         dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)" 
+        attractionImg[imgId-1].classList.add("none")
+        attractionImg[imgId].classList.remove("none")
     }
-    console.log(imgId)
-    attractionImg.style.backgroundImage = `url(${fetchImg[imgId]})`
-    /* fade */
-    attractionImg.classList.remove("fade")
-    setTimeout(function(){
-        attractionImg.classList.add("fade")
-      }, 0);
 })
 
 leftArrow.addEventListener("click", () => {
-    let attractionImg = document.getElementById("attractionImg")
+    let attractionImg = document.getElementsByClassName("attractionImg")
     imgId = imgId -1
     if(imgId < 0){
         imgId = imageLength-1
@@ -113,18 +117,15 @@ leftArrow.addEventListener("click", () => {
     if(imgId == imageLength-1){
         dot[0].style.backgroundImage = "url(/static/pic/circle.png)"
         dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)" 
+        attractionImg[0].classList.add("none")
+        attractionImg[imgId].classList.remove("none")
 
     }else{
         dot[imgId+1].style.backgroundImage = "url(/static/pic/circle.png)"
         dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)" 
+        attractionImg[imgId+1].classList.add("none")
+        attractionImg[imgId].classList.remove("none")
     }
-    console.log(imgId)
-    attractionImg.style.backgroundImage = `url(${fetchImg[imgId]})`
-    /* fade */
-    attractionImg.classList.remove("fade")
-    setTimeout(function(){
-        attractionImg.classList.add("fade")
-        }, 0);
 })
 
 
