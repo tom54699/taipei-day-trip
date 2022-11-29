@@ -54,3 +54,5 @@ export function noPageGenerate(){
     noDataBox.setAttribute("src","/static/pic/404.png")
     attractionMainBoxNode[0].appendChild(noDataBox)
 }
+
+

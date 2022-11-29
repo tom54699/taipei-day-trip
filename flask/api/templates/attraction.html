@@ -7,6 +7,7 @@
     <meta name="description" content="Taipei Trip 台北一日遊 | 景點">
     <title>Taipei Trip 台北一日遊 | 景點</title>
     <link rel="stylesheet" type="text/css" href="/static/css/attraction.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
     <link rel="shortcut icon" href="/static/pic/flag.png" />
 </head>
 <body> 
@@ -16,10 +17,42 @@
             <h2><a href="/">台北一日遊 </a></h2>
             <div>
                 <div><a class="navButton1">預定行程</a></div>
-                <div><a class="navButton2">登入/註冊</a></div>
+                <div>
+                    <a id="goLoginButton" class="navButton2">登入/註冊</a>
+                    <a id="logoutButton" class="navButton2 none">登出</a>
+                </div>
             </div>
         </div>  
     </nav>
+    <!-- Login -->
+    <div id="dialogMask" class="dialogMask none"></div>
+    <div id="loginBox" class="loginBox none"> 
+        <div></div>
+        <div class="loginMainBox">
+            <div class="cancelButton"></div>
+            <div>登入會員帳號</div>
+            <input id="loginEmail" type="email" placeholder="輸入電子信箱" required/>
+            <div class="errorMessage none"></div>
+            <input id="loginPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{4,12}" required/>
+            <div class="errorMessage none"></div>
+            <button id="loginButton" disabled>登入帳戶</button>
+            <div id="goRegisterButton">還沒有帳戶？點此註冊</div>
+        </div>
+    </div>
+    <div id="registerBox" class="registerBox none">
+        <div></div>
+        <div class="registerMainBox">
+            <div class="cancelButton"></div>
+            <div>註冊會員帳號</div>
+            <input id="registerName"  type="text" placeholder="輸入姓名" required/>
+            <input id="registerEmail" type="email" placeholder="輸入電子信箱" required/>
+            <div class="errorMessage none">信箱格式錯誤</div>
+            <input id="registerPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{4,12}" required/>
+            <div class="errorMessage none">⚠ 密碼長度須介於5到10字元</div>
+            <button id="registerButton" disabled>註冊新帳戶</button>
+            <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
+        </div>
+    </div>
     <hr class="separator1"/>
     <main>
         <section>
@@ -80,5 +113,6 @@
         </div>
     </footer>
     <script type="module" src="/static/js/attractionPage.js"></script>
+    <script type="module" src="/static/js/member.js"></script>
 </body>
 </html>

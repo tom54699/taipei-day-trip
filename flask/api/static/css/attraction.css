@@ -21,6 +21,7 @@ body{
     position: relative; 
     font-family: "Noto Sans TC", sans-serif;
     font-style: normal;
+    display: flex; flex-direction: column; align-items: center;
 }
 
 /* [Desktop] Navigation */
@@ -79,6 +80,7 @@ nav>div>div>div:nth-child(1){
     font-size: 16px;
     line-height: 13px;
     color: #666666;
+    cursor: pointer;
 }
 
 /* Button2 [forNavigation] */
@@ -97,6 +99,7 @@ nav>div>div>div:nth-child(2){
     font-size: 16px;
     line-height: 13px;
     color: #666666;
+    cursor: pointer;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -470,7 +473,7 @@ footer>div>div{
     }
 }
 
-@media (max-width:360px){
+@media (max-width:400px){
     nav{
         width: 360px;
         height: 54px;
