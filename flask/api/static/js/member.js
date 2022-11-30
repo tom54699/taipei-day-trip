@@ -84,6 +84,8 @@ function goLogin(){
     dialogMask.classList.remove("none")
     registerBox.classList.add("none")
     loginBox.classList.remove("none")
+    clearInputValue()
+    clearErrorMessage()
 }
 
 /* 會員註冊相關按鈕 */
@@ -94,6 +96,8 @@ function goRegister(){
     dialogMask.classList.remove("none")
     loginBox.classList.add("none")
     registerBox.classList.remove("none")
+    clearInputValue()
+    clearErrorMessage()
 }
 
 /* 取消叉叉 */ 
@@ -114,6 +118,8 @@ function cancelLoginBox(){
     registerButton.style.cursor = "not-allowed"
     loginButton.setAttribute("disabled","")
     registerButton.setAttribute("disabled","")
+    //清空提醒訊息
+    clearErrorMessage()
 }
 let loginEmail = document.getElementById("loginEmail")
 let loginPassword = document.getElementById("loginPassword")
@@ -146,12 +152,14 @@ loginButton.addEventListener("click",() => {
             errorMessage[0].textContent = res[1]
             loginEmail.style.borderColor = "red"
             loginEmail.style.borderWidth = "2px"
+            isValidEmail = false
             clearInputValue()
         }else if(res[0] == "wrongPassword"){
             errorMessage[1].classList.remove("none")
             errorMessage[1].textContent = res[1]
             loginPassword.style.borderColor = "red"
             loginPassword.style.borderWidth = "2px"
+            isValidPassword = false
             // 清空input的值
             if (loginPassword.value != "") {
                 loginPassword.value = ""
@@ -168,14 +176,11 @@ loginButton.addEventListener("click",() => {
 })
 /* checkLoginInput  */
 function checkLoginInput(){
-    console.log("執行")
     loginEmail.addEventListener("input",() => {
-        console.log("執行1")
         checkLoginEmailInput()
         loginEmailInputValue = loginEmail.value
     })
     loginPassword.addEventListener("input",() => {
-        console.log("執行2")
         checkLoginPasswordInput()
         loginPasswordInputValue = loginPassword.value
     })
@@ -189,12 +194,6 @@ function checkLoginInput(){
 }
 /* 拿取註冊輸入值 + 準備註冊 */
 registerButton.addEventListener("click",() => {
-    // 清空input的值
-    if (registerName.value != "" && registerEmail.value != "" && registerPassword.value != "") {
-        registerName.value = ""
-        registerEmail.value = ""
-        registerPassword.value = ""
-    }
     // login api
     let fetchRegisterMessage = register(registerNameInputValue,registerEmailInputValue,registerPasswordInputValue)
 
@@ -205,20 +204,24 @@ registerButton.addEventListener("click",() => {
             errorMessage[2].textContent = res[1]
             registerEmail.style.borderColor = "red"
             registerEmail.style.borderWidth = "2px"
+            isValidEmail = false
+            clearInputValue()
+        }else if(res[0] == "formatError"){
+            errorMessage[3].classList.remove("none")
+            errorMessage[3].textContent = res[1]
+            errorMessage[3].style.color = "red"
+            clearInputValue()
         }else if(res[0] == "success"){
             console.log(res[1])
             errorMessage[3].classList.remove("none")
             errorMessage[3].textContent = "註冊成功，請返回登入"
             errorMessage[3].style.color = "blue"
+            clearInputValue()
         }else{
             console.log(res[1])
+            clearInputValue()
         }
     })
-
-    // 清空值
-    registerNameInputValue = ""
-    registerEmailInputValue = "" 
-    registerPasswordInputValue = ""
 })
 function checkRegisterInput(){
     registerName.addEventListener("input",() => {
@@ -250,7 +253,7 @@ function checkLoginEmailInput(){
     if(isValidEmail != true){
         errorMessage[0].classList.remove("none")
         errorMessage[0].textContent = "⚠ 信箱格式錯誤"
-        loginEmail.style.borderColor = "black"
+        loginEmail.style.borderColor = "#CCCCCC"
         loginEmail.style.borderWidth = "1px"
     }else{
         errorMessage[0].classList.add("none")
@@ -258,10 +261,11 @@ function checkLoginEmailInput(){
 }
 function checkLoginPasswordInput(){
     isValidPassword = loginPassword.checkValidity()
+    console.log(isValidPassword)
     if(isValidPassword != true){
         errorMessage[1].classList.remove("none")
         errorMessage[1].textContent = "⚠ 密碼長度須介於5到10字元，禁止非法字元"
-        loginPassword.style.borderColor = "black"
+        loginPassword.style.borderColor = "#CCCCCC"
         loginPassword.style.borderWidth = "1px"
     }else{
         errorMessage[1].classList.add("none")
@@ -270,10 +274,11 @@ function checkLoginPasswordInput(){
 
 function checkRegisterEmailInput(){
     isValidEmail = registerEmail.checkValidity()
+    console.log(isValidEmail)
     if(isValidEmail != true){
         errorMessage[2].classList.remove("none")
         errorMessage[2].textContent = "⚠ 信箱格式錯誤"
-        registerEmail.style.borderColor = "black"
+        registerEmail.style.borderColor = "#CCCCCC"
     }else{
         errorMessage[2].classList.add("none")
     }
@@ -282,6 +287,11 @@ function checkRegisterPasswordInput(){
     isValidPassword = registerPassword.checkValidity()
     if(isValidPassword != true){
         errorMessage[3].classList.remove("none")
+        errorMessage[3].textContent = "⚠ 密碼長度須介於5到10字元，禁止非法字元"
+        errorMessage[3].style.color = "red"
+        registerPassword.style.borderColor = "#CCCCCC"
+        registerPassword.style.borderWidth = "1px"
+
     }else{
         errorMessage[3].classList.add("none")
     }
@@ -291,19 +301,37 @@ function checkRegisterPasswordInput(){
 
 function clearInputValue(){
     // 清空input的值
-    if (loginEmail.value != "" && loginPassword.value != "") {
-        loginPassword.value = ""
-        loginEmail.value = ""
-    }
-    if (registerName.value != "" && registerEmail.value != "" && registerPassword.value != "") {
-        registerName.value = ""
-        registerEmail.value = ""
-        registerPassword.value = ""
-    }
+    loginPassword.value = ""
+    loginEmail.value = ""
+    registerName.value = ""
+    registerEmail.value = ""
+    registerPassword.value = ""
+
     // 清空值
     loginEmailInputValue = ""
     loginPasswordInputValue = ""
     registerNameInputValue = ""
     registerEmailInputValue = "" 
     registerPasswordInputValue = ""
+    // 禁用按鈕
+    loginButton.style.cursor = "not-allowed"
+    registerButton.style.cursor = "not-allowed"
+    loginButton.setAttribute("disabled","")
+    registerButton.setAttribute("disabled","")
+}
+
+/* 清空提示訊息 */
+function clearErrorMessage(){
+    errorMessage[0].classList.add("none")
+    errorMessage[1].classList.add("none")
+    errorMessage[2].classList.add("none")
+    errorMessage[3].classList.add("none")
+    loginEmail.style.borderColor = "#CCCCCC"
+    loginPassword.style.borderColor = "#CCCCCC"
+    registerEmail.style.borderColor = "#CCCCCC"
+    registerPassword.style.borderColor = "#CCCCCC"
+    loginEmail.style.borderWidth = "1px"
+    loginPassword.style.borderWidth = "1px"
+    registerEmail.style.borderWidth = "1px"
+    registerPassword.style.borderWidth = "1px"
 }

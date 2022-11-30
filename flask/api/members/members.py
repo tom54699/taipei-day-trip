@@ -1,11 +1,11 @@
 from flask import Flask,Blueprint,jsonify,request,render_template
 from api import db,bcrypt,jwt
 from api.models.members_model import Member
-from sqlalchemy import or_,and_
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
+import re
 
 members = Blueprint("members",
     __name__,
@@ -21,6 +21,10 @@ def register():
         register_email = data["registerEmail"]
         register_password = data["registerPassword"]
         print(register_name,register_email,register_password)
+        # 確保格式正確
+        regex = r"[A-Za-z0-9]{5,12}"
+        if register_email == "" or not bool(re.match(regex, register_password)):
+            return jsonify(status="formatError",message="⚠ 信箱或密碼格式不正確"),400
         # 確認account、email有無重複
         filters = {"email" : register_email}
         result = Member.query.filter_by(**filters).all()
@@ -86,4 +90,5 @@ def logout():
         return response,200
     except Exception as ex:
         return jsonify(status="error",message=f"{ex}"),500
+
 

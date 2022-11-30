@@ -29,6 +29,12 @@ export async function register(name,email,password){
             res.push(status,errorMessage)
             return res
         }
+        if(registerData["status"] == "formatError"){
+            let errorMessage = registerData["message"]
+            let status = registerData["status"]
+            res.push(status,errorMessage)
+            return res
+        }
         if(registerData["status"] == "success"){
             let status = registerData["status"]
             let message = "註冊成功"
