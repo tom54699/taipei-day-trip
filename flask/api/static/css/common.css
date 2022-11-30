@@ -1,5 +1,7 @@
 /* Member */
-
+button{
+    border-width: 0px;
+}
 .dialogMask{
     position: absolute;
     width: 100%; height: 100%;

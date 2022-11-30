@@ -105,6 +105,13 @@ function cancelLoginBox(){
     dialogMask.classList.add("none")
     loginBox.classList.add("none")
     registerBox.classList.add("none")
+    // 清空input的值
+    clearInputValue()
+    // 禁用按鈕
+    loginButton.style.cursor = "not-allowed"
+    registerButton.style.cursor = "not-allowed"
+    loginButton.setAttribute("disabled","")
+    registerButton.setAttribute("disabled","")
 }
 let loginEmail = document.getElementById("loginEmail")
 let loginPassword = document.getElementById("loginPassword")
@@ -112,8 +119,8 @@ let registerName = document.getElementById("registerName")
 let registerEmail = document.getElementById("registerEmail")
 let registerPassword = document.getElementById("registerPassword")
 let errorMessage = document.getElementsByClassName("errorMessage")
-/* 拿取登入輸入值 + 準備登入 */
 
+/* 拿取登入輸入值 + 準備登入 */
 let loginEmailInputValue 
 let loginPasswordInputValue 
 let registerNameInputValue 
@@ -128,12 +135,6 @@ document.addEventListener("input", ()=>{
 })
 
 loginButton.addEventListener("click",() => {
-    // 清空input的值
-    if (loginEmail.value != "" && loginPassword.value != "") {
-        loginPassword.value = ""
-        loginEmail.value = ""
-    }
-    console.log(loginEmailInputValue,loginPasswordInputValue)
     // login api + 顯示登入結果
     let fetchLoginMessage = login(loginEmailInputValue,loginPasswordInputValue)
     fetchLoginMessage.then(res=>{
@@ -143,22 +144,25 @@ loginButton.addEventListener("click",() => {
             errorMessage[0].textContent = res[1]
             loginEmail.style.borderColor = "red"
             loginEmail.style.borderWidth = "2px"
+            clearInputValue()
         }else if(res[0] == "wrongPassword"){
             errorMessage[1].classList.remove("none")
             errorMessage[1].textContent = res[1]
             loginPassword.style.borderColor = "red"
             loginPassword.style.borderWidth = "2px"
+            // 清空input的值
+            if (loginPassword.value != "") {
+                loginPassword.value = ""
+            }
+            loginPasswordInputValue = ""
         }else if(res[0] == "success"){
-            console.log(res[1])
             checkLogin()
+            // 清空input的值
+            clearInputValue()
         }else{
             console.log(res[1])
         }
     })
-
-    // 清空值
-    loginEmailInputValue = ""
-    loginPasswordInputValue = ""
 })
 /* checkLoginInput  */
 function checkLoginInput(){
@@ -186,7 +190,6 @@ registerButton.addEventListener("click",() => {
         registerEmail.value = ""
         registerPassword.value = ""
     }
-    console.log(registerNameInputValue,registerEmailInputValue,registerPasswordInputValue)
     // login api
     let fetchRegisterMessage = register(registerNameInputValue,registerEmailInputValue,registerPasswordInputValue)
 
@@ -195,8 +198,8 @@ registerButton.addEventListener("click",() => {
         if(res[0] == "emailDuplicate"){
             errorMessage[2].classList.remove("none")
             errorMessage[2].textContent = res[1]
-            loginEmail.style.borderColor = "red"
-            loginEmail.style.borderWidth = "2px"
+            registerEmail.style.borderColor = "red"
+            registerEmail.style.borderWidth = "2px"
         }else if(res[0] == "success"){
             console.log(res[1])
             errorMessage[3].classList.remove("none")
@@ -251,7 +254,7 @@ function checkLoginPasswordInput(){
     isValidPassword = loginPassword.checkValidity()
     if(isValidPassword != true){
         errorMessage[1].classList.remove("none")
-        errorMessage[1].textContent = "⚠ 密碼長度須介於5到10字元"
+        errorMessage[1].textContent = "⚠ 密碼長度須介於5到10字元，禁止非法字元"
         loginPassword.style.borderColor = "black"
         loginPassword.style.borderWidth = "1px"
     }else{
@@ -278,3 +281,23 @@ function checkRegisterPasswordInput(){
     }
 }
 
+/* 清空input值*/
+
+function clearInputValue(){
+    // 清空input的值
+    if (loginEmail.value != "" && loginPassword.value != "") {
+        loginPassword.value = ""
+        loginEmail.value = ""
+    }
+    if (registerName.value != "" && registerEmail.value != "" && registerPassword.value != "") {
+        registerName.value = ""
+        registerEmail.value = ""
+        registerPassword.value = ""
+    }
+    // 清空值
+    loginEmailInputValue = ""
+    loginPasswordInputValue = ""
+    registerNameInputValue = ""
+    registerEmailInputValue = "" 
+    registerPasswordInputValue = ""
+}
