@@ -12,7 +12,7 @@ members = Blueprint("members",
     static_folder='static',
     template_folder='templates')
 
-@members.route("api/member",methods=["POST"])
+@members.route("api/user",methods=["POST"])
 def register():
     try:
         # 拿使用者輸入的資料
@@ -24,23 +24,24 @@ def register():
         # 確保格式正確
         regex = r"[A-Za-z0-9]{5,12}"
         if register_email == "" or not bool(re.match(regex, register_password)):
-            return jsonify(status="formatError",message="⚠ 信箱或密碼格式不正確"),400
+
+            return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
         # 確認account、email有無重複
         filters = {"email" : register_email}
         result = Member.query.filter_by(**filters).all()
         print("篩選結果:",len(result))
         if len(result) != 0:
-            return jsonify(status="emailDuplicate",message="⚠ 信箱已被註冊"),400
+            return jsonify(error="true",message="⚠ 信箱已被註冊"),400
         else:
             pw_hash = bcrypt.generate_password_hash(register_password, 10)
             data = Member(register_name,register_email,pw_hash)
             db.session.add(data)
             db.session.commit()
-            return jsonify(status="success"),200
+            return jsonify(ok="true"),200
     except Exception as ex:
-        return jsonify(status="error",message=f"{ex}"),500
+        return jsonify(error="true",message=f"{ex}"),500
   
-@members.route("api/member",methods=["PATCH"])
+@members.route("api/user/auth",methods=["PUT"])
 def login():
     try:
         # 拿使用者輸入的資料
@@ -54,41 +55,48 @@ def login():
             login_name = i.name
         print("篩選結果:",len(result)) 
         if len(result) == 0:
-            return jsonify(status="noAccount",message="⚠ 未註冊的信箱，或是輸入錯誤"),400
+            return jsonify(error="true", message="⚠ 未註冊的信箱，或是輸入錯誤"),400
         if bcrypt.check_password_hash(result[0].password,login_password):
             # 帶JWT
             access_token = create_access_token(identity = login_email, fresh=True)
             refresh_token = create_refresh_token(identity = login_email)
             # 把access_token和status都弄成json傳過去
-            status = "success"
-            resp = jsonify(access_token=access_token,status=status,name=login_name)
+            status = "true"
+            resp = jsonify(access_token=access_token,ok=status,name=login_name)
             set_refresh_cookies(resp,refresh_token)
         else:
-            return jsonify(status="wrongPassword",message="⚠ 密碼輸入錯誤"),400
+            return jsonify(error="true" ,message="⚠ 密碼輸入錯誤"),400
         return resp,200
     except Exception as ex:
-        return jsonify(status="error",message=f"{ex}"),500
+        return jsonify(error="true" ,message=f"{ex}"),500
 
-@members.route("api/member",methods=["GET"])
+@members.route("api/user/auth",methods=["GET"])
 @jwt_required(refresh=True)
 def get_member():
     try:
         identity = get_jwt_identity()
         member_email =identity
         member = Member.query.filter_by(email=member_email).first()
-        return jsonify(status="success", id=member.id, name=member.name, email=member.email),200
+        member_data ={
+            "data": {
+                "id": member.id,
+                "name": member.name,
+                "email": member.email
+            }
+        }
+        return member_data,200
     except Exception as ex:
-        return jsonify(status="error",message=f"{ex}"),500
+        return jsonify(error="true",message=f"{ex}"),500
 
 
 
-@members.route("api/member",methods=["DELETE"])
+@members.route("api/user/auth",methods=["DELETE"])
 def logout():
     try:
-        response = jsonify({"status": "success"})
+        response = jsonify({"ok": "true"})
         unset_refresh_cookies(response)
         return response,200
     except Exception as ex:
-        return jsonify(status="error",message=f"{ex}"),500
+        return jsonify(error="true",message=f"{ex}"),500
 
 

@@ -9,7 +9,6 @@ export async function register(name,email,password){
             "Accept": "application/json",
         }
         let content = {
-            "status": "success",
             "registerName": name,
             "registerEmail": email,
             "registerPassword": password
@@ -19,29 +18,22 @@ export async function register(name,email,password){
             headers: headers,
             body: JSON.stringify(content)
         }
-        let response = await fetch("/api/member",config)
+        let response = await fetch("/api/user",config)
         let registerData = await response.json()
         console.log("後端login回傳的資料",registerData)
-        // 回傳資料如果status是error
-        if(registerData["status"] == "emailDuplicate"){
-            let errorMessage = registerData["message"]
-            let status = registerData["status"]
-            res.push(status,errorMessage)
-            return res
-        }
-        if(registerData["status"] == "formatError"){
-            let errorMessage = registerData["message"]
-            let status = registerData["status"]
-            res.push(status,errorMessage)
-            return res
-        }
-        if(registerData["status"] == "success"){
-            let status = registerData["status"]
+        if(registerData["ok"] == "true"){
+            let status = registerData["ok"]
             let message = "註冊成功"
             res.push(status,message)
             return res
         }
-        if(loginData["status"] == "error"){
+        // 回傳資料如果status是error
+        if(registerData["message"] == "⚠ 信箱已被註冊" || registerData["message"] == "⚠ 信箱或密碼格式不正確"){
+            let errorMessage = registerData["message"]
+            let status = registerData["status"]
+            res.push(status,errorMessage)
+            return res
+        }else{
             let errorMessage = registerData["message"]
             let status = "error"
             res.push(status,errorMessage)
@@ -69,38 +61,36 @@ export async function login(email,password){
             //"Authorization" : `Bearer ${access_token}`
         }
         let content = {
-            "status": "success",
             "loginEmail": email,
             "loginPassword": password
         }
         let config = {
-            method: "PATCH",
+            method: "PUT",
             headers: headers,
             body: JSON.stringify(content)
         }
-        let response = await fetch("/api/member",config)
+        let response = await fetch("/api/user/auth",config)
         let loginData = await response.json()
         console.log("後端login回傳的資料",loginData)
-        // 回傳資料如果是信箱或密碼錯誤
-        if(loginData["status"] == "wrongPassword" || loginData["status"] == "noAccount"){
-            let errorMessage = loginData["message"]
-            let status = loginData["status"]
-            res.push(status,errorMessage)
-            return res
-        }
-        if(loginData["status"] == "success"){
+        if(loginData["ok"] == "true"){
             storeAccessToken(loginData["access_token"])
             function clock(){
                 window.setTimeout(( () => console.log("Token has expired") ), 60000)
             }
             clock()
-            let status = loginData["status"]
+            let status = loginData["ok"]
             let message = "登入成功"
             let name = loginData["name"]
             res.push(status,message,name)
             return res
         }
-        if(loginData["status"] == "error"){
+        // 回傳資料如果是信箱或密碼錯誤
+        if(loginData["message"] == "⚠ 密碼輸入錯誤" || loginData["message"] == "⚠ 未註冊的信箱，或是輸入錯誤"){
+            let errorMessage = loginData["message"]
+            let status = loginData["status"]
+            res.push(status,errorMessage)
+            return res
+        }else{
             let errorMessage = loginData["message"]
             let status = "error"
             res.push(status,errorMessage)

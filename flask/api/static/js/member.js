@@ -28,10 +28,10 @@ async function checkLogin(){
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/api/member",config)
+        let response = await fetch("/api/user/auth",config)
         let getMemberData = await response.json()
         console.log("後端login回傳的資料",getMemberData)
-        if(getMemberData["status"] == "success"){
+        if(getMemberData["data"] != null){
             dialogMask.classList.add("none")
             loginBox.classList.add("none")
             logoutButton.classList.remove("none")
@@ -57,10 +57,10 @@ logoutButton.addEventListener("click",async() => {
             method: "DELETE",
             headers: headers,
         }
-        let response = await fetch("/api/member",config)
+        let response = await fetch("/api/user/auth",config)
         let deleteData = await response.json()
         console.log("後端login回傳的資料",deleteData)
-        if(deleteData["status"] == "success"){
+        if(deleteData["ok"] == "true"){
             logoutButton.classList.add("none")
             goLoginButton.classList.remove("none")
             isLogin = true
@@ -147,14 +147,14 @@ loginButton.addEventListener("click",() => {
     let fetchLoginMessage = login(loginEmailInputValue,loginPasswordInputValue)
     fetchLoginMessage.then(res=>{
         console.log(res)
-        if(res[0] == "noAccount"){
+        if(res[1] == "⚠ 未註冊的信箱，或是輸入錯誤"){
             errorMessage[0].classList.remove("none")
             errorMessage[0].textContent = res[1]
             loginEmail.style.borderColor = "red"
             loginEmail.style.borderWidth = "2px"
             isValidEmail = false
             clearInputValue()
-        }else if(res[0] == "wrongPassword"){
+        }else if(res[1] == "⚠ 密碼輸入錯誤"){
             errorMessage[1].classList.remove("none")
             errorMessage[1].textContent = res[1]
             loginPassword.style.borderColor = "red"
@@ -165,7 +165,7 @@ loginButton.addEventListener("click",() => {
                 loginPassword.value = ""
             }
             loginPasswordInputValue = ""
-        }else if(res[0] == "success"){
+        }else if(res[0] == "true"){
             checkLogin()
             // 清空input的值
             clearInputValue()
@@ -185,9 +185,11 @@ function checkLoginInput(){
         loginPasswordInputValue = loginPassword.value
     })
     if(isValidEmail && isValidPassword){
+        console.log("執行")
         loginButton.style.cursor = "pointer"
         loginButton.removeAttribute("disabled")
     }else{
+        console.log("執行1")
         loginButton.style.cursor = "not-allowed"
         loginButton.setAttribute("disabled","")
     }
@@ -199,19 +201,19 @@ registerButton.addEventListener("click",() => {
 
     fetchRegisterMessage.then(res=>{
         console.log(res)
-        if(res[0] == "emailDuplicate"){
+        if(res[1] == "⚠ 信箱已被註冊"){
             errorMessage[2].classList.remove("none")
             errorMessage[2].textContent = res[1]
             registerEmail.style.borderColor = "red"
             registerEmail.style.borderWidth = "2px"
             isValidEmail = false
             clearInputValue()
-        }else if(res[0] == "formatError"){
+        }else if(res[1] == "⚠ 信箱或密碼格式不正確"){
             errorMessage[3].classList.remove("none")
             errorMessage[3].textContent = res[1]
             errorMessage[3].style.color = "red"
             clearInputValue()
-        }else if(res[0] == "success"){
+        }else if(res[0] == "true"){
             console.log(res[1])
             errorMessage[3].classList.remove("none")
             errorMessage[3].textContent = "註冊成功，請返回登入"
@@ -320,7 +322,7 @@ function clearInputValue(){
     registerButton.setAttribute("disabled","")
 }
 
-/* 清空提示訊息 */
+/* 清空提示訊息 + 按鈕disable判斷 */
 function clearErrorMessage(){
     errorMessage[0].classList.add("none")
     errorMessage[1].classList.add("none")
@@ -334,4 +336,6 @@ function clearErrorMessage(){
     loginPassword.style.borderWidth = "1px"
     registerEmail.style.borderWidth = "1px"
     registerPassword.style.borderWidth = "1px"
+    isValidEmail = false
+    isValidPassword = false
 }
