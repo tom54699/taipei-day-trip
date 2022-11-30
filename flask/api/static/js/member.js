@@ -14,6 +14,8 @@ let isLogin = false;
 
 window.addEventListener("load", () => {
     checkLogin()
+    checkLoginInput()
+    checkRegisterInput()
 })
 
 async function checkLogin(){
@@ -129,11 +131,6 @@ let registerPasswordInputValue
 let isValidEmail
 let isValidPassword
 
-document.addEventListener("input", ()=>{
-    checkLoginInput()
-    checkRegisterInput()
-})
-
 loginButton.addEventListener("click",() => {
     // login api + 顯示登入結果
     let fetchLoginMessage = login(loginEmailInputValue,loginPasswordInputValue)
@@ -166,11 +163,14 @@ loginButton.addEventListener("click",() => {
 })
 /* checkLoginInput  */
 function checkLoginInput(){
+    console.log("執行")
     loginEmail.addEventListener("input",() => {
+        console.log("執行1")
         checkLoginEmailInput()
         loginEmailInputValue = loginEmail.value
     })
     loginPassword.addEventListener("input",() => {
+        console.log("執行2")
         checkLoginPasswordInput()
         loginPasswordInputValue = loginPassword.value
     })
@@ -241,6 +241,7 @@ function checkRegisterInput(){
 /* --- */
 function checkLoginEmailInput(){
     isValidEmail = loginEmail.checkValidity()
+    console.log(isValidEmail)
     if(isValidEmail != true){
         errorMessage[0].classList.remove("none")
         errorMessage[0].textContent = "⚠ 信箱格式錯誤"
