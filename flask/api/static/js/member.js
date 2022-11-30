@@ -131,6 +131,11 @@ let registerPasswordInputValue
 let isValidEmail
 let isValidPassword
 
+document.addEventListener("input", ()=>{
+    checkLoginInput()
+    checkRegisterInput()
+})
+
 loginButton.addEventListener("click",() => {
     // login api + 顯示登入結果
     let fetchLoginMessage = login(loginEmailInputValue,loginPasswordInputValue)
