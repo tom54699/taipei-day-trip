@@ -17,9 +17,9 @@ def register():
     try:
         # 拿使用者輸入的資料
         data = request.get_json()
-        register_name = data["registerName"]
-        register_email = data["registerEmail"]
-        register_password = data["registerPassword"]
+        register_name = data["name"]
+        register_email = data["email"]
+        register_password = data["password"]
         print(register_name,register_email,register_password)
         # 確保格式正確
         regex = r"[A-Za-z0-9]{5,12}"
@@ -46,8 +46,8 @@ def login():
     try:
         # 拿使用者輸入的資料
         data = request.get_json()
-        login_email = data["loginEmail"]
-        login_password = data["loginPassword"]
+        login_email = data["email"]
+        login_password = data["password"]
 
         filters = {"email" : login_email}
         result = Member.query.filter_by(**filters).all()

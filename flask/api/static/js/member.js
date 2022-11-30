@@ -239,6 +239,8 @@ function checkRegisterInput(){
         registerPasswordInputValue = registerPassword.value
     })
     if(isValidEmail && isValidPassword){
+        registerEmail.style.borderColor = "#CCCCCC"
+        registerEmail.style.borderWidth = "1px"
         registerButton.style.cursor = "pointer"
         registerButton.removeAttribute("disabled")
     }else{
@@ -281,6 +283,7 @@ function checkRegisterEmailInput(){
         errorMessage[2].classList.remove("none")
         errorMessage[2].textContent = "⚠ 信箱格式錯誤"
         registerEmail.style.borderColor = "#CCCCCC"
+        registerEmail.style.borderWidth = "1px"
     }else{
         errorMessage[2].classList.add("none")
     }

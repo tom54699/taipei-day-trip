@@ -9,9 +9,9 @@ export async function register(name,email,password){
             "Accept": "application/json",
         }
         let content = {
-            "registerName": name,
-            "registerEmail": email,
-            "registerPassword": password
+            "name": name,
+            "email": email,
+            "password": password
         }
         let config = {
             method: "POST",
@@ -61,8 +61,8 @@ export async function login(email,password){
             //"Authorization" : `Bearer ${access_token}`
         }
         let content = {
-            "loginEmail": email,
-            "loginPassword": password
+            "email": email,
+            "password": password
         }
         let config = {
             method: "PUT",
