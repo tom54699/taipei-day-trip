@@ -7,9 +7,6 @@
     text-decoration: none;
 }
 
-a{
-    color: #448899;
-}
 
 input:focus{
     outline:none;/*input標籤聚焦不出現預設邊框:*/
@@ -340,6 +337,7 @@ input[type=radio]{
     background: #448899;
     border-radius: 5px;
     display: flex; align-items: center;justify-content: center;
+    cursor: pointer;
 }
 /* BUTTON */
 .attractionProfileBox>div:nth-child(3)>div:nth-child(6)>div{
@@ -348,6 +346,7 @@ input[type=radio]{
     font-size: 19px;
     line-height: 16px;
     color: #FFFFFF;
+    cursor: pointer;
 }
 
 

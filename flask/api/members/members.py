@@ -24,7 +24,6 @@ def register():
         # 確保格式正確
         regex = r"[A-Za-z0-9]{5,12}"
         if register_email == "" or not bool(re.match(regex, register_password)):
-
             return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
         # 確認account、email有無重複
         filters = {"email" : register_email}
@@ -35,6 +34,7 @@ def register():
         else:
             pw_hash = bcrypt.generate_password_hash(register_password, 10)
             data = Member(register_name,register_email,pw_hash)
+            print(data)
             db.session.add(data)
             db.session.commit()
             return jsonify(ok="true"),200
@@ -51,8 +51,6 @@ def login():
 
         filters = {"email" : login_email}
         result = Member.query.filter_by(**filters).all()
-        for i in result:
-            login_name = i.name
         print("篩選結果:",len(result)) 
         if len(result) == 0:
             return jsonify(error="true", message="⚠ 未註冊的信箱，或是輸入錯誤"),400
@@ -62,7 +60,7 @@ def login():
             refresh_token = create_refresh_token(identity = login_email)
             # 把access_token和status都弄成json傳過去
             status = "true"
-            resp = jsonify(access_token=access_token,ok=status,name=login_name)
+            resp = jsonify(access_token=access_token,ok=status)
             set_refresh_cookies(resp,refresh_token)
         else:
             return jsonify(error="true" ,message="⚠ 密碼輸入錯誤"),400
@@ -100,3 +98,12 @@ def logout():
         return jsonify(error="true",message=f"{ex}"),500
 
 
+@members.route("/refresh", methods=["GET"])
+@jwt_required(refresh=True)
+def refresh():
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity, fresh=True)
+    resp = jsonify(access_token=access_token,status="success")
+    refresh_token = create_refresh_token(identity = identity)
+    set_refresh_cookies(resp,refresh_token)
+    return resp

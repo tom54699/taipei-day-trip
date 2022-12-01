@@ -185,11 +185,9 @@ function checkLoginInput(){
         loginPasswordInputValue = loginPassword.value
     })
     if(isValidEmail && isValidPassword){
-        console.log("執行")
         loginButton.style.cursor = "pointer"
         loginButton.removeAttribute("disabled")
     }else{
-        console.log("執行1")
         loginButton.style.cursor = "not-allowed"
         loginButton.setAttribute("disabled","")
     }
@@ -253,7 +251,6 @@ function checkRegisterInput(){
 /* --- */
 function checkLoginEmailInput(){
     isValidEmail = loginEmail.checkValidity()
-    console.log(isValidEmail)
     if(isValidEmail != true){
         errorMessage[0].classList.remove("none")
         errorMessage[0].textContent = "⚠ 信箱格式錯誤"
@@ -265,7 +262,6 @@ function checkLoginEmailInput(){
 }
 function checkLoginPasswordInput(){
     isValidPassword = loginPassword.checkValidity()
-    console.log(isValidPassword)
     if(isValidPassword != true){
         errorMessage[1].classList.remove("none")
         errorMessage[1].textContent = "⚠ 密碼長度須介於5到10字元，禁止非法字元"
@@ -278,7 +274,6 @@ function checkLoginPasswordInput(){
 
 function checkRegisterEmailInput(){
     isValidEmail = registerEmail.checkValidity()
-    console.log(isValidEmail)
     if(isValidEmail != true){
         errorMessage[2].classList.remove("none")
         errorMessage[2].textContent = "⚠ 信箱格式錯誤"

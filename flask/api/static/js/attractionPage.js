@@ -10,6 +10,9 @@ let fetchTransport
 let imgId 
 let imageLength
 
+window.addEventListener("load", () => {
+    setNowDate()
+})
 export async function generateAttraction(id){
     await fetchAttraction(id).then(data=>{
         /* Get Data */
@@ -147,4 +150,22 @@ function checkTourTime(){
     }else if(afternoon.checked == true){
         tourFee.textContent = "新台幣 2500 元"
     }
+}
+
+/* 開始預約行程按鈕 */
+let bookingAttractionButton = document.getElementById("bookingAttractionButton")
+bookingAttractionButton.addEventListener("click",() => {
+    
+})
+
+/* 預設 INPUT DATE */
+function setNowDate(){
+    let bookingDate = document.getElementById("bookingDate") 
+    let today = new Date();
+    bookingDate.value = today.toISOString().substr(0, 10);
+    let year = today.getFullYear()+1
+    let month = ('0'+ (today.getMonth() + 1)).slice(-2)
+    let date = ('0' + today.getDate()).slice(-2)
+    let time = year+"-"+month+"-"+date
+    bookingDate.setAttribute("max", time)
 }

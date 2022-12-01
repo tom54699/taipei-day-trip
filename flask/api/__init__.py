@@ -29,5 +29,7 @@ def create_app():
         app.register_blueprint(main, url_prefix="")
         from api.members.members import members
         app.register_blueprint(members, url_prefix="")
+        from api.booking.booking import booking
+        app.register_blueprint(booking, url_prefix="")
         
     return app
