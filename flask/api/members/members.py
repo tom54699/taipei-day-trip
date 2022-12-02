@@ -2,10 +2,13 @@ from flask import Flask,Blueprint,jsonify,request,render_template
 from api import db,bcrypt,jwt
 from api.models.members_model import Member
 from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
+    JWTManager, jwt_required, create_access_token,get_jwt,
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
 import re
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 
 members = Blueprint("members",
     __name__,
@@ -48,7 +51,6 @@ def login():
         data = request.get_json()
         login_email = data["email"]
         login_password = data["password"]
-
         filters = {"email" : login_email}
         result = Member.query.filter_by(**filters).all()
         print("篩選結果:",len(result)) 
@@ -113,7 +115,7 @@ def refresh():
 
 @jwt.invalid_token_loader
 def invalid_token_callback(e):
-    return jsonify(error="true",message="⚠ 請登入"),403
+    return jsonify(error="true",message="⚠ 請登入"),401
 
 @jwt.expired_token_loader
 def expired_token_callback(jwt_header,jwt_data):
@@ -121,4 +123,4 @@ def expired_token_callback(jwt_header,jwt_data):
 
 @jwt.unauthorized_loader
 def unauthorized_callback(e):
-    return jsonify(error="true",message="⚠ 請登入"), 403
+    return jsonify(error="true",message="⚠ 請登入"), 401

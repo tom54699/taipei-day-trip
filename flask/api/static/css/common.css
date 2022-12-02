@@ -12,9 +12,10 @@ button{
 }
 /* Dialog / signin */
 .loginBox{
-    width: min(95%,340px); height: auto;
+    width: min(100%,340px); height: auto;
+    margin-left: -170px;
     display: flex; flex-direction: column; align-items: center;
-    position: fixed; top: 80px;
+    position: fixed; top: 80px; left:50%;
     background: #FFFFFF;
     box-shadow: 0px 4px 60px #AAAAAA;
     border-radius: 6px;
@@ -100,8 +101,9 @@ button:disabled {
 
 .registerBox{
     width: min(95%,340px); height: auto;
+    margin-left: -170px;
     display: flex; flex-direction: column; align-items: center;
-    position: fixed; top: 80px;
+    position: fixed; top: 80px; left:50%;
     background: #FFFFFF;
     box-shadow: 0px 4px 60px #AAAAAA;
     border-radius: 6px;
@@ -128,3 +130,6 @@ button:disabled {
 }
 
 /* login message */
+
+
+

@@ -10,7 +10,7 @@ let goRegisterButton = document.getElementById("goRegisterButton")
 let goBackLoginButton = document.getElementById("goBackLoginButton")
 let cancelButton = document.getElementsByClassName("cancelButton")
 let logoutButton = document.getElementById("logoutButton")
-
+let isLogin = false
 
 window.addEventListener("load", () => {
     checkLogin()
@@ -36,11 +36,14 @@ async function checkLogin(){
             loginBox.classList.add("none")
             logoutButton.classList.remove("none")
             goLoginButton.classList.add("none")
+            isLogin = true
         }else{
             console.log(getMemberData["message"])
+            isLogin = false
         }
     }
     catch(err){
+        isLogin = false
         console.log("Something Wrong:",err)
     }
 }
@@ -61,11 +64,14 @@ logoutButton.addEventListener("click",async() => {
         if(deleteData["ok"] == "true"){
             logoutButton.classList.add("none")
             goLoginButton.classList.remove("none")
+            isLogin = false
         }else{
             console.log(deleteData["message"])
+            isLogin = true
         }
     }
     catch(err){
+        isLogin = true
         console.log("Something Wrong:",err)
     }
 })
@@ -367,7 +373,13 @@ export async function refreshAccessToken(){
 }
 
 /* 判斷換發時機  */
-export function checkRefreshAccessToken(){
-    window.setTimeout(( () => console.log("Token has expired") ), 60000)
-    
+export async function checkRefreshAccessToken(time){
+    if(isLogin == true){
+        console.log("拿到時間")
+        setInterval(( () => console.log("Token has expired") ), time)
+        let timeout2 = setInterval( () => {
+                console.log("準備換")
+                refreshAccessToken()
+        }, time*0.8);
+    }
 }
