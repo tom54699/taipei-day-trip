@@ -365,3 +365,9 @@ export async function refreshAccessToken(){
         errorPageGenerate(problem)
     }
 }
+
+/* 判斷換發時機  */
+export function checkRefreshAccessToken(){
+    window.setTimeout(( () => console.log("Token has expired") ), 60000)
+    
+}
