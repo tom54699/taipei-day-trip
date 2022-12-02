@@ -101,9 +101,24 @@ def logout():
 @members.route("/refresh", methods=["GET"])
 @jwt_required(refresh=True)
 def refresh():
-    identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity, fresh=True)
-    resp = jsonify(access_token=access_token,status="success")
-    refresh_token = create_refresh_token(identity = identity)
-    set_refresh_cookies(resp,refresh_token)
-    return resp
+    try:
+        identity = get_jwt_identity()
+        access_token = create_access_token(identity=identity, fresh=True)
+        resp = jsonify(access_token=access_token,status="success")
+        refresh_token = create_refresh_token(identity = identity)
+        set_refresh_cookies(resp,refresh_token)
+        return resp,200
+    except Exception as ex:
+        return jsonify(error="true",message=f"{ex}"),500   
+
+@jwt.invalid_token_loader
+def invalid_token_callback(e):
+    return jsonify(error="true",message="⚠ 請登入"),403
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header,jwt_data):
+    return jsonify(error="true",message="⚠ 請換發token"),403
+
+@jwt.unauthorized_loader
+def unauthorized_callback(e):
+    return jsonify(error="true",message="⚠ 請登入"), 403

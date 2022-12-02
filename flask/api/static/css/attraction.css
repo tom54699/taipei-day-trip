@@ -332,15 +332,18 @@ input[type=radio]{
 }
 /* Button [forBooking] */
 .attractionProfileBox>div:nth-child(3)>div:nth-child(6){
-    width: 154px; height: 36px;
-    margin-top: 25px; margin-left: 20px; 
+    margin-top: 25px; margin-left: 20px;
+    display: flex; justify-content: flex-start; align-items: center;
+}
+.attractionProfileBox>div:nth-child(3)>div:nth-child(6)>button{
+    width: 154px; height: 36px; 
     background: #448899;
     border-radius: 5px;
     display: flex; align-items: center;justify-content: center;
     cursor: pointer;
 }
 /* BUTTON */
-.attractionProfileBox>div:nth-child(3)>div:nth-child(6)>div{
+.attractionProfileBox>div:nth-child(3)>div:nth-child(6)>button>div{
     width: 114px; height: 16px;
     font-weight: 400;
     font-size: 19px;
@@ -348,7 +351,20 @@ input[type=radio]{
     color: #FFFFFF;
     cursor: pointer;
 }
-
+.bookingMessage{
+    margin-left: 15px;
+    color: #179bbc;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+}
+.goBookingButton{
+    margin-left: 10px;
+    color: #179bbc;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+}
 
 /*-----------------------------------------------------*/
 /* 分隔線 */

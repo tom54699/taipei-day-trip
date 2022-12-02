@@ -1,4 +1,4 @@
-import {register,login} from "./sendDataToBackend.js"
+import {register,login,storeAccessToken,getAccessToken} from "./sendDataToBackend.js"
 
 let dialogMask = document.getElementById("dialogMask")
 let loginButton = document.getElementById("loginButton")
@@ -10,7 +10,7 @@ let goRegisterButton = document.getElementById("goRegisterButton")
 let goBackLoginButton = document.getElementById("goBackLoginButton")
 let cancelButton = document.getElementsByClassName("cancelButton")
 let logoutButton = document.getElementById("logoutButton")
-let isLogin = false;
+
 
 window.addEventListener("load", () => {
     checkLogin()
@@ -36,10 +36,8 @@ async function checkLogin(){
             loginBox.classList.add("none")
             logoutButton.classList.remove("none")
             goLoginButton.classList.add("none")
-            isLogin = true
         }else{
             console.log(getMemberData["message"])
-            isLogin = false
         }
     }
     catch(err){
@@ -63,10 +61,8 @@ logoutButton.addEventListener("click",async() => {
         if(deleteData["ok"] == "true"){
             logoutButton.classList.add("none")
             goLoginButton.classList.remove("none")
-            isLogin = true
         }else{
             console.log(deleteData["message"])
-            isLogin = false
         }
     }
     catch(err){
@@ -336,4 +332,36 @@ function clearErrorMessage(){
     registerPassword.style.borderWidth = "1px"
     isValidEmail = false
     isValidPassword = false
+}
+
+
+/* 換發access_token */
+export async function refreshAccessToken(){
+    try{
+        let headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        let config = {
+            method: "GET",
+            headers: headers,
+        }
+        let response = await fetch("/refresh",config)
+        let refreshData = await response.json()
+        console.log("後端refresh回傳的資料",refreshData)
+        let access_token = refreshData["access_token"]
+        if(refreshData["status"] == "success"){
+            storeAccessToken(access_token)
+        }
+        else{
+            let problem = "⚠ 換發 Refresh Token 失敗"
+            console.log(problem)
+            //errorPageGenerate(problem)
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+        let problem = err
+        errorPageGenerate(problem)
+    }
 }

@@ -120,3 +120,53 @@ function getAccessToken(){
     const access_token = window.sessionStorage.getItem("access_token")
     return access_token
 }
+
+
+/* 儲存景點精料 */
+export async function sendBookingData(attractionId,date,time,price){
+    let res = []
+    let access_token = getAccessToken()
+    try{
+        //let access_token = getAccessToken()
+        let headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        let content = {
+            "attractionId": attractionId,
+            "date": date,
+            "time": time,
+            "price": price
+        }
+        let config = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(content)
+        }
+        let response = await fetch("/api/booking",config)
+        let getBookingData = await response.json()
+        console.log("後端getBookingData回傳的資料",getBookingData)
+        if(getBookingData["ok"] == "true"){
+            let status = "ok"
+            let message = "預約成功 ☛"
+            res.push(status,message)
+            return res
+        }
+        // 回傳Error
+        if(getBookingData["error"] == "true"){
+            let errorMessage = getBookingData["message"]
+            let status = "error"
+            res.push(status,errorMessage)
+            return res
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+        let errorMessage = err
+        let status = "error"
+        res.push(status,errorMessage)
+        return res
+    }
+}
+

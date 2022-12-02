@@ -1,5 +1,7 @@
 import {fetchAttraction} from "./fetchLocation.js"
+import{sendBookingData} from "./sendDataToBackend.js"
 
+let fetchId
 let fetchName
 let fetchMrt
 let fetchCategories
@@ -23,6 +25,7 @@ export async function generateAttraction(id){
             let newFetchImg = data["data"]["images"][i]
             fetchImg.push(newFetchImg)
         }
+        fetchId = data["data"]["id"]
         fetchName = data["data"]["name"]
         fetchMrt = data["data"]["mrt"]
         fetchCategories = data["data"]["category"]
@@ -152,15 +155,9 @@ function checkTourTime(){
     }
 }
 
-/* 開始預約行程按鈕 */
-let bookingAttractionButton = document.getElementById("bookingAttractionButton")
-bookingAttractionButton.addEventListener("click",() => {
-    
-})
-
 /* 預設 INPUT DATE */
+let bookingDate = document.getElementById("bookingDate") 
 function setNowDate(){
-    let bookingDate = document.getElementById("bookingDate") 
     let today = new Date();
     bookingDate.value = today.toISOString().substr(0, 10);
     let year = today.getFullYear()+1
@@ -169,3 +166,55 @@ function setNowDate(){
     let time = year+"-"+month+"-"+date
     bookingDate.setAttribute("max", time)
 }
+
+
+
+/* 開始預約行程按鈕 */
+let bookingAttractionButton = document.getElementById("bookingAttractionButton")
+let bookingMessage = document.getElementById("bookingMessage")
+let goBookingButton = document.getElementById("goBookingButton")
+bookingAttractionButton.addEventListener("click",async() => {
+    /* 抓取填寫的資料 */
+    let date = bookingDate.value
+    let time
+    let price
+    if(morning.checked == true){
+        time = "上半天"
+        price = 2000
+    }else if(afternoon.checked == true){
+        time = "下半天"
+        price = 2500
+    }
+    let fetchSendBookingData = sendBookingData(fetchId,date,time,price)
+
+    fetchSendBookingData.then(res=>{
+        console.log(res)
+        if(res[0] == "ok"){
+            bookingMessage.textContent = res[1]
+            bookingMessage.classList.remove("none")
+            // 倒數自動跳轉
+            goBookingButton.textContent = "3 ...自動跳轉中"
+            let number = 3
+            let timeout1 = setInterval( () => {
+                console.log(number)
+                number --
+                goBookingButton.textContent = number + " ...自動跳轉中"
+                if(number <= 0){
+                    goBookingButton.textContent = "滾去付錢 🖕"
+                    clearInterval(timeout1)
+                }
+            }, 1000);
+            setTimeout("location.href='/booking'",3500)
+            goBookingButton.classList.remove("none") 
+            
+        }else if(res[0] == "error"){
+            bookingMessage.textContent = res[1]
+            bookingMessage.classList.remove("none")
+            goBookingButton.classList.add("none")
+        }else{
+            bookingMessage.textContent = "⚠ 未知原因失敗"
+            bookingMessage.classList.remove("none") 
+        }
+    })
+})
+
