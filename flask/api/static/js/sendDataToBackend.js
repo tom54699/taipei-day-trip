@@ -74,6 +74,7 @@ export async function login(email,password){
         console.log("後端login回傳的資料",loginData)
         if(loginData["ok"] == "true"){
             storeAccessToken(loginData["access_token"])
+            setInterval(( () => console.log("Token has expired") ), 60000)
             let status = loginData["ok"]
             let message = "登入成功"
             let name = loginData["name"]

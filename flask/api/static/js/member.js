@@ -372,7 +372,8 @@ export async function refreshAccessToken(){
     }
 }
 
-/* 判斷換發時機  */
+
+/* 判斷換發時機  
 export async function checkRefreshAccessToken(time){
     if(isLogin == true){
         console.log("拿到時間")
@@ -383,3 +384,4 @@ export async function checkRefreshAccessToken(time){
         }, time*0.8);
     }
 }
+*/

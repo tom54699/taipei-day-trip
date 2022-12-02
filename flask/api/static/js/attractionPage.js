@@ -1,5 +1,6 @@
 import {fetchAttraction} from "./fetchLocation.js"
 import{sendBookingData} from "./sendDataToBackend.js"
+import {refreshAccessToken} from "./member.js"
 
 let fetchId
 let fetchName
@@ -173,7 +174,7 @@ function setNowDate(){
 let bookingAttractionButton = document.getElementById("bookingAttractionButton")
 let bookingMessage = document.getElementById("bookingMessage")
 let goBookingButton = document.getElementById("goBookingButton")
-bookingAttractionButton.addEventListener("click",async() => {
+bookingAttractionButton.addEventListener("click",async function booking(){
     /* 抓取填寫的資料 */
     let date = bookingDate.value
     let time
@@ -208,6 +209,10 @@ bookingAttractionButton.addEventListener("click",async() => {
             goBookingButton.classList.remove("none") 
             
         }else if(res[0] == "error"){
+            if( res[1] == "⚠ 請換發token"){
+                refreshAccessToken()
+                booking()
+            }
             bookingMessage.textContent = res[1]
             bookingMessage.classList.remove("none")
             goBookingButton.classList.add("none")
