@@ -99,7 +99,7 @@ def logout():
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
 
-
+# 小隱憂 如果有人把refreshtoken拔掉 會無限loop
 @members.route("/refresh", methods=["GET"])
 @jwt_required(refresh=True)
 def refresh():
@@ -111,16 +111,19 @@ def refresh():
         set_refresh_cookies(resp,refresh_token)
         return resp,200
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}"),500   
+        return jsonify(error="true",message=f"{ex}"),500  
+
 
 @jwt.invalid_token_loader
 def invalid_token_callback(e):
-    return jsonify(error="true",message="⚠ 請登入"),401
+    return jsonify(error="true",message="⚠ 請登入會員"),401
 
 @jwt.expired_token_loader
 def expired_token_callback(jwt_header,jwt_data):
     return jsonify(error="true",message="⚠ 請換發token"),403
 
+
 @jwt.unauthorized_loader
 def unauthorized_callback(e):
-    return jsonify(error="true",message="⚠ 請登入"), 401
+    return render_template("error.html"),401
+    #return jsonify(error="true",message="⚠ 未登入會員"), 401

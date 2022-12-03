@@ -77,8 +77,7 @@ export async function login(email,password){
             setInterval(( () => console.log("Token has expired") ), 60000)
             let status = loginData["ok"]
             let message = "登入成功"
-            let name = loginData["name"]
-            res.push(status,message,name)
+            res.push(status,message)
             return res
         }
         // 回傳資料如果是信箱或密碼錯誤
@@ -117,14 +116,16 @@ export function getAccessToken(){
     const access_token = window.sessionStorage.getItem("access_token")
     return access_token
 }
-
+// 刪除access_token
+export function deleteAccessToken(){
+    window.sessionStorage.removeItem("access_token")
+}
 
 /* 儲存景點精料 */
 export async function sendBookingData(attractionId,date,time,price){
     let res = []
     let access_token = getAccessToken()
     try{
-        //let access_token = getAccessToken()
         let headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -167,3 +168,21 @@ export async function sendBookingData(attractionId,date,time,price){
     }
 }
 
+/* 呼叫booking api */
+export async function bookingPageEnter(){
+    let access_token = getAccessToken()
+    try{
+        let headers = {
+            "Authorization" : `Bearer ${access_token}`
+        }
+        let config = {
+            method: "GET",
+            headers: headers,
+        }
+        let response = await fetch("/booking",config)
+        console.log(response)
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}

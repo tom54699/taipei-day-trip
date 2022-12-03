@@ -11,7 +11,7 @@ booking = Blueprint("booking",
     static_folder='static',
     template_folder='templates')
 
-@booking.route("/booking",methods=["GET"])
+@booking.route("/booking",methods=["GET"]) 
 @jwt_required(refresh=True)
 def frontPage():
     return render_template("booking.html")

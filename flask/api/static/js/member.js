@@ -1,4 +1,4 @@
-import {register,login,storeAccessToken,getAccessToken} from "./sendDataToBackend.js"
+import {register,login,storeAccessToken,getAccessToken,deleteAccessToken} from "./sendDataToBackend.js"
 
 let dialogMask = document.getElementById("dialogMask")
 let loginButton = document.getElementById("loginButton")
@@ -10,7 +10,7 @@ let goRegisterButton = document.getElementById("goRegisterButton")
 let goBackLoginButton = document.getElementById("goBackLoginButton")
 let cancelButton = document.getElementsByClassName("cancelButton")
 let logoutButton = document.getElementById("logoutButton")
-let isLogin = false
+let pathname = location.pathname
 
 window.addEventListener("load", () => {
     checkLogin()
@@ -19,34 +19,51 @@ window.addEventListener("load", () => {
 })
 
 async function checkLogin(){
+    console.log(pathname)
     try{
-        let headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
-        let config = {
-            method: "GET",
-            headers: headers,
-        }
-        let response = await fetch("/api/user/auth",config)
-        let getMemberData = await response.json()
-        console.log("後端login回傳的資料",getMemberData)
-        if(getMemberData["data"] != null){
-            dialogMask.classList.add("none")
-            loginBox.classList.add("none")
-            logoutButton.classList.remove("none")
-            goLoginButton.classList.add("none")
-            isLogin = true
+        if(pathname == "/booking"){
+            let config = {
+                method: "GET",
+            }
+            let response = await fetch("/api/user/auth",config)
+            console.log(response.status)
+            if(response.status == 200){
+                dialogMask.classList.add("none")
+                loginBox.classList.add("none")
+                logoutButton.classList.remove("none")
+                goLoginButton.classList.add("none")
+            }else{
+                dialogMask.classList.remove("none")
+                loginBox.classList.remove("none")
+            }
         }else{
-            console.log(getMemberData["message"])
-            isLogin = false
+            let headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+            let config = {
+                method: "GET",
+                headers: headers,
+            }
+            let response = await fetch("/api/user/auth",config)
+            let getMemberData = await response.json()
+            console.log("後端login回傳的資料",getMemberData)
+            console.log(response.status)
+            if(response.status == 200){
+                dialogMask.classList.add("none")
+                loginBox.classList.add("none")
+                logoutButton.classList.remove("none")
+                goLoginButton.classList.add("none")
+            }else{
+                console.log(getMemberData["message"])
+            }
         }
     }
     catch(err){
-        isLogin = false
         console.log("Something Wrong:",err)
     }
 }
+
 /* 會員登出按鈕  */
 logoutButton.addEventListener("click",async() => {
     try{
@@ -64,14 +81,16 @@ logoutButton.addEventListener("click",async() => {
         if(deleteData["ok"] == "true"){
             logoutButton.classList.add("none")
             goLoginButton.classList.remove("none")
-            isLogin = false
+            deleteAccessToken()
+            checkLogin()
+            if(pathname == "/booking"){
+                location.href = "/booking"
+            }
         }else{
             console.log(deleteData["message"])
-            isLogin = true
         }
     }
     catch(err){
-        isLogin = true
         console.log("Something Wrong:",err)
     }
 })
@@ -171,6 +190,9 @@ loginButton.addEventListener("click",() => {
             checkLogin()
             // 清空input的值
             clearInputValue()
+            if(pathname == "/booking"){
+                location.href = "/booking"
+            }
         }else{
             console.log(res[1])
         }
@@ -353,35 +375,24 @@ export async function refreshAccessToken(){
             headers: headers,
         }
         let response = await fetch("/refresh",config)
+        console.log(response)
+        if(response.status == 401){
+            //以防refresh token過期
+            location.href = pathname
+        }
         let refreshData = await response.json()
         console.log("後端refresh回傳的資料",refreshData)
         let access_token = refreshData["access_token"]
         if(refreshData["status"] == "success"){
             storeAccessToken(access_token)
-        }
-        else{
+        }else{
             let problem = "⚠ 換發 Refresh Token 失敗"
             console.log(problem)
-            //errorPageGenerate(problem)
         }
     }
     catch(err){
         console.log("Something Wrong:",err)
-        let problem = err
-        errorPageGenerate(problem)
     }
 }
 
 
-/* 判斷換發時機  
-export async function checkRefreshAccessToken(time){
-    if(isLogin == true){
-        console.log("拿到時間")
-        setInterval(( () => console.log("Token has expired") ), time)
-        let timeout2 = setInterval( () => {
-                console.log("準備換")
-                refreshAccessToken()
-        }, time*0.8);
-    }
-}
-*/

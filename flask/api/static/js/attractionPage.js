@@ -174,7 +174,7 @@ function setNowDate(){
 let bookingAttractionButton = document.getElementById("bookingAttractionButton")
 let bookingMessage = document.getElementById("bookingMessage")
 let goBookingButton = document.getElementById("goBookingButton")
-bookingAttractionButton.addEventListener("click",async function booking(){
+bookingAttractionButton.addEventListener("click",async function enterBookingPage(){
     /* 抓取填寫的資料 */
     let date = bookingDate.value
     let time
@@ -211,7 +211,7 @@ bookingAttractionButton.addEventListener("click",async function booking(){
         }else if(res[0] == "error"){
             if( res[1] == "⚠ 請換發token"){
                 refreshAccessToken()
-                booking()
+                //enterBookingPage()
             }
             bookingMessage.textContent = res[1]
             bookingMessage.classList.remove("none")
