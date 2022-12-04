@@ -168,21 +168,30 @@ export async function sendBookingData(attractionId,date,time,price){
     }
 }
 
-/* 呼叫booking api */
-export async function bookingPageEnter(){
+/* 拿景點資料 */
+
+export async function getBookingData(){
+    let res = []
     let access_token = getAccessToken()
     try{
         let headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
             "Authorization" : `Bearer ${access_token}`
         }
         let config = {
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/booking",config)
-        console.log(response)
+        let response = await fetch("/api/booking",config)
+        let getBookingData = await response.json()
+        console.log("後端getBookingData回傳的資料",getBookingData)
     }
     catch(err){
         console.log("Something Wrong:",err)
+        let errorMessage = err
+        let status = "error"
+        res.push(status,errorMessage)
+        return res
     }
 }
