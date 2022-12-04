@@ -86,7 +86,7 @@ def get_member():
         }
         return member_data,200
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"),500
 
 
 
@@ -127,3 +127,5 @@ def expired_token_callback(jwt_header,jwt_data):
 def unauthorized_callback(e):
     #return render_template("error.html"),401
     return jsonify(error="true",message="⚠ 未登入會員"), 401
+
+    
