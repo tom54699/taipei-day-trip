@@ -1,16 +1,19 @@
-import {register,login,storeAccessToken,getAccessToken,deleteAccessToken} from "./sendDataToBackend.js"
-
-let dialogMask = document.getElementById("dialogMask")
-let loginButton = document.getElementById("loginButton")
-let registerButton = document.getElementById("registerButton")
-let loginBox = document.getElementById("loginBox")
-let registerBox = document.getElementById("registerBox")
-let goLoginButton = document.getElementById("goLoginButton")
-let goRegisterButton = document.getElementById("goRegisterButton")
-let goBackLoginButton = document.getElementById("goBackLoginButton")
-let cancelButton = document.getElementsByClassName("cancelButton")
-let logoutButton = document.getElementById("logoutButton")
+import {register,login,logout,storeAccessToken,getAccessToken,deleteAccessToken} from "./sendDataToBackend.js"
+const dialogMask = document.getElementById("dialogMask")
+const loginButton = document.getElementById("loginButton")
+const registerButton = document.getElementById("registerButton")
+const loginBox = document.getElementById("loginBox")
+const registerBox = document.getElementById("registerBox")
+const goLoginButton = document.getElementById("goLoginButton")
+const goRegisterButton = document.getElementById("goRegisterButton")
+const goBackLoginButton = document.getElementById("goBackLoginButton")
+const cancelButton = document.getElementsByClassName("cancelButton")
+const logoutButton = document.getElementById("logoutButton")
+let memberName
 let pathname = location.pathname
+
+let bookingMessage = document.getElementById("bookingMessage")
+let goBookingButton = document.getElementById("goBookingButton")
 
 window.addEventListener("load", () => {
     checkLogin()
@@ -18,77 +21,56 @@ window.addEventListener("load", () => {
     checkRegisterInput()
 })
 
-async function checkLogin(){
+export async function checkLogin(){
     console.log(pathname)
-    try{
-        if(pathname == "/booking"){
-            let config = {
-                method: "GET",
-            }
-            let response = await fetch("/api/user/auth",config)
-            console.log(response.status)
-            if(response.status == 200){
-                dialogMask.classList.add("none")
-                loginBox.classList.add("none")
-                logoutButton.classList.remove("none")
-                goLoginButton.classList.add("none")
-            }else{
-                dialogMask.classList.remove("none")
-                loginBox.classList.remove("none")
-            }
-        }else{
-            let headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            }
-            let config = {
-                method: "GET",
-                headers: headers,
-            }
-            let response = await fetch("/api/user/auth",config)
-            let getMemberData = await response.json()
-            console.log("後端login回傳的資料",getMemberData)
-            console.log(response.status)
-            if(response.status == 200){
-                dialogMask.classList.add("none")
-                loginBox.classList.add("none")
-                logoutButton.classList.remove("none")
-                goLoginButton.classList.add("none")
-            }else{
-                console.log(getMemberData["message"])
-            }
-        }
-    }
-    catch(err){
-        console.log("Something Wrong:",err)
-    }
-}
-
-/* 會員登出按鈕  */
-logoutButton.addEventListener("click",async() => {
     try{
         let headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
         let config = {
-            method: "DELETE",
+            method: "GET",
             headers: headers,
         }
         let response = await fetch("/api/user/auth",config)
-        let deleteData = await response.json()
-        console.log("後端login回傳的資料",deleteData)
-        if(deleteData["ok"] == "true"){
-            logoutButton.classList.add("none")
-            goLoginButton.classList.remove("none")
-            deleteAccessToken()
-            checkLogin()
-            if(pathname == "/booking"){
-                location.href = "/booking"
+        let fetchMemberData = await response.json()
+        console.log("後端login回傳的資料",fetchMemberData)
+        if(response.status == 200){
+            memberName = fetchMemberData["data"]["name"]
+            dialogMask.classList.add("none")
+            loginBox.classList.add("none")
+            logoutButton.classList.remove("none")
+            goLoginButton.classList.add("none")
+            if(pathname.slice(0,12) == "/attraction/"){
+                bookingMessage.classList.add("none")
             }
         }else{
-            console.log(deleteData["message"])
+            deleteAccessToken()
+            console.log(fetchMemberData["message"])
         }
+    }
+    
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}
+/* 會員登出按鈕  */
+logoutButton.addEventListener("click",async() => {
+    try{
+        const fetchLogout = logout()
+        fetchLogout.then(res => {
+            if(res == "success"){
+                logoutButton.classList.add("none")
+                goLoginButton.classList.remove("none")
+                deleteAccessToken()
+                checkLogin()
+                if(pathname == "/booking"){
+                    location.href = "/booking"
+                }   
+            }else{
+                console.log(res)
+            }
+        })
     }
     catch(err){
         console.log("Something Wrong:",err)
@@ -375,19 +357,20 @@ export async function refreshAccessToken(){
             headers: headers,
         }
         let response = await fetch("/refresh",config)
-        console.log(response)
         if(response.status == 401){
             //以防refresh token過期
-            location.href = pathname
+            //location.href = pathname
         }
         let refreshData = await response.json()
         console.log("後端refresh回傳的資料",refreshData)
         let access_token = refreshData["access_token"]
         if(refreshData["status"] == "success"){
             storeAccessToken(access_token)
+            return "success"
         }else{
-            let problem = "⚠ 換發 Refresh Token 失敗"
-            console.log(problem)
+            const message = "⚠ 換發 Refresh Token 失敗"
+            console.log(message)
+            return "error"
         }
     }
     catch(err){

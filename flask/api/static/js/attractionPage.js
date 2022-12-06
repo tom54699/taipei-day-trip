@@ -1,6 +1,6 @@
 import {fetchAttraction} from "./fetchLocation.js"
-import{sendBookingData} from "./sendDataToBackend.js"
-import {refreshAccessToken} from "./member.js"
+import{sendBookingData,logout} from "./sendDataToBackend.js"
+import {refreshAccessToken,checkLogin} from "./member.js"
 
 let fetchId
 let fetchName
@@ -176,7 +176,7 @@ let bookingMessage = document.getElementById("bookingMessage")
 let goBookingButton = document.getElementById("goBookingButton")
 bookingAttractionButton.addEventListener("click",async function enterBookingPage(){
     /* 抓取填寫的資料 */
-    let date = bookingDate.value
+    let date = String(bookingDate.value)
     let time
     let price
     if(morning.checked == true){
@@ -205,17 +205,39 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
                     clearInterval(timeout1)
                 }
             }, 1000);
-            setTimeout("location.href='/booking'",3500)
+            setTimeout("location.href = '/booking'",3500)
             goBookingButton.classList.remove("none") 
             
         }else if(res[0] == "error"){
-            if( res[1] == "⚠ 請換發token"){
-                refreshAccessToken()
-                //enterBookingPage()
+            if(res[1] == "⚠ 請登入會員"){
+                bookingMessage.textContent = res[1]
+                bookingMessage.classList.remove("none")
+                goBookingButton.classList.add("none")
             }
-            bookingMessage.textContent = res[1]
-            bookingMessage.classList.remove("none")
-            goBookingButton.classList.add("none")
+            if(res[1] == "⚠ 請換發token"){
+                bookingMessage.textContent = res[1]
+                bookingMessage.classList.remove("none")
+                goBookingButton.classList.add("none")
+                let fetchRefreshAccessToken = refreshAccessToken()
+                fetchRefreshAccessToken.then(res =>{
+                    console.log(res)
+                    if(res == "error"){
+                        bookingMessage.textContent = "⚠ 發生異常，請重新登入"
+                        const fetchLogout = logout()
+                        fetchLogout.then(res => {
+                            if(res == "success"){
+                                logoutButton.classList.add("none")
+                                goLoginButton.classList.remove("none")
+                                checkLogin()
+                            }else{
+                                console.log(res)
+                            }
+                        })
+                    }else{
+                        enterBookingPage()
+                    }
+                })
+            }
         }else{
             bookingMessage.textContent = "⚠ 未知原因失敗"
             bookingMessage.classList.remove("none") 

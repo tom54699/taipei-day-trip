@@ -1,49 +1,50 @@
 
+import { refreshAccessToken } from "./member.js"
 
 /* register */
 export async function register(name,email,password){
     let res = []
     try{
-        let headers = {
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        let content = {
+        const content = {
             "name": name,
             "email": email,
             "password": password
         }
-        let config = {
+        const config = {
             method: "POST",
             headers: headers,
             body: JSON.stringify(content)
         }
-        let response = await fetch("/api/user",config)
-        let registerData = await response.json()
+        const response = await fetch("/api/user",config)
+        const registerData = await response.json()
         console.log("後端login回傳的資料",registerData)
         if(registerData["ok"] == "true"){
-            let status = registerData["ok"]
-            let message = "註冊成功"
+            const status = registerData["ok"]
+            const message = "註冊成功"
             res.push(status,message)
             return res
         }
         // 回傳資料如果status是error
         if(registerData["message"] == "⚠ 信箱已被註冊" || registerData["message"] == "⚠ 信箱或密碼格式不正確"){
-            let errorMessage = registerData["message"]
-            let status = registerData["status"]
+            const errorMessage = registerData["message"]
+            const status = registerData["status"]
             res.push(status,errorMessage)
             return res
         }else{
-            let errorMessage = registerData["message"]
-            let status = "error"
+            const errorMessage = registerData["message"]
+            const status = "error"
             res.push(status,errorMessage)
             return res
         }
     }
     catch(err){
         console.log("Something Wrong:",err)
-        let errorMessage = err
-        let status = "error"
+        const errorMessage = err
+        const status = "error"
         res.push(status,errorMessage)
         return res
     }
@@ -55,55 +56,83 @@ export async function login(email,password){
     let res = []
     try{
         //let access_token = getAccessToken()
-        let headers = {
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             //"Authorization" : `Bearer ${access_token}`
         }
-        let content = {
+        const content = {
             "email": email,
             "password": password
         }
-        let config = {
+        const config = {
             method: "PUT",
             headers: headers,
             body: JSON.stringify(content)
         }
-        let response = await fetch("/api/user/auth",config)
-        let loginData = await response.json()
+        const response = await fetch("/api/user/auth",config)
+        const loginData = await response.json()
         console.log("後端login回傳的資料",loginData)
         if(loginData["ok"] == "true"){
             storeAccessToken(loginData["access_token"])
             setInterval(( () => console.log("Token has expired") ), 60000)
-            let status = loginData["ok"]
-            let message = "登入成功"
+            const status = loginData["ok"]
+            const message = "登入成功"
             res.push(status,message)
             return res
         }
         // 回傳資料如果是信箱或密碼錯誤
         if(loginData["message"] == "⚠ 密碼輸入錯誤" || loginData["message"] == "⚠ 未註冊的信箱，或是輸入錯誤"){
-            let errorMessage = loginData["message"]
-            let status = loginData["status"]
+            const errorMessage = loginData["message"]
+            const status = loginData["status"]
             res.push(status,errorMessage)
             return res
         }else{
-            let errorMessage = loginData["message"]
-            let status = "error"
+            const errorMessage = loginData["message"]
+            const status = "error"
             res.push(status,errorMessage)
             return res
         }
     }
     catch(err){
         console.log("Something Wrong:",err)
-        let errorMessage = err
-        let status = "error"
+        const errorMessage = err
+        const status = "error"
         res.push(status,errorMessage)
         return res
     }
 }
 
 
-
+/* logout */
+export async function logout(){
+    try{
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        const config = {
+            method: "DELETE",
+            headers: headers,
+        }
+        const response = await fetch("/api/user/auth",config)
+        const deleteData = await response.json()
+        console.log("後端login回傳的資料",deleteData)
+        if(deleteData["ok"] == "true"){
+            return "success"
+        }else{
+            console.log(deleteData["message"])
+            return "error"
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+        const errorMessage = err
+        const status = "error"
+        res.push(status,errorMessage)
+        return res
+    }
+}
 
 
 
@@ -124,73 +153,87 @@ export function deleteAccessToken(){
 /* 儲存景點精料 */
 export async function sendBookingData(attractionId,date,time,price){
     let res = []
-    let access_token = getAccessToken()
+    const access_token = getAccessToken()
     try{
-        let headers = {
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization" : `Bearer ${access_token}`
         }
-        let content = {
+        const content = {
             "attractionId": attractionId,
             "date": date,
             "time": time,
             "price": price
         }
-        let config = {
+        const config = {
             method: "POST",
             headers: headers,
             body: JSON.stringify(content)
         }
-        let response = await fetch("/api/booking",config)
-        let getBookingData = await response.json()
+        const response = await fetch("/api/booking",config)
+        const getBookingData = await response.json()
         console.log("後端getBookingData回傳的資料",getBookingData)
         if(getBookingData["ok"] == "true"){
-            let status = "ok"
-            let message = "預約成功 ☛"
+            const status = "ok"
+            const message = "預約成功 ☛"
             res.push(status,message)
             return res
         }
         // 回傳Error
         if(getBookingData["error"] == "true"){
-            let errorMessage = getBookingData["message"]
-            let status = "error"
+            const errorMessage = getBookingData["message"]
+            const status = "error"
             res.push(status,errorMessage)
             return res
         }
     }
     catch(err){
         console.log("Something Wrong:",err)
-        let errorMessage = err
-        let status = "error"
+        const errorMessage = err
+        const status = "error"
         res.push(status,errorMessage)
         return res
     }
 }
 
 /* 拿景點資料 */
-
 export async function getBookingData(){
     let res = []
-    let access_token = getAccessToken()
+    const access_token = getAccessToken()
     try{
-        let headers = {
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization" : `Bearer ${access_token}`
         }
-        let config = {
+        const config = {
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/api/booking",config)
-        let getBookingData = await response.json()
+        const response = await fetch("/api/booking",config)
+        const getBookingData = await response.json()
         console.log("後端getBookingData回傳的資料",getBookingData)
+        if(getBookingData["message"] == "⚠ 請換發token"){
+            const status = "error"
+            const message = "⚠ 請換發token"
+            res.push(status, message)
+            return res
+        }else if(getBookingData["message"] == "⚠ 請登入會員"){
+            const status = "error"
+            const message = "⚠ 請登入會員"
+            res.push(status, message)
+            return res
+        }else{
+            const status = "success"
+            res.push(status,getBookingData)
+            return res
+        }
     }
     catch(err){
         console.log("Something Wrong:",err)
-        let errorMessage = err
-        let status = "error"
+        const errorMessage = err
+        const status = "error"
         res.push(status,errorMessage)
         return res
     }

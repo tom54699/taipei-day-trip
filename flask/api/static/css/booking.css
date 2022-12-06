@@ -128,20 +128,26 @@ header>div{
 section{
     position: relative;
     width: min(90%, 980px);
+    display: flex;flex-direction: column;
+}
+.bookingCard{
+    position: relative;
+    width: 100%;
     display: flex; justify-content: flex-start; align-items: center;
     margin-top: 30px;
 }
 /* icon / delete */
-section>img:nth-child(1){
+.deleteIcon{
     position: absolute;
     width: 30px; height: 30px;
     right: 0px; top: 0px;
+    cursor: pointer;
 }
 /* picture */
-section>div:nth-child(2){
+.attractionImageBox{
     width: 250px; height: 200px;
 }
-section>div:nth-child(2)>img{
+.attractionImage{
     width: 250px; height: 200px;
     object-fit: cover;
     object-position: center;
@@ -153,8 +159,8 @@ section>div:nth-child(2)>img{
     display: flex; flex-direction: column; align-items: flex-start;
 }
 /* 台北一日遊：平安鐘 */
-.infoBox>div:nth-child(1){
-    width: 144px; height: 14px;
+.attractionName{
+    height: 14px;
     margin-top: 5px;
     font-weight: 700;
     font-size: 16px;
@@ -162,24 +168,25 @@ section>div:nth-child(2)>img{
     color: #448899;
 }
 /* Frame 1  Frame 2  Frame 3  Frame 4 */
-.infoBox>div:nth-child(2),.infoBox>div:nth-child(3),.infoBox>div:nth-child(4),.infoBox>div:nth-child(5){
+.bookingDateBox,.bookingTimeBox,.bookingPriceBox,.attractionAddressBox,.bookingIdBox{
     width: min(100%, 700px); height: 24px;
     margin-top: 15px;
     display: flex; justify-content: flex-start; align-items: center;
 }
-.infoBox>div:nth-child(2){
+.bookingDateBox{
     margin-top: 25px;
 }
 /* 日期： */
-.infoBox>div:nth-child(2)>div:nth-child(1),.infoBox>div:nth-child(3)>div:nth-child(1),.infoBox>div:nth-child(4)>div:nth-child(1),.infoBox>div:nth-child(5)>div:nth-child(1){
-    width: 48px; height: 14px;
+.bookingDateTitle,.bookingTimeTitle,.bookingPriceTitle,.attractionAddressTitle,.bookingIdTitle{
+    height: 14px;
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;
+    letter-spacing: 1px;
     color: #666666;
 }
 /* 2021-04-23 */
-.infoBox>div:nth-child(2)>div:nth-child(2),.infoBox>div:nth-child(3)>div:nth-child(2),.infoBox>div:nth-child(4)>div:nth-child(2),.infoBox>div:nth-child(5)>div:nth-child(2){
+.bookingDate,.bookingTime,.bookingPrice,.attractionAddress,.bookingId{
     height: 14px;
     margin-left: 5px;
     font-weight: 500;
@@ -340,14 +347,14 @@ footer>div>div{
 /*-------------------------------------------------------------------------*/
 
 @media (max-width:600px){
-    section{
+    .bookingCard{
         flex-wrap: wrap;
         justify-content: center;
     }
-    section>div:nth-child(2),section>div:nth-child(2)>img{
+    .attractionImageBox,.attractionImage{
         width: 100%; height: 256px; 
     }
-    section>img:nth-child(1){
+    .deleteIcon{
         top:461px;
     }
     .infoBox{
@@ -361,10 +368,10 @@ footer>div>div{
     section{
         width: 340px;
     }
-    section>div:nth-child(2),section>div:nth-child(2)>img{
+    .attractionImageBox,.attractionImage{
         width: 340px; height: 200px; 
     }
-    section>img:nth-child(1){
+    .deleteIcon{
         top:405px;
     }
     main{

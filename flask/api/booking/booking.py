@@ -14,7 +14,6 @@ booking = Blueprint("booking",
     template_folder='templates')
 
 @booking.route("/booking",methods=["GET"]) 
-@jwt_required(refresh=True)
 def frontPage():
     return render_template("booking.html")
 
@@ -27,6 +26,9 @@ def getBookingData():
         member_email =identity
         query_booking_lists = db.session.query(Booking, Attraction,Member). \
             select_from(Booking).join(Attraction).join(Member).filter(Booking.member_email==member_email).all()
+        if len(query_booking_lists) == 0:
+            query = Member.query.filter_by(email=member_email).first()
+            return jsonify(status="noData",name=query.name)
         for booking, attraction, member in query_booking_lists:
             image_urls = []
             for image in attraction.images:
@@ -42,6 +44,7 @@ def getBookingData():
                         "address": attraction.address,
                         "image": image_urls
                     },
+                    "id": booking.id,
                     "date": booking.date,
                     "time": booking.time,
                     "price": booking.price
@@ -76,6 +79,16 @@ def sendBookingData():
         return jsonify(error="true",message=f"{ex}"),500
 
 @booking.route("/api/booking",methods=["DELETE"])
+@jwt_required(fresh=True)
 def deleteBookingData():
-    return "1"
-
+    try:
+        data = request.get_json()
+        print(data)
+        booking_id = data["bookingId"]
+        print(booking_id)
+        query = Booking.query.filter_by(id=booking_id).first()
+        db.session.delete(query)
+        db.session.commit()
+        return jsonify(status="success")
+    except Exception as ex:
+        return jsonify(error="true",message=f"{ex}"),500

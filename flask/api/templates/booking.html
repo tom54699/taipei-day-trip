@@ -54,35 +54,15 @@
         </div>
     </div>
     <hr class="separator1"/>
-    <header>
+    <header id="header">
         <div>您好，</div>
-        <div>某人</div>
+        <div id="memberName"></div>
         <div>，待預訂的行程如下：</div>
     </header>
-    <section>
-        <img src="/static/pic/icon_delete.png"/>
-        <div><img src="/static/pic/image 10.png"/></div>
-        <div class="infoBox">
-            <div>台北一日遊：平安鐘</div>
-            <div>
-                <div>日期：</div>
-                <div>2021-04-23</div>
-            </div>
-            <div>
-                <div>時間：</div>
-                <div>早上 9 點到下午 4 點</div>
-            </div>
-            <div>
-                <div>費用：</div>
-                <div>新台幣 2000 元</div>
-            </div>
-            <div>
-                <div>地點：</div>
-                <div>臺北市 大安區忠孝東路4段</div>
-            </div>
-        </div>
+    <section class="bookingCardBox">
+
     </section>
-    <main>
+    <main id="main">
         <hr class="separator2"/>
         <div class="contactForm">
             <div>您的聯絡資訊</div>
@@ -118,7 +98,7 @@
         </div> 
         <hr class="separator2"/>
         <div class="confirmBox">
-            <div>總價：新台幣 2000 元</div>
+            <div id="totalBookingPrice">總價：新台幣 2000 元</div>
             <div>
                 <a>確認訂購並付款</a>
             </div>
@@ -130,7 +110,7 @@
             <div>COPYRIGHT © 2021 台北一日遊</div>
         </div>
     </footer>
-    <script type="module" src="/static/js/booking.js"></script>
     <script type="module" src="/static/js/member.js"></script>
+    <script type="module" src="/static/js/booking.js"></script>
 </body>
 </html>
