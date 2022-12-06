@@ -49,6 +49,38 @@ INSERT INTO `attraction` VALUES (1,'新北投溫泉區','養生溫泉','北投�
 UNLOCK TABLES;
 
 --
+-- Table structure for table `booking`
+--
+
+DROP TABLE IF EXISTS `booking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `booking` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `member_email` varchar(100) NOT NULL,
+  `attraction_id` int NOT NULL,
+  `date` varchar(50) NOT NULL,
+  `time` varchar(30) NOT NULL,
+  `price` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_email` (`member_email`),
+  KEY `attraction_id` (`attraction_id`),
+  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`member_email`) REFERENCES `member` (`email`),
+  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attraction` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `booking`
+--
+
+LOCK TABLES `booking` WRITE;
+/*!40000 ALTER TABLE `booking` DISABLE KEYS */;
+INSERT INTO `booking` VALUES (23,'789@789',12,'2022-12-06','上半天',2000);
+/*!40000 ALTER TABLE `booking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `image`
 --
 
@@ -87,8 +119,9 @@ CREATE TABLE `member` (
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +130,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'789','789@789','$2b$10$MZY0i26TzJ5utFkt7U6WhecDFNAjHKABal/fNGePm6yCiK0t0Ehme');
+INSERT INTO `member` VALUES (1,'789','789@789','$2b$10$aM0NHTK.X1KJwAssR1wHB.X4dBhJK4VZQMy7HSzeQQ59mFGNCFuMy'),(2,'123','123@123','$2b$10$YP0zjgiCY/UubNpHytrdYu6OFdAynOoElB0y2D4BC7pOxmxr8xofi'),(3,'aaa','aaa@aaa','$2b$10$9iHquDlaazXSod7.IwgxzOX5T1KYSWEv0Hi/6bZlPVTnXwyI4/ZSi'),(4,'0','0@0','$2b$10$9mVlJKJFcmgYU8xkdttaC.nC7pEh9mTwQzfeBopymdol.eQoPmSC6'),(5,'555','555@555','$2b$10$LVanPs/11UmQ8KjvGEsW2OojogW9ekzDyZtTl0G/ghy3svGy2KgvC');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -110,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-29 20:18:25
+-- Dump completed on 2022-12-06  8:43:10
