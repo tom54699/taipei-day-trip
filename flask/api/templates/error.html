@@ -5,10 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Taipei Trip 台北一日遊 | 首頁">
-    <title>Taipei Trip 台北一日遊 | 購物車</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/booking.css">
+    <title>Taipei Trip 台北一日遊 | 首頁</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
     <link rel="stylesheet" type="text/css" href="/static/css/common.css">
     <link rel="shortcut icon" href="/static/pic/flag.png" />
+
 </head>
 <body>
     <!-- Navigation -->
@@ -25,8 +26,8 @@
         </div>  
     </nav>
     <!-- Login -->
-    <div id="dialogMask" class="dialogMask none"></div>
-    <div id="loginBox" class="loginBox none"> 
+    <div id="dialogMask" class="dialogMask "></div>
+    <div id="loginBox" class="loginBox "> 
         <div></div>
         <div class="loginMainBox">
             <div class="cancelButton"></div>
@@ -53,64 +54,13 @@
             <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
         </div>
     </div>
-    <hr class="separator1"/>
-    <header id="header">
-        <div>您好，</div>
-        <div id="memberName"></div>
-        <div>，待預訂的行程如下：</div>
-    </header>
-    <section class="bookingCardBox">
-
-    </section>
-    <main id="main">
-        <hr class="separator2"/>
-        <div class="contactForm">
-            <div>您的聯絡資訊</div>
-            <div>
-                <div>聯絡姓名：</div>
-                <input type="text"/>
-            </div>
-            <div>
-                <div>連絡信箱：</div>
-                <input type="text"/>
-            </div>
-            <div>
-                <div>手機號碼：</div>
-                <input type="text"/>
-            </div>
-            <div>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
-        </div> 
-        <hr class="separator2"/>
-        <div class="payment">
-            <div>信用卡付款資訊</div>
-            <div>
-                <div>卡片號碼：</div>
-                <input type="text" placeholder="**** **** **** ****"/>
-            </div>
-            <div>
-                <div>過期時間：</div>
-                <input type="text" placeholder="MM / YY"/>
-            </div>
-            <div>
-                <div>驗證密碼：</div>
-                <input type="text" placeholder="CVV"/>
-            </div>
-        </div> 
-        <hr class="separator2"/>
-        <div class="confirmBox">
-            <div id="totalBookingPrice">總價：新台幣 2000 元</div>
-            <div>
-                <a>確認訂購並付款</a>
-            </div>
-        </div>
-    </main>
     <!-- Footer -->
     <footer id=footer>
         <div>
             <div>COPYRIGHT © 2021 台北一日遊</div>
         </div>
     </footer>
+    <script type="module" src="/static/js/componentAttractions.js"></script>
     <script type="module" src="/static/js/member.js"></script>
-    <script type="module" src="/static/js/booking.js"></script>
 </body>
 </html>

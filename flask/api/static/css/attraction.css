@@ -6,9 +6,7 @@
     box-sizing: auto;
     text-decoration: none;
 }
-a{
-    color: #448899;
-}
+
 
 input:focus{
     outline:none;/*input標籤聚焦不出現預設邊框:*/
@@ -21,6 +19,7 @@ body{
     position: relative; 
     font-family: "Noto Sans TC", sans-serif;
     font-style: normal;
+    display: flex; flex-direction: column; 
 }
 
 /* [Desktop] Navigation */
@@ -79,6 +78,7 @@ nav>div>div>div:nth-child(1){
     font-size: 16px;
     line-height: 13px;
     color: #666666;
+    cursor: pointer;
 }
 
 /* Button2 [forNavigation] */
@@ -97,6 +97,7 @@ nav>div>div>div:nth-child(2){
     font-size: 16px;
     line-height: 13px;
     color: #666666;
+    cursor: pointer;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -331,21 +332,39 @@ input[type=radio]{
 }
 /* Button [forBooking] */
 .attractionProfileBox>div:nth-child(3)>div:nth-child(6){
-    width: 154px; height: 36px;
-    margin-top: 25px; margin-left: 20px; 
+    margin-top: 25px; margin-left: 20px;
+    display: flex; justify-content: flex-start; align-items: center;
+}
+.attractionProfileBox>div:nth-child(3)>div:nth-child(6)>button{
+    width: 154px; height: 36px; 
     background: #448899;
     border-radius: 5px;
     display: flex; align-items: center;justify-content: center;
+    cursor: pointer;
 }
 /* BUTTON */
-.attractionProfileBox>div:nth-child(3)>div:nth-child(6)>div{
+.attractionProfileBox>div:nth-child(3)>div:nth-child(6)>button>div{
     width: 114px; height: 16px;
     font-weight: 400;
     font-size: 19px;
     line-height: 16px;
     color: #FFFFFF;
+    cursor: pointer;
 }
-
+.bookingMessage{
+    margin-left: 15px;
+    color: #179bbc;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+}
+.goBookingButton{
+    margin-left: 10px;
+    color: #179bbc;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+}
 
 /*-----------------------------------------------------*/
 /* 分隔線 */
@@ -461,12 +480,31 @@ footer>div>div{
         width: 50%;
     }
 }
+@media (max-width:880px){
+    .bookingMessage{
+        font-size: 16px;
+    }
+    .goBookingButton{
+        font-size: 16px;
+    }
+}
+
 @media (max-width:800px){
     .attractionImgBox{
         width: 600px;
     }
     .attractionProfileBox{
         width: 600px;
+    }
+}
+@media (max-width:435px){
+    .bookingMessage{
+        margin-left: 10px;
+        font-size: 12px;
+    }
+    .goBookingButton{
+        margin-left: 5px;
+        font-size: 12px;
     }
 }
 

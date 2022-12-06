@@ -1,5 +1,8 @@
 import {fetchAttraction} from "./fetchLocation.js"
+import{sendBookingData,logout} from "./sendDataToBackend.js"
+import {refreshAccessToken,checkLogin} from "./member.js"
 
+let fetchId
 let fetchName
 let fetchMrt
 let fetchCategories
@@ -10,6 +13,9 @@ let fetchTransport
 let imgId 
 let imageLength
 
+window.addEventListener("load", () => {
+    setNowDate()
+})
 export async function generateAttraction(id){
     await fetchAttraction(id).then(data=>{
         /* Get Data */
@@ -20,6 +26,7 @@ export async function generateAttraction(id){
             let newFetchImg = data["data"]["images"][i]
             fetchImg.push(newFetchImg)
         }
+        fetchId = data["data"]["id"]
         fetchName = data["data"]["name"]
         fetchMrt = data["data"]["mrt"]
         fetchCategories = data["data"]["category"]
@@ -148,3 +155,93 @@ function checkTourTime(){
         tourFee.textContent = "新台幣 2500 元"
     }
 }
+
+/* 預設 INPUT DATE */
+let bookingDate = document.getElementById("bookingDate") 
+function setNowDate(){
+    let today = new Date();
+    bookingDate.value = today.toISOString().substr(0, 10);
+    let year = today.getFullYear()+1
+    let month = ('0'+ (today.getMonth() + 1)).slice(-2)
+    let date = ('0' + today.getDate()).slice(-2)
+    let time = year+"-"+month+"-"+date
+    bookingDate.setAttribute("max", time)
+}
+
+
+
+/* 開始預約行程按鈕 */
+let bookingAttractionButton = document.getElementById("bookingAttractionButton")
+let bookingMessage = document.getElementById("bookingMessage")
+let goBookingButton = document.getElementById("goBookingButton")
+bookingAttractionButton.addEventListener("click",async function enterBookingPage(){
+    /* 抓取填寫的資料 */
+    let date = String(bookingDate.value)
+    let time
+    let price
+    if(morning.checked == true){
+        time = "上半天"
+        price = 2000
+    }else if(afternoon.checked == true){
+        time = "下半天"
+        price = 2500
+    }
+    let fetchSendBookingData = sendBookingData(fetchId,date,time,price)
+
+    fetchSendBookingData.then(res=>{
+        console.log(res)
+        if(res[0] == "ok"){
+            bookingMessage.textContent = res[1]
+            bookingMessage.classList.remove("none")
+            // 倒數自動跳轉
+            goBookingButton.textContent = "3 ...自動跳轉中"
+            let number = 3
+            let timeout1 = setInterval( () => {
+                console.log(number)
+                number --
+                goBookingButton.textContent = number + " ...自動跳轉中"
+                if(number <= 0){
+                    goBookingButton.textContent = "滾去付錢 🖕"
+                    clearInterval(timeout1)
+                }
+            }, 1000);
+            setTimeout("location.href = '/booking'",3500)
+            goBookingButton.classList.remove("none") 
+            
+        }else if(res[0] == "error"){
+            if(res[1] == "⚠ 請登入會員"){
+                bookingMessage.textContent = res[1]
+                bookingMessage.classList.remove("none")
+                goBookingButton.classList.add("none")
+            }
+            if(res[1] == "⚠ 請換發token"){
+                bookingMessage.textContent = res[1]
+                bookingMessage.classList.remove("none")
+                goBookingButton.classList.add("none")
+                let fetchRefreshAccessToken = refreshAccessToken()
+                fetchRefreshAccessToken.then(res =>{
+                    console.log(res)
+                    if(res == "error"){
+                        bookingMessage.textContent = "⚠ 發生異常，請重新登入"
+                        const fetchLogout = logout()
+                        fetchLogout.then(res => {
+                            if(res == "success"){
+                                logoutButton.classList.add("none")
+                                goLoginButton.classList.remove("none")
+                                checkLogin()
+                            }else{
+                                console.log(res)
+                            }
+                        })
+                    }else{
+                        enterBookingPage()
+                    }
+                })
+            }
+        }else{
+            bookingMessage.textContent = "⚠ 未知原因失敗"
+            bookingMessage.classList.remove("none") 
+        }
+    })
+})
+
