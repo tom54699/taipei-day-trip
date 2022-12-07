@@ -30,6 +30,7 @@ def getBookingData():
             query = Member.query.filter_by(email=member_email).first()
             return jsonify(status="noData",name=query.name)
         for booking, attraction, member in query_booking_lists:
+            print(member.bookings)
             image_urls = []
             for image in attraction.images:
                 image_urls.append(image.image_url)
@@ -71,7 +72,6 @@ def sendBookingData():
         filters = {"member_email" : member_email}
         result = Booking.query.filter_by(**filters).all()
         data = Booking(member_email, attraction_id, date, time, price)
-        print(data)
         db.session.add(data)
         db.session.commit()
         return jsonify(ok="true"),200

@@ -28,3 +28,4 @@ class BaseConfig:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
     JWT_COOKIE_SECURE = False  # 開true要有https
     JWT_COOKIE_CSRF_PROTECT = False
+

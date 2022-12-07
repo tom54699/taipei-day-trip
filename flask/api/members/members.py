@@ -6,9 +6,8 @@ from flask_jwt_extended import (
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
 import re
-from datetime import datetime
+import redis
 from datetime import timedelta
-from datetime import timezone
 
 members = Blueprint("members",
     __name__,
@@ -71,7 +70,7 @@ def login():
         return jsonify(error="true" ,message=f"{ex}"),500
 
 @members.route("api/user/auth",methods=["GET"])
-@jwt_required(refresh=True)
+@jwt_required(fresh=True)
 def get_member():
     try:
         identity = get_jwt_identity()
@@ -91,21 +90,27 @@ def get_member():
 
 
 @members.route("api/user/auth",methods=["DELETE"])
+@jwt_required(refresh=True,optional=True)
 def logout():
     try:
         response = jsonify({"ok": "true"})
-        unset_refresh_cookies(response)
+        #unset_refresh_cookies(response)
+        a = get_jwt()
+        if a == {}:
+            return response,200
+        jti = get_jwt()["jti"]
+        jwt_redis_blocklist.set(jti, "", ex=timedelta(days=7))
         return response,200
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
 
 # 小隱憂 如果有人把refreshtoken拔掉 會無限loop
-@members.route("/refresh", methods=["GET"])
+@members.route("api/refresh", methods=["GET"])
 @jwt_required(refresh=True)
 def refresh():
     try:
         identity = get_jwt_identity()
-        access_token = create_access_token(identity=identity, fresh=True)
+        access_token = create_access_token(identity = identity, fresh=True)
         resp = jsonify(access_token=access_token,status="success")
         refresh_token = create_refresh_token(identity = identity)
         set_refresh_cookies(resp,refresh_token)
@@ -113,6 +118,7 @@ def refresh():
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500  
 
+# JWT Auth Setting
 
 @jwt.invalid_token_loader
 def invalid_token_callback(e):
@@ -126,6 +132,17 @@ def expired_token_callback(jwt_header,jwt_data):
 @jwt.unauthorized_loader
 def unauthorized_callback(e):
     #return render_template("error.html"),401
-    return jsonify(error="true",message="⚠ 未登入會員"), 403
+    return jsonify(error="true",message="⚠ 未登入會員"), 401
 
-    
+
+jwt_redis_blocklist = redis.StrictRedis(
+    host="localhost", port=6379, db=0, decode_responses=True
+)
+
+ 
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    print(jwt_redis_blocklist.ping())
+    jti = jwt_payload["jti"]
+    token_in_redis = jwt_redis_blocklist.get(jti)
+    return token_in_redis is not None

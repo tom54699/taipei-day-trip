@@ -24,9 +24,11 @@ window.addEventListener("load", () => {
 export async function checkLogin(){
     console.log(pathname)
     try{
+        let access_token = getAccessToken()
         let headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
         }
         let config = {
             method: "GET",
@@ -35,6 +37,17 @@ export async function checkLogin(){
         let response = await fetch("/api/user/auth",config)
         let fetchMemberData = await response.json()
         console.log("後端login回傳的資料",fetchMemberData)
+        if(fetchMemberData["message"] == "⚠ 請換發token"){
+            let fetchRefreshAccessToken = refreshAccessToken()
+            fetchRefreshAccessToken.then(res =>{
+                console.log(res)
+                if(res == "error"){
+                    logout()
+                }else{
+                    checkLogin()
+                }
+            })
+        }
         if(response.status == 200){
             memberName = fetchMemberData["data"]["name"]
             dialogMask.classList.add("none")
@@ -45,11 +58,12 @@ export async function checkLogin(){
                 bookingMessage.classList.add("none")
             }
         }else{
+            logoutButton.classList.add("none")
+            goLoginButton.classList.remove("none")
             deleteAccessToken()
             console.log(fetchMemberData["message"])
         }
     }
-    
     catch(err){
         console.log("Something Wrong:",err)
     }
@@ -356,7 +370,7 @@ export async function refreshAccessToken(){
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/refresh",config)
+        let response = await fetch("/api/refresh",config)
         if(response.status == 401){
             //以防refresh token過期
             //location.href = pathname

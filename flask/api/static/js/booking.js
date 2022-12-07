@@ -15,18 +15,20 @@ let data_length
 
 window.addEventListener("load", () => {
     checkBookingAuth()
-
 })
 /* 檢查權限 */
 export function checkBookingAuth(){
     const fetchGetBookingData = getBookingData()
     fetchGetBookingData.then((res) => {
+        console.log("booking",res)
         if(res[0] == "success"){
             // 如果沒資料
             if(res[1]["status"] == "noData"){
+                const memberNameNode = document.getElementById("memberName")
                 memberName = res[1]["name"]
-                console.log(memberName)
-            }
+                memberNameNode.textContent = memberName
+                noBookingPage()
+            }else{
             //memberName = res[1][0]["data"]["member"]["name"]
             data_length = res[1].length
             for(let i=0; i <data_length; i++){
@@ -45,21 +47,16 @@ export function checkBookingAuth(){
             generateBookingPage(data_length)
             totalBookingPrice(data_length)
             deleteBookingButton(data_length)
+            }
         }else if(res[1] == "⚠ 請登入會員"){
             noAuthBookingPage()
         }else if(res[1] == "⚠ 請換發token"){
             let fetchRefreshAccessToken = refreshAccessToken()
             fetchRefreshAccessToken.then(res =>{
                 if(res == "error"){
-                    //bookingMessage.textContent = "⚠ 發生異常，請重新登入"
-                    const fetchLogout = logout()
-                    fetchLogout.then(res => {
-                        if(res == "success"){
-                            checkLogin()
-                        }else{
-                            console.log(res)
-                        }
-                    })
+                    logout()
+                    checkLogin()
+                    noAuthBookingPage()
                 }else{
                     checkBookingAuth()
                 }
@@ -94,11 +91,31 @@ export function generateBookingPage(data_length){
 export function deleteBookingButton(data_length){
     const deleteIcon = document.getElementsByClassName("deleteIcon")
     const bookingId = document.getElementsByClassName("bookingId")
+    console.log(bookingId)
     for(let i=0; i<data_length;i++){
         deleteIcon[i].addEventListener("click",() => {
-            deleteBooking(Number(bookingId[i].textContent))
-            bookingId[i].textContent = `${bookingId[i].textContent}` + " -- ❌取消訂單中💣"
-            setTimeout("location.href = '/booking'",2500)
+            let fetchDeleteBooking = deleteBooking(Number(bookingId[i].textContent))
+            fetchDeleteBooking.then(res => {
+                console.log(res)
+                if(res["message"] == "⚠ 請換發token"){
+                    let fetchRefreshAccessToken = refreshAccessToken()
+                    fetchRefreshAccessToken.then(res =>{
+                        console.log(res)
+                        if(res == "error"){
+                            bookingId[i].textContent = "⚠ 發生異常，請重新登入"
+                            logout()
+                            checkLogin()
+                        }else{
+                            deleteBooking(Number(bookingId[i].textContent))
+                            bookingId[i].textContent = `${bookingId[i].textContent}` + " -- ❌取消訂單中💣"
+                            setTimeout("location.href = '/booking'",2500)
+                        }
+                    })
+                }else{
+                    bookingId[i].textContent = `${bookingId[i].textContent}` + " -- ❌取消訂單中💣"
+                    setTimeout("location.href = '/booking'",2500)
+                }
+            })
         })
     }
 }
@@ -123,6 +140,10 @@ export function deleteBookingButton(data_length){
         const response = await fetch("/api/booking",config)
         const getBookingData = await response.json()
         console.log("後端getBookingData回傳的資料",getBookingData)
+        if(getBookingData["message"] == "⚠ 請換發token"){
+            return getBookingData
+        }
+        return "success"
     }
     catch(err){
         console.log("Something Wrong:",err)
@@ -155,5 +176,21 @@ function noAuthBookingPage(){
     loginBox.classList.remove("none")
     errorMessage[1].textContent = "⚠ 請登入"
     errorMessage[1].classList.remove("none")
+}
 
+/* 沒訂單的頁面反應 */
+function noBookingPage(){
+    const body = document.getElementById("body")
+    const main = document.getElementById("main")
+    const footer = document.getElementById("footer")
+    const header = document.getElementById("header")
+    // 頁面清除
+    main.remove()
+    let emptyState = document.createElement("div")
+    emptyState.setAttribute("class","emptyState")
+    emptyState.textContent = "目前沒有任何待預訂的行程"
+    body.insertBefore(emptyState,footer)
+    let emptyFooter = document.createElement("div")
+    emptyFooter.setAttribute("class","emptyFooter")
+    body.appendChild(emptyFooter)
 }
