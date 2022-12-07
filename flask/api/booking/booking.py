@@ -37,7 +37,7 @@ def getBookingData():
             booking_data = {
                 "data": {
                     "member":{
-                        "name":member.name
+                        "name": member.name,
                     },
                     "attraction": {
                         "id": attraction.id,

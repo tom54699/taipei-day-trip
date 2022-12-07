@@ -31,5 +31,6 @@ def create_app():
         app.register_blueprint(members, url_prefix="")
         from api.booking.booking import booking
         app.register_blueprint(booking, url_prefix="")
-        
+        from api.orders.orders import orders
+        app.register_blueprint(orders, url_prefix="")
     return app

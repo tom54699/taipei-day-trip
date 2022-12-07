@@ -16,7 +16,7 @@
         <div>
             <h2><a href="/">台北一日遊 </a></h2>
             <div>
-                <div><a class="navButton1">預定行程</a></div>
+                <div><a href="/booking" class="navButton1">預定行程</a></div>
                 <div>
                     <a id="goLoginButton" class="navButton2">登入/註冊</a>
                     <a id="logoutButton" class="navButton2 none">登出</a>
@@ -68,15 +68,17 @@
             <div>您的聯絡資訊</div>
             <div>
                 <div>聯絡姓名：</div>
-                <input type="text"/>
+                <input id="contactName" type="text" placeholder="請輸入姓名"/>
             </div>
             <div>
                 <div>連絡信箱：</div>
-                <input type="text"/>
+                <input id="contactEmail" type="email" placeholder="請輸入信箱"/>
+                <div class="errorContactMessage none">⚠ 格式錯誤，請重新輸入</div>
             </div>
             <div>
                 <div>手機號碼：</div>
-                <input type="text"/>
+                <input id="contactPhone" type="text" placeholder="請輸入手機號碼" pattern="^09[0-9]{8}$"/>
+                <div class="errorContactMessage none">⚠ 格式錯誤，請重新輸入</div>
             </div>
             <div>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
         </div> 
@@ -85,21 +87,21 @@
             <div>信用卡付款資訊</div>
             <div>
                 <div>卡片號碼：</div>
-                <input type="text" placeholder="**** **** **** ****"/>
+                <div class="tpfield" id="card-number"></div>
             </div>
             <div>
                 <div>過期時間：</div>
-                <input type="text" placeholder="MM / YY"/>
+                <div class="tpfield" id="card-expiration-date"></div>
             </div>
             <div>
                 <div>驗證密碼：</div>
-                <input type="text" placeholder="CVV"/>
+                <div class="tpfield" id="card-ccv" ></div>
             </div>
         </div> 
         <hr class="separator2"/>
         <div class="confirmBox">
             <div id="totalBookingPrice">總價：新台幣 2000 元</div>
-            <div>
+            <div id="bookingButton" class="bookingButton"> 
                 <a>確認訂購並付款</a>
             </div>
         </div>
@@ -110,7 +112,9 @@
             <div>COPYRIGHT © 2021 台北一日遊</div>
         </div>
     </footer>
+    <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
     <script type="module" src="/static/js/member.js"></script>
     <script type="module" src="/static/js/booking.js"></script>
+    <script type="module" src="/static/js/order.js"></script>
 </body>
 </html>

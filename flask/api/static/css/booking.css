@@ -237,14 +237,18 @@ main{
     margin-top: 24px;
 }
 /* 聯絡姓名： */
-.contactForm>div:nth-child(2)>div,.contactForm>div:nth-child(3)>div,.contactForm>div:nth-child(4)>div,.payment>div:nth-child(2)>div,.payment>div:nth-child(3)>div,.payment>div:nth-child(4)>div{
+.contactForm>div:nth-child(2)>div:nth-child(1),.contactForm>div:nth-child(3)>div:nth-child(1),.contactForm>div:nth-child(4)>div:nth-child(1),.payment>div:nth-child(2)>div:nth-child(1),.payment>div:nth-child(3)>div:nth-child(1),.payment>div:nth-child(4)>div:nth-child(1){
     width: 81px; height: 24px;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     color: #666666;
 }
-.contactForm>div:nth-child(2)>input,.contactForm>div:nth-child(3)>input,.contactForm>div:nth-child(4)>input,.payment>div:nth-child(2)>input,.payment>div:nth-child(3)>input,.payment       >div:nth-child(4)>input{
+.errorContactMessage{
+    margin-left: 10px;
+    color: red;
+}
+.contactForm>div:nth-child(2)>input,.contactForm>div:nth-child(3)>input,.contactForm>div:nth-child(4)>input{
     box-sizing: border-box;
     width: 200px; height: 38px;
     background: #FFFFFF;
@@ -255,6 +259,17 @@ main{
     font-size: 16px;
     line-height: 13px;
     color: #000000;
+}
+.tpfield{
+    box-sizing: border-box;
+    width: 200px; height: 38px;
+    background: #FFFFFF;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    padding-left: 10px;
 }
 /* field notice */
 .contactForm>div:nth-child(5){
@@ -293,9 +308,12 @@ input::placeholder{
     font-family: 'Noto Sans TC';
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 13px;
-    color: #757575;
+    color: grey;
+}
+.bookingButton{
+    cursor: pointer;
 }
 /*----------------------------------------------------------*/
 /* 分隔線 */
@@ -360,7 +378,7 @@ footer>div>div{
 
 /*-------------------------------------------------------------------------*/
 
-@media (max-width:600px){
+@media (max-width:640px){
     .bookingCard{
         flex-wrap: wrap;
         justify-content: center;
