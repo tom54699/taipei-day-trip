@@ -232,10 +232,11 @@ registerButton.addEventListener("click",() => {
             errorMessage[3].style.color = "red"
             clearInputValue()
         }else if(res[0] == "true"){
-            console.log(res[1])
-            errorMessage[3].classList.remove("none")
-            errorMessage[3].textContent = "註冊成功，請返回登入"
-            errorMessage[3].style.color = "blue"
+            registerBox.classList.add("none")
+            loginBox.classList.remove("none")
+            errorMessage[1].classList.remove("none")
+            errorMessage[1].textContent = "註冊成功，請登入"
+            errorMessage[1].style.color = "blue"
             clearInputValue()
         }else{
             console.log(res[1])

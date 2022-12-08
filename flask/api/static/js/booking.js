@@ -1,4 +1,4 @@
-import {getBookingData,logout,getAccessToken} from "./sendDataToBackend.js"
+import {getBookingData,logout,getAccessToken,sendBookingData, sendOrderData} from "./sendDataToBackend.js"
 import { refreshAccessToken,checkLogin,} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 
@@ -91,7 +91,6 @@ export function generateBookingPage(data_length){
 export function deleteBookingButton(data_length){
     const deleteIcon = document.getElementsByClassName("deleteIcon")
     const bookingId = document.getElementsByClassName("bookingId")
-    console.log(bookingId)
     for(let i=0; i<data_length;i++){
         deleteIcon[i].addEventListener("click",() => {
             let fetchDeleteBooking = deleteBooking(Number(bookingId[i].textContent))
@@ -334,8 +333,9 @@ function checkContactInput(){
 }
 /*  get prime */
 const bookingButton = document.getElementById("bookingButton")
+const errorCardMessage = document.getElementsByClassName("errorCardMessage")
 let prime
-bookingButton.addEventListener("click", async(data_length) => {
+bookingButton.addEventListener("click", () => {
     if(!bookingIsValidName || !bookingIsValidEmail || !bookingIsValidPhone){
         checkContactInput()
         return
@@ -347,41 +347,44 @@ bookingButton.addEventListener("click", async(data_length) => {
     // 確認是否可以 getPrime
 
     // Get prime
-    await TPDirect.card.getPrime((result) => {
+    TPDirect.card.getPrime((result) => {
         if (result.status !== 0) {
-            alert('get prime error ' + result.msg)
+            alert('get prime error' + result.msg)
+            errorCardMessage[0].classList.remove("none")
             return
         }
         prime = result.card.prime
-        console.log(prime)
+        errorCardMessage[0].classList.add("none")
         alert('get prime 成功，prime: ' + result.card.prime)
-    })
 
-    const order_data = {
-        "prime": prime,
-        "order": {
-            "price": totalPrice,
-            "trip": [],
-            "contact":{
-                "name": contactNameInputValue,
-                "email": contactEmailInputValue,
-                "phone": contactPhoneInputValue
-            }    
-        },
-    }
-
-    for(let i=0; i<data_length; i++){
-        let trips = {
-            "attraction":{
-                "id": bookingIdList[i],
-                "name": attractionNameList[i],
-                "address": attractionAddressList[i],
-                "image": attractionImgList[i]
+        const order_data = {
+            "prime": prime,
+            "order": {
+                "price": totalPrice,
+                "trip": [],
+                "contact":{
+                    "name": contactNameInputValue,
+                    "email": contactEmailInputValue,
+                    "phone": contactPhoneInputValue
+                }    
             },
-            "date": bookingDateList[i],
-            "time": bookingTimeList[i]
         }
-        order_data["order"]["trip"].push(trips)
-    }
-    console.log(order_data)
+
+        for(let i=0; i<data_length; i++){
+            let trips = {
+                "attraction":{
+                    "id": bookingIdList[i],
+                    "name": attractionNameList[i],
+                    "address": attractionAddressList[i],
+                    "image": attractionImgList[i],
+                    "bookingId": bookingIdList[i]
+                },
+                "date": bookingDateList[i],
+                "time": bookingTimeList[i]
+            }
+            order_data["order"]["trip"].push(trips)
+        }
+
+        sendOrderData(order_data)
+    })
 })

@@ -248,6 +248,10 @@ main{
     margin-left: 10px;
     color: red;
 }
+.errorCardMessage{
+    margin-top: 25px;
+    color: red;
+}
 .contactForm>div:nth-child(2)>input,.contactForm>div:nth-child(3)>input,.contactForm>div:nth-child(4)>input{
     box-sizing: border-box;
     width: 200px; height: 38px;

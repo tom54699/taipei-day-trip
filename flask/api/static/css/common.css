@@ -32,7 +32,7 @@ button{
     width: min(100%,310px); height: auto;
     margin-top: 15px;
     position: relative;
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; align-items: center;
 }
 /* icon / close */
 .cancelButton{
@@ -88,7 +88,7 @@ button:disabled {
 }
 /* 還沒有帳戶？點此註冊 */
 .loginMainBox>div:nth-child(8),.registerMainBox>div:nth-child(9){
-    width: min(100%,310px); height: 22px;
+    width: min(100%,180px); height: 22px;
     margin-top: 10px; margin-bottom: 15px;
     font-weight: 500;
     font-size: 16px;
@@ -113,7 +113,7 @@ button:disabled {
     width: min(100%,310px); height: auto;
     margin-top: 15px;
     position: relative;
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; align-items: center;
 }
 
 .none {
@@ -121,7 +121,8 @@ button:disabled {
 }
 
 .errorMessage{
-    width: 80%;
+    width: 100%;
+    text-align: start;
     color: red;
     font-size: 12px;
     text-align: left;
@@ -129,7 +130,7 @@ button:disabled {
     text-indent: 5px;
 }
 
-/* login message */
+
 
 
 

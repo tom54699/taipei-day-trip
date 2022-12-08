@@ -238,3 +238,47 @@ export async function getBookingData(){
         return res
     }
 }
+
+/* 傳送訂單資訊 order api*/
+export async function sendOrderData(orderContent){
+    let res = []
+    const access_token = getAccessToken()
+    try{
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        const content = orderContent
+        const config = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(content)
+        }
+        const response = await fetch("/api/orders",config)
+        const getBookingData = await response.json()
+        console.log("後端getBookingData回傳的資料",getBookingData)
+        if(getBookingData["message"] == "⚠ 請換發token"){
+            const status = "error"
+            const message = "⚠ 請換發token"
+            res.push(status, message)
+            return res
+        }else if(getBookingData["message"] == "⚠ 請登入會員"){
+            const status = "error"
+            const message = "⚠ 請登入會員"
+            res.push(status, message)
+            return res
+        }else{
+            const status = "success"
+            res.push(status,getBookingData)
+            return res
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+        const errorMessage = err
+        const status = "error"
+        res.push(status,errorMessage)
+        return res
+    }
+}
