@@ -68,17 +68,18 @@
             <div>您的聯絡資訊</div>
             <div>
                 <div>聯絡姓名：</div>
-                <input id="contactName" type="text" placeholder="請輸入姓名"/>
+                <input id="contactName" type="text" placeholder="請輸入姓名" oninput="value=value.replace(/\s+/g,'')">
+                <div class="errorContactMessage none"></div>
             </div>
             <div>
                 <div>連絡信箱：</div>
-                <input id="contactEmail" type="email" placeholder="請輸入信箱"/>
-                <div class="errorContactMessage none">⚠ 格式錯誤，請重新輸入</div>
+                <input id="contactEmail" type="email" placeholder="請輸入信箱" oninput="value=value.replace(/\s+/g,'')"/>
+                <div class="errorContactMessage none"></div>
             </div>
             <div>
                 <div>手機號碼：</div>
-                <input id="contactPhone" type="text" placeholder="請輸入手機號碼" pattern="^09[0-9]{8}$"/>
-                <div class="errorContactMessage none">⚠ 格式錯誤，請重新輸入</div>
+                <input id="contactPhone" type="text" placeholder="請輸入手機號碼" pattern="^09[0-9]{8}$" oninput="value=value.replace(/\s+/g,'')"/>
+                <div class="errorContactMessage none"></div>
             </div>
             <div>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
         </div> 

@@ -30,7 +30,7 @@ export function checkBookingAuth(){
                 noBookingPage()
             }else{
             //memberName = res[1][0]["data"]["member"]["name"]
-            data_length = res[1].length
+            data_length = Number(res[1].length)
             for(let i=0; i <data_length; i++){
                 let data = res[1][i]["data"]
                 memberName = data["member"]["name"]
@@ -272,38 +272,74 @@ const errorContactMessage = document.getElementsByClassName("errorContactMessage
 let contactNameInputValue
 let contactEmailInputValue
 let contactPhoneInputValue
-let bookingIsValidEmail
-let bookingIsValidPhone
+let bookingIsValidName = false
+let bookingIsValidEmail = false
+let bookingIsValidPhone = false
 contactName.addEventListener("input",() => {
+    bookingIsValidName = true
+    errorContactMessage[0].classList.add("none")
     contactNameInputValue = contactName.value
+    if(contactNameInputValue == "" || contactNameInputValue == undefined){
+        bookingIsValidName = false
+    }
 })
 contactEmail.addEventListener("input",() => {
+    bookingIsValidName = true
     checkContactEmailInput()
     contactEmailInputValue = contactEmail.value
+    if(contactEmailInputValue == "" || contactEmailInputValue == undefined){
+        bookingIsValidEmail = false
+    }
 })
 contactPhone.addEventListener("input",() => {
+    bookingIsValidName = true
     checkContactPhoneInput()
     contactPhoneInputValue = contactPhone.value
+    if(contactPhoneInputValue == "" || contactPhoneInputValue == undefined){
+        bookingIsValidPhone = false
+    }
 })
 function checkContactEmailInput(){
     bookingIsValidEmail = contactEmail.checkValidity()
     if(bookingIsValidEmail != true){
-        errorContactMessage[0].classList.remove("none")
-    }else{
-        errorContactMessage[0].classList.add("none")
-    }
-}
-function checkContactPhoneInput(){
-    bookingIsValidPhone = contactPhone.checkValidity()
-    if(bookingIsValidPhone != true){
+        errorContactMessage[1].textContent = "⚠ 格式錯誤，請重新輸入"
         errorContactMessage[1].classList.remove("none")
     }else{
         errorContactMessage[1].classList.add("none")
     }
 }
+function checkContactPhoneInput(){
+    bookingIsValidPhone = contactPhone.checkValidity()
+    if(bookingIsValidPhone != true){
+        errorContactMessage[2].textContent = "⚠ 格式錯誤，請重新輸入"
+        errorContactMessage[2].classList.remove("none")
+    }else{
+        errorContactMessage[2].classList.add("none")
+    }
+}
+
+function checkContactInput(){
+    if(contactNameInputValue == undefined || contactNameInputValue == ""){
+        errorContactMessage[0].textContent = "⚠ 必填"
+        errorContactMessage[0].classList.remove("none")
+    }
+    if(contactEmailInputValue == undefined || contactEmailInputValue == ""){
+        errorContactMessage[1].textContent = "⚠ 必填"
+        errorContactMessage[1].classList.remove("none")
+    }
+    if(contactPhoneInputValue == undefined || contactPhoneInputValue == ""){
+        errorContactMessage[2].textContent = "⚠ 必填"
+        errorContactMessage[2].classList.remove("none")
+    }
+}
 /*  get prime */
 const bookingButton = document.getElementById("bookingButton")
-bookingButton.addEventListener("click", () => {
+let prime
+bookingButton.addEventListener("click", async(data_length) => {
+    if(!bookingIsValidName || !bookingIsValidEmail || !bookingIsValidPhone){
+        checkContactInput()
+        return
+    }
     // 取得 TapPay Fields 的 status
     const tappayStatus = TPDirect.card.getTappayFieldsStatus()
     console.log(tappayStatus)
@@ -311,29 +347,21 @@ bookingButton.addEventListener("click", () => {
     // 確認是否可以 getPrime
 
     // Get prime
-    TPDirect.card.getPrime((result) => {
+    await TPDirect.card.getPrime((result) => {
         if (result.status !== 0) {
             alert('get prime error ' + result.msg)
             return
         }
+        prime = result.card.prime
+        console.log(prime)
         alert('get prime 成功，prime: ' + result.card.prime)
     })
 
-    order_data = {
-        "prime": result.card.prime,
+    const order_data = {
+        "prime": prime,
         "order": {
             "price": totalPrice,
-            "trip": [
-                {
-                    "attraction":{
-                        "id": bookingIdList[0],
-                        "name": attractionNameList[0],
-                        "address": attractionAddressList[0],
-                        "image": attractionImgList[0]
-                    },
-                    "date": bookingDateList[0],
-                    "time": bookingTimeList[0]
-                }],
+            "trip": [],
             "contact":{
                 "name": contactNameInputValue,
                 "email": contactEmailInputValue,
@@ -341,4 +369,19 @@ bookingButton.addEventListener("click", () => {
             }    
         },
     }
+
+    for(let i=0; i<data_length; i++){
+        let trips = {
+            "attraction":{
+                "id": bookingIdList[i],
+                "name": attractionNameList[i],
+                "address": attractionAddressList[i],
+                "image": attractionImgList[i]
+            },
+            "date": bookingDateList[i],
+            "time": bookingTimeList[i]
+        }
+        order_data["order"]["trip"].push(trips)
+    }
+    console.log(order_data)
 })
