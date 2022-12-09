@@ -78,8 +78,7 @@ services:
       retries: 20
   redis:
     container_name: redis
-    image: redis:4.0
-    command: redis-server --appendonly yes
+    image: redis:latest
     ports:
       - "6379:6379"
     volumes:
