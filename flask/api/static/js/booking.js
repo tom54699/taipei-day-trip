@@ -15,11 +15,12 @@ let data_length
 
 window.addEventListener("load", () => {
     checkBookingAuth()
+    buttonEventSetting()
 })
 /* 檢查權限 */
 export function checkBookingAuth(){
     const fetchGetBookingData = getBookingData()
-    fetchGetBookingData.then((res) => {
+    fetchGetBookingData.then( res => {
         console.log("booking",res)
         if(res[0] == "success"){
             // 如果沒資料
@@ -51,7 +52,7 @@ export function checkBookingAuth(){
         }else if(res[1] == "⚠ 請登入會員"){
             noAuthBookingPage()
         }else if(res[1] == "⚠ 請換發token"){
-            let fetchRefreshAccessToken = refreshAccessToken()
+            const fetchRefreshAccessToken = refreshAccessToken()
             fetchRefreshAccessToken.then(res =>{
                 if(res == "error"){
                     logout()
@@ -167,7 +168,9 @@ function noAuthBookingPage(){
     const errorMessage = document.getElementsByClassName("errorMessage")
     const header = document.getElementById("header")
     const main = document.getElementById("main")
+    const bookingCardBox = document.getElementsByClassName("bookingCardBox")
     // 頁面清除
+    bookingCardBox[0].remove()
     header.remove()
     main.remove()
     dialogMask.classList.remove("none")
@@ -349,13 +352,13 @@ bookingButton.addEventListener("click", () => {
     // Get prime
     TPDirect.card.getPrime((result) => {
         if (result.status !== 0) {
-            alert('get prime error' + result.msg)
+            console.log('get prime error' + result.msg)
             errorCardMessage[0].classList.remove("none")
             return
         }
         prime = result.card.prime
         errorCardMessage[0].classList.add("none")
-        alert('get prime 成功，prime: ' + result.card.prime)
+        console.log('get prime 成功，prime: ' + result.card.prime)
 
         const order_data = {
             "prime": prime,
@@ -385,6 +388,57 @@ bookingButton.addEventListener("click", () => {
             order_data["order"]["trip"].push(trips)
         }
 
-        sendOrderData(order_data)
+        function fetchSendOrder(order_data){
+            const fetchSendOrderData = sendOrderData(order_data)
+            fetchSendOrderData.then( res => {
+                console.log("order",res)
+                if(res[0] == "success"){
+                    successMessageBox.classList.remove("none")
+                }else if(res[1] == "⚠ 請登入會員"){
+                    noAuthBookingPage()
+                }else if(res[1] == "⚠ 請換發token"){
+                    const fetchRefreshAccessToken = refreshAccessToken()
+                    fetchRefreshAccessToken.then(res =>{
+                        if(res == "error"){
+                            logout()
+                            checkLogin()
+                            noAuthBookingPage()
+                        }else{
+                            fetchSendOrder(order_data)
+                        }
+                    })
+                }else if(res[1] == "⚠ 請勿重複付款"){
+                    errorMessageBox.classList.remove("none")
+                    errorPopup.textContent = res[1]
+                }else if(res[1] == "⚠ 信箱或密碼格式不正確"){
+                    errorMessageBox.classList.remove("none")
+                    errorPopup.textContent = res[1]
+                }else{
+                    errorMessageBox.classList.remove("none")
+                }
+    
+            })
+        }
+        fetchSendOrder(order_data)
+
     })
 })
+
+/* 註冊彈出訊息取消按鈕 */
+function buttonEventSetting(){
+    const successMessageCancelButton = document.getElementsByClassName("successMessageCancelButton")
+    const errorMessageCancelButton = document.getElementsByClassName("errorMessageCancelButton")
+    const successMessageBox = document.getElementById("successMessageBox")
+    const errorMessageBox = document.getElementById("errorMessageBox")
+    const errorPopup = document.getElementById("errorPopup")
+
+successMessageCancelButton[0].addEventListener("click", () => {
+    location.href = "/booking"
+})
+errorMessageCancelButton[0].addEventListener("click", () => {
+    errorMessageBox.classList.add("none")
+})
+}
+
+
+

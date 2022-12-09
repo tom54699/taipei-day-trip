@@ -59,15 +59,18 @@ CREATE TABLE `booking` (
   `id` int NOT NULL AUTO_INCREMENT,
   `member_email` varchar(100) NOT NULL,
   `attraction_id` int NOT NULL,
+  `order_number` varchar(50) DEFAULT NULL,
   `date` varchar(50) NOT NULL,
   `time` varchar(30) NOT NULL,
   `price` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `member_email` (`member_email`),
   KEY `attraction_id` (`attraction_id`),
+  KEY `order_number` (`order_number`),
   CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`member_email`) REFERENCES `member` (`email`),
-  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attraction` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attraction` (`id`),
+  CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`order_number`) REFERENCES `orders` (`order_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +79,7 @@ CREATE TABLE `booking` (
 
 LOCK TABLES `booking` WRITE;
 /*!40000 ALTER TABLE `booking` DISABLE KEYS */;
-INSERT INTO `booking` VALUES (23,'789@789',12,'2022-12-06','上半天',2000);
+INSERT INTO `booking` VALUES (1,'789@789',1,'20221209153033','2022-12-09','上半天',2000),(2,'789@789',4,'20221209153033','2022-12-09','下半天',2500);
 /*!40000 ALTER TABLE `booking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +124,7 @@ CREATE TABLE `member` (
   `password` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,8 +133,35 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'789','789@789','$2b$10$aM0NHTK.X1KJwAssR1wHB.X4dBhJK4VZQMy7HSzeQQ59mFGNCFuMy'),(2,'123','123@123','$2b$10$YP0zjgiCY/UubNpHytrdYu6OFdAynOoElB0y2D4BC7pOxmxr8xofi'),(3,'aaa','aaa@aaa','$2b$10$9iHquDlaazXSod7.IwgxzOX5T1KYSWEv0Hi/6bZlPVTnXwyI4/ZSi'),(4,'0','0@0','$2b$10$9mVlJKJFcmgYU8xkdttaC.nC7pEh9mTwQzfeBopymdol.eQoPmSC6'),(5,'555','555@555','$2b$10$LVanPs/11UmQ8KjvGEsW2OojogW9ekzDyZtTl0G/ghy3svGy2KgvC');
+INSERT INTO `member` VALUES (1,'789','789@789','$2b$10$TyjpuEVUIgK0ZH.2fFN8..A6G3w0u0fx0rVwU/5c6iqtxg2d10WSO');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `order_number` varchar(50) NOT NULL,
+  `contact_name` varchar(50) NOT NULL,
+  `contact_email` varchar(100) NOT NULL,
+  `contact_phone` varchar(30) NOT NULL,
+  `price` int NOT NULL,
+  PRIMARY KEY (`order_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES ('20221209153033','789','789@789','0963524565',4500);
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -143,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-06  8:43:10
+-- Dump completed on 2022-12-09 15:31:39

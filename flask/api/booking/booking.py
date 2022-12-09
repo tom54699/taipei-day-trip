@@ -25,12 +25,11 @@ def getBookingData():
         identity = get_jwt_identity()
         member_email =identity
         query_booking_lists = db.session.query(Booking, Attraction,Member). \
-            select_from(Booking).join(Attraction).join(Member).filter(Booking.member_email==member_email).all()
+            select_from(Booking).join(Attraction).join(Member).filter(Booking.member_email == member_email,Booking.order_number == None).all()
         if len(query_booking_lists) == 0:
             query = Member.query.filter_by(email=member_email).first()
             return jsonify(status="noData",name=query.name)
         for booking, attraction, member in query_booking_lists:
-            print(member.bookings)
             image_urls = []
             for image in attraction.images:
                 image_urls.append(image.image_url)
@@ -83,9 +82,7 @@ def sendBookingData():
 def deleteBookingData():
     try:
         data = request.get_json()
-        print(data)
         booking_id = data["bookingId"]
-        print(booking_id)
         query = Booking.query.filter_by(id=booking_id).first()
         db.session.delete(query)
         db.session.commit()

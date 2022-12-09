@@ -136,18 +136,18 @@ export async function logout(){
 
 
 
-// 存放access_token到sessionStorage
+// 存放access_token到localStorage
 export function storeAccessToken(data){
-    window.sessionStorage.setItem("access_token",data)
+    window.localStorage.setItem("access_token",data)
 }
-// 拿access_token到sessionStorage
+// 拿access_token到localStorage
 export function getAccessToken(){
-    const access_token = window.sessionStorage.getItem("access_token")
+    const access_token = window.localStorage.getItem("access_token")
     return access_token
 }
 // 刪除access_token
 export function deleteAccessToken(){
-    window.sessionStorage.removeItem("access_token")
+    window.localStorage.removeItem("access_token")
 }
 
 /* 儲存景點精料 */
@@ -268,7 +268,18 @@ export async function sendOrderData(orderContent){
             const message = "⚠ 請登入會員"
             res.push(status, message)
             return res
-        }else{
+        }else if(getBookingData["message"] == "⚠ 信箱或密碼格式不正確"){
+            const status = "error"
+            const message = "⚠ 信箱或密碼格式不正確"
+            res.push(status, message)
+            return res
+        }else if(getBookingData["message"] == "⚠ 請勿重複付款"){
+            const status = "error"
+            const message = "⚠ 請勿重複付款"
+            res.push(status, message)
+            return res
+        }
+        else{
             const status = "success"
             res.push(status,getBookingData)
             return res

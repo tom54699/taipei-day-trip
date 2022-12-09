@@ -24,8 +24,8 @@ def register():
         register_password = data["password"]
         print(register_name,register_email,register_password)
         # 確保格式正確
-        regex = r"[A-Za-z0-9]{5,12}"
-        if register_email == "" or not bool(re.match(regex, register_password)):
+        password_regex = r"[A-Za-z0-9]{5,12}"
+        if register_email == "" or not bool(re.match(password_regex, register_password)):
             return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
         # 確認account、email有無重複
         filters = {"email" : register_email}
