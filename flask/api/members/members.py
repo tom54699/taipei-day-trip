@@ -94,12 +94,12 @@ def get_member():
 def logout():
     try:
         response = jsonify({"ok": "true"})
-        #unset_refresh_cookies(response)
-        a = get_jwt()
-        if a == {}:
-            return response,200
-        jti = get_jwt()["jti"]
-        jwt_redis_blocklist.set(jti, "", ex=timedelta(days=7))
+        unset_refresh_cookies(response)
+        #a = get_jwt()
+        #if a == {}:
+            #return response,200
+        #jti = get_jwt()["jti"]
+        #jwt_redis_blocklist.set(jti, "", ex=timedelta(days=7))
         return response,200
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
@@ -135,14 +135,14 @@ def unauthorized_callback(e):
     return jsonify(error="true",message="⚠ 未登入會員"), 401
 
 
-jwt_redis_blocklist = redis.StrictRedis(
-    host="localhost", port=6379, db=0, decode_responses=True
-)
+#jwt_redis_blocklist = redis.StrictRedis(
+    #host="localhost", port=6379, db=0, decode_responses=True
+#)
 
  
-@jwt.token_in_blocklist_loader
-def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
-    print(jwt_redis_blocklist.ping())
-    jti = jwt_payload["jti"]
-    token_in_redis = jwt_redis_blocklist.get(jti)
-    return token_in_redis is not None
+#@jwt.token_in_blocklist_loader
+#def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    #print(jwt_redis_blocklist.ping())
+    #jti = jwt_payload["jti"]
+    #token_in_redis = jwt_redis_blocklist.get(jti)
+    #return token_in_redis is not None
