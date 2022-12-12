@@ -15,7 +15,7 @@ class BaseConfig:
     "pool_pre_ping": True,
     "pool_recycle": 300,
     'pool_timeout': 900,
-    'pool_size': 5,
+    'pool_size': 10,
     'max_overflow': 5,
     }  
     SQLALCHEMY_TRACK_MODIFICATIONS = False

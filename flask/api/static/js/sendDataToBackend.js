@@ -199,7 +199,7 @@ export async function sendBookingData(attractionId,date,time,price){
 
 /* 拿景點資料 */
 export async function getBookingData(){
-    let res = []
+    const res = []
     const access_token = getAccessToken()
     try{
         const headers = {
@@ -214,6 +214,11 @@ export async function getBookingData(){
         const response = await fetch("/api/booking",config)
         const getBookingData = await response.json()
         console.log("後端getBookingData回傳的資料",getBookingData)
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,getBookingData)
+            return res
+        }
         if(getBookingData["message"] == "⚠ 請換發token"){
             const status = "error"
             const message = "⚠ 請換發token"
@@ -225,7 +230,7 @@ export async function getBookingData(){
             res.push(status, message)
             return res
         }else{
-            const status = "success"
+            const status = "error"
             res.push(status,getBookingData)
             return res
         }
@@ -256,24 +261,24 @@ export async function sendOrderData(orderContent){
             body: JSON.stringify(content)
         }
         const response = await fetch("/api/orders",config)
-        const getBookingData = await response.json()
-        console.log("後端getBookingData回傳的資料",getBookingData)
-        if(getBookingData["message"] == "⚠ 請換發token"){
+        const sendOrderData = await response.json()
+        console.log("後端sendOrderData回傳的資料",sendOrderData)
+        if(sendOrderData["message"] == "⚠ 請換發token"){
             const status = "error"
             const message = "⚠ 請換發token"
             res.push(status, message)
             return res
-        }else if(getBookingData["message"] == "⚠ 請登入會員"){
+        }else if(sendOrderData["message"] == "⚠ 請登入會員"){
             const status = "error"
             const message = "⚠ 請登入會員"
             res.push(status, message)
             return res
-        }else if(getBookingData["message"] == "⚠ 信箱或密碼格式不正確"){
+        }else if(sendOrderData["message"] == "⚠ 信箱或密碼格式不正確"){
             const status = "error"
             const message = "⚠ 信箱或密碼格式不正確"
             res.push(status, message)
             return res
-        }else if(getBookingData["message"] == "⚠ 請勿重複付款"){
+        }else if(sendOrderData["message"] == "⚠ 請勿重複付款"){
             const status = "error"
             const message = "⚠ 請勿重複付款"
             res.push(status, message)

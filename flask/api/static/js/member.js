@@ -9,6 +9,7 @@ const goRegisterButton = document.getElementById("goRegisterButton")
 const goBackLoginButton = document.getElementById("goBackLoginButton")
 const cancelButton = document.getElementsByClassName("cancelButton")
 const logoutButton = document.getElementById("logoutButton")
+const memberCenterButton = document.getElementById("memberCenterButton")
 let memberName
 let pathname = location.pathname
 
@@ -52,16 +53,24 @@ export async function checkLogin(){
             memberName = fetchMemberData["data"]["name"]
             dialogMask.classList.add("none")
             loginBox.classList.add("none")
-            logoutButton.classList.remove("none")
             goLoginButton.classList.add("none")
             if(pathname.slice(0,12) == "/attraction/"){
                 bookingMessage.classList.add("none")
             }
+            if(pathname == "/user"){
+                logoutButton.classList.remove("none")
+            }else{
+                memberCenterButton.classList.remove("none")
+            }
         }else{
-            logoutButton.classList.add("none")
             goLoginButton.classList.remove("none")
             deleteAccessToken()
             console.log(fetchMemberData["message"])
+            if(pathname == "/user"){
+                logoutButton.classList.add("none")
+            }else{
+                memberCenterButton.classList.add("none")
+            }
         }
     }
     catch(err){

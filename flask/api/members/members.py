@@ -14,6 +14,11 @@ members = Blueprint("members",
     static_folder='static',
     template_folder='templates')
 
+@members.route("/user",methods=["GET"])
+def enterMemberCenter():
+    return render_template("memberCenter.html")
+
+
 @members.route("api/user",methods=["POST"])
 def register():
     try:
@@ -136,7 +141,7 @@ def unauthorized_callback(e):
 
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="redis", port=6379, db=0, decode_responses=True
+    host="localhost", port=6379, db=0, decode_responses=True
 )
 
  

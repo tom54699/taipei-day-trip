@@ -86,6 +86,6 @@ def deleteBookingData():
         query = Booking.query.filter_by(id=booking_id).first()
         db.session.delete(query)
         db.session.commit()
-        return jsonify(status="success")
+        return jsonify(ok="true")
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
