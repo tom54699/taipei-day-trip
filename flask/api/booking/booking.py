@@ -68,8 +68,11 @@ def sendBookingData():
         member_email =identity
         print("Booking Data:",data,member_email)
         # 存到資料庫
-        filters = {"member_email" : member_email}
+        filters = {"member_email": member_email,"attraction_id": attraction_id, "date": date, "time": time}
         result = Booking.query.filter_by(**filters).all()
+        if len(result) >=1:
+            return jsonify(error="true",message="⚠ 已在重複時段預約行程"),400
+        print(result)
         data = Booking(member_email, attraction_id, date, time, price)
         db.session.add(data)
         db.session.commit()

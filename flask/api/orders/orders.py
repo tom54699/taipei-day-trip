@@ -4,7 +4,7 @@ from api.models.bookings_model import Booking
 from api.models.attractions_model import Attraction
 from api.models.members_model import Member
 from api.models.orders_model import Orders
-from flask_jwt_extended import (JWTManager, jwt_required,)
+from flask_jwt_extended import (JWTManager, jwt_required,get_jwt_identity)
 import time
 import re
 import os 
@@ -23,6 +23,8 @@ orders = Blueprint("orders",
 @jwt_required(fresh=True)
 def create_new_order():
     try:
+        identity = get_jwt_identity()
+        member_email =identity
         data = request.get_json()
         contact_email = data["order"]["contact"]["email"]
         contact_phone = data["order"]["contact"]["phone"]
@@ -73,7 +75,7 @@ def create_new_order():
                     }
                 }
             }
-            order_upload_data = Orders(number, contact_name, contact_email, contact_phone, order_price)
+            order_upload_data = Orders(number, member_email, contact_name, contact_email, contact_phone, order_price)
             db.session.add(order_upload_data)
             db.session.commit()
             for i in range(data_length):
@@ -85,8 +87,10 @@ def create_new_order():
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
 
+    
+
 @orders.route("api/orders/<orderNumber>",methods=["GET"])
-#@jwt_required(fresh=True)
+@jwt_required(fresh=True)
 def get_new_order(orderNumber):
     try:
         trip_lists = []

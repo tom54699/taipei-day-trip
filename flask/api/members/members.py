@@ -85,7 +85,7 @@ def get_member():
             "data": {
                 "id": member.id,
                 "name": member.name,
-                "email": member.email
+                "email": member.email,
             }
         }
         return member_data,200
@@ -151,3 +151,47 @@ def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
     jti = jwt_payload["jti"]
     token_in_redis = jwt_redis_blocklist.get(jti)
     return token_in_redis is not None
+
+
+
+# 會員中心拿全部資料 
+
+@members.route("api/membercenter",methods=["GET"])
+@jwt_required(fresh=True)
+def get_member_center_data():
+    try:
+        identity = get_jwt_identity()
+        member_email =identity
+        member = Member.query.filter_by(email=member_email).first()
+        booking_lists = []
+        order_lists = []
+        for booking in member.bookings:
+            booking_data = {
+                "attraction_id": booking.attraction_id,
+                "date": booking.date,
+                "time": booking.time,
+            }
+            booking_lists.append(booking_data)
+        for order in member.orders:
+            order_data = {
+                "order_number": order.order_number,
+                "price": order.price
+            }
+            order_lists.append(order_data)
+        member_center_data = {
+            "member": {
+                "id": member.id,
+                "name": member.name,
+                "nick_name": member.nick_name,
+                "email": member.email,
+                "password": member.password,
+                "birthday": member.birthday,
+                "phone_number": member.phone_number,
+                "country": member.country
+            },
+            "bookings": booking_lists,
+            "orders": order_lists
+        }
+        return jsonify(ok="true",data=member_center_data),200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"),500

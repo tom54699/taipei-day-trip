@@ -23,7 +23,6 @@ window.addEventListener("load", () => {
 })
 
 export async function checkLogin(){
-    console.log(pathname)
     try{
         let access_token = getAccessToken()
         let headers = {
@@ -48,8 +47,7 @@ export async function checkLogin(){
                     checkLogin()
                 }
             })
-        }
-        if(response.status == 200){
+        }else if(response.status == 200){
             memberName = fetchMemberData["data"]["name"]
             dialogMask.classList.add("none")
             loginBox.classList.add("none")
@@ -68,6 +66,7 @@ export async function checkLogin(){
             console.log(fetchMemberData["message"])
             if(pathname == "/user"){
                 logoutButton.classList.add("none")
+                location.href = "/"
             }else{
                 memberCenterButton.classList.add("none")
             }
@@ -403,3 +402,50 @@ export async function refreshAccessToken(){
 }
 
 
+/* 預定行程按鈕 */
+const goBookingNavButton = document.getElementById("goBookingNavButton")
+goBookingNavButton.addEventListener("click",async() => {
+    try{
+        let access_token = getAccessToken()
+        let headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        let config = {
+            method: "GET",
+            headers: headers,
+        }
+        let response = await fetch("/api/user/auth",config)
+        let fetchMemberData = await response.json()
+        console.log("後端login回傳的資料",fetchMemberData)
+        if(fetchMemberData["message"] == "⚠ 請換發token"){
+            let fetchRefreshAccessToken = refreshAccessToken()
+            fetchRefreshAccessToken.then(res =>{
+                console.log(res)
+                if(res == "error"){
+                    logout()
+                }else{
+                    checkLogin()
+                }
+            })
+        }else if(response.status == 200){
+            location.href = "/booking"
+        }else{
+            goLoginButton.classList.remove("none")
+            dialogMask.classList.remove("none")
+            loginBox.classList.remove("none")
+            deleteAccessToken()
+            console.log(fetchMemberData["message"])
+            if(pathname == "/user"){
+                logoutButton.classList.add("none")
+                location.href = "/"
+            }else{
+                memberCenterButton.classList.add("none")
+            }
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+})

@@ -146,7 +146,7 @@ section{
     margin-top: 40px;
     display: flex; flex-direction: column; align-items: center;
 }
-.memberProfile,.memberPassword,.memberHistoryOrder,.memberHistoryConsume {
+.memberProfile,.memberPassword,.memberHistoryOrder,.memberHistoryConsume,.memberHistoryTour {
     margin-bottom: 40px;
     padding:10px;
     width:min(90%, 980px); 
@@ -166,7 +166,7 @@ legend {
     line-height: 33px; 
     background:white;
 }
-.memberProfile>div,.memberPassword>div,.memberHistoryOrder>div{
+.memberProfile>div,.memberPassword>div,.memberHistoryOrderCard,.memberHistoryConsume>div{
     width: 90%; height: 38px;
     margin-left: 15px;margin-top: 10px;
     display: flex;
@@ -181,7 +181,7 @@ legend {
 .editProfileButton{
     width: 24px; height: 24px;
     position: absolute;
-    right: 10px; bottom: 10px;
+    right: 15px; bottom: 15px;
 }
 .memberProfile>div>input,.memberPassword>div>input{
     box-sizing: border-box;
@@ -197,14 +197,17 @@ legend {
     color: #000000;
     margin-left: 50px;
 }
-.memberProfile>div>div:nth-child(1),.memberPassword>div>div:nth-child(1),.memberHistoryOrder>div>div:nth-child(1){
+.memberProfile>div>div:nth-child(1),.memberPassword>div>div:nth-child(1),.memberHistoryOrderTitle,.memberHistoryConsume>div>div:nth-child(1){
     width: 80px; height: 24px;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     color: #666666;
 }
-.memberProfile>div>div:nth-child(2),.memberPassword>div>div:nth-child(2),.memberHistoryOrder>div>a:nth-child(2){
+.memberHistoryOrderTitle{
+    width: auto;
+}
+.memberProfile>div>div:nth-child(2),.memberPassword>div>div:nth-child(2),.memberHistoryOrderNumber,.memberHistoryConsume>div>div:nth-child(2){
     width: 80px; height: 24px;
     font-weight: 500;
     font-size: 16px;

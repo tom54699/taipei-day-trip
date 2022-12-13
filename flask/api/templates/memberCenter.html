@@ -70,27 +70,33 @@
                 <legend>會員個人資料</legend> 
                 <div>
                     <div>註冊信箱</div>
-                    <div>789@gmail.com</div>
+                    <div id="memberEmail"></div>
                     <img class="hintMessage" src="https://i2.bahamut.com.tw/forum/icons/pixel-Q.svg">
                 </div>
                 <div>
                     <div>姓名</div>
-                    <div>789789</div>
+                    <div id="memberName"></div>
                     <input class="none"/>
                 </div>
                 <div>
-                    <div>生日</div>
-                    <div>1994/07/08</div>
+                    <div>暱稱</div>
+                    <div id="memberNickName"></div>
                     <input class="none"/>
                 </div>
                 <div>
-                    <div>手機</div>
-                    <div>0978541256</div>
+                    <div>出生日期</div>
+                    <div id="memberBirthday"></div>
                     <input class="none"/>
                 </div>
                 <div>
-                    <div>國籍</div>
-                    <div>台灣</div>
+                    <div>電話號碼</div>
+                    <div id="memberPhoneNumber"></div>
+                    <input class="none"/>
+                </div>
+                <div>
+                    <div>國家/地區</div>
+                    <div id="memberCountry"></div>
+                    <input class="none"/>
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
                 <div class="editProfileButton none">送出</div>
@@ -99,17 +105,15 @@
                 <legend>更改密碼<small>（至少 8 個字元，需包含英文及數字。）</small></legend> 
                 <div>
                     <div>舊密碼</div>
-                    <div>789789</div>
+                    <input type="password" disabled="disabled" class="" placeholder="輸入舊密碼"/>
                 </div>
                 <div>
                     <div>新密碼</div>
-                    <div>有要改嗎?</div>
-                    <input class="none" placeholder="輸入新密碼"/>
+                    <input type="password" disabled="disabled" class="" placeholder="輸入新密碼"/>
                 </div>
                 <div>
                     <div>確認密碼</div>
-                    <div>考慮清楚</div>
-                    <input class="none" placeholder="確認新密碼"/>
+                    <input type="password" disabled="disabled" class="" placeholder="確認新密碼"/>
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
                 <div class="editProfileButton none">送出</div>
@@ -118,27 +122,15 @@
         <section id="memberHistoryOrderBox" class="none">
             <fieldset class="memberHistoryOrder"> 
                 <legend>歷史訂單</small></legend> 
-                <div>
-                    <div>歷史訂單一</div>
-                    <a>訂單編號</a>
-                </div>
-                <div>
-                    <div>歷史訂單二</div>
-                    <a>訂單編號</a>
-                </div>
-                <div>
-                    <div>歷史訂單三</div>
-                    <a>訂單編號</a>
-                </div>
             </fieldset>
-            <fieldset class="memberHistoryOrder"> 
+            <fieldset class="memberHistoryConsume"> 
                 <legend>歷史花費</small></legend> 
                 <div>
                     <div>總花費</div>
-                    <a>5000NT$</a>
+                    <div id="memberHistoryConsume"></div>
                 </div>
             </fieldset>
-            <fieldset class="memberHistoryConsume"> 
+            <fieldset class="memberHistoryTour"> 
                 <legend>旅遊歷史</small></legend> 
                 <div class="chartBox">
                     <canvas id="myChart"></canvas>

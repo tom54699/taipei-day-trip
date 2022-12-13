@@ -1,9 +1,59 @@
+import {getMemberCenterData} from "./sendDataToBackend.js"
+import {refreshAccessToken} from "./member.js"
+let memberName
+let memberNickName
+let memberEmail
+let memberPassword
+let memberBirthday
+let memberPhoneNumber
+let memberCountry
+const booking_lists = []
+const order_lists= []
+
 /* 載入 */
 window.addEventListener("DOMContentLoaded", () => {
+    checkMemberCenterAuth()
     memberCenterButtonAddEvent()
     calendarAddEvent()
 })
 
+/* 檢查權限 */
+function checkMemberCenterAuth(){
+    const fetchGetMemberCenterData = getMemberCenterData()
+    fetchGetMemberCenterData.then(res => {
+        console.log("MemberCenter",res)
+        if(res[0] == "success"){
+            let memberCenterData = res[1].data
+            memberName = memberCenterData.member.name
+            memberNickName = memberCenterData.member.nick_name
+            memberEmail = memberCenterData.member.email
+            memberPassword = String(memberCenterData.member.password)
+            memberBirthday = memberCenterData.member.birthday
+            memberPhoneNumber = memberCenterData.member.phone_number
+            memberCountry = memberCenterData.member.country
+            for(let data of memberCenterData.bookings){
+                booking_lists.push(data)
+            }
+            for(let data of memberCenterData.orders){
+                order_lists.push(data)
+            }
+            // 產生畫面
+            memberDateShow()
+            memberHistoryOrderShow(order_lists)
+        }else if(res[1] == "⚠ 請登入會員"){
+            location.href = "/"
+        }else if(res[1] == "⚠ 請換發token"){
+            const fetchRefreshAccessToken = refreshAccessToken()
+            fetchRefreshAccessToken.then(res =>{
+                if(res == "error"){
+                    location.href = "/"
+                }else{
+                    checkMemberCenterAuth()
+                }
+            })
+        }
+    })
+}
 /* Calendar */
 function calendarAddEvent(){
     const calendarEl = document.getElementById('calendar');
@@ -79,9 +129,10 @@ function memberCenterButtonAddEvent(){
     })
 }
 
+/* 折線圖 */
 
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
@@ -93,3 +144,62 @@ var myChart = new Chart(ctx, {
         }]
     },
 });
+
+
+/* 歷史訂單+花費產生器 */
+function memberHistoryOrderShow(data_length){
+    const memberHistoryOrderNode = document.getElementsByClassName("memberHistoryOrder")
+    const memberHistoryOrderCardNode = document.getElementsByClassName("memberHistoryOrderCard")
+    const memberHistoryConsume = document.getElementById("memberHistoryConsume")
+    let totalMoney = 0
+    for(let i in data_length){
+        const memberHistoryOrderCard = document.createElement("div")
+        memberHistoryOrderCard.setAttribute("class","memberHistoryOrderCard")
+        memberHistoryOrderNode[0].appendChild(memberHistoryOrderCard)
+    
+        const memberHistoryOrderTitle = document.createElement("div")
+        memberHistoryOrderTitle.setAttribute("class","memberHistoryOrderTitle")
+        memberHistoryOrderTitle.textContent = `歷史訂單${Number(i)+1}`
+        memberHistoryOrderCardNode[i].appendChild(memberHistoryOrderTitle)
+    
+        const memberHistoryOrderNumber = document.createElement("a")
+        memberHistoryOrderNumber.setAttribute("class","memberHistoryOrderNumber")
+        memberHistoryOrderNumber.textContent = order_lists[i].order_number
+        memberHistoryOrderCardNode[i].appendChild(memberHistoryOrderNumber)
+        totalMoney += Number(order_lists[i].price)
+    }
+    memberHistoryConsume.textContent = `${totalMoney} NT$`
+}
+
+/* 會員資料產生器 */
+function memberDateShow(){
+    const memberEmailNode = document.getElementById("memberEmail")
+    const memberNameNode = document.getElementById("memberName")
+    const memberNickNameNode = document.getElementById("memberNickName")
+    const memberBirthdayNode = document.getElementById("memberBirthday")
+    const memberPhoneNumberNode = document.getElementById("memberPhoneNumber")
+    const memberCountryNode = document.getElementById("memberCountry")
+
+    memberEmailNode.textContent = memberEmail
+    memberNameNode.textContent = memberName
+    if(memberNickName === null){
+        memberNickNameNode.textContent = "(空)"
+    }else{
+        memberNickNameNode.textContent = memberNickName
+    }
+    if(memberBirthday === null){
+        memberBirthdayNode.textContent = "(空)"
+    }else{
+        memberBirthdayNode.textContent = memberBirthday
+    }
+    if(memberPhoneNumber === null){
+        memberPhoneNumberNode.textContent = "(空)"
+    }else{
+        memberPhoneNumberNode.textContent = memberPhoneNumber
+    }
+    if(memberCountry === null){
+        memberCountryNode.textContent = "(空)"
+    }else{
+        memberCountryNode.textContent = memberCountry
+    }
+}

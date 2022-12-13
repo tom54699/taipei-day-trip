@@ -298,3 +298,46 @@ export async function sendOrderData(orderContent){
         return res
     }
 }
+
+/* GET Member Center INFORMATION */
+export async function getMemberCenterData(){
+    try{
+        const res = []
+        const access_token = getAccessToken()
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        const config = {
+            method: "GET",
+            headers: headers,
+        }
+        const response = await fetch("/api/membercenter",config)
+        const fetchMemberData = await response.json()
+        console.log("後端login回傳的資料",fetchMemberData)
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,fetchMemberData)
+            return res
+        }
+        if(fetchMemberData["message"] == "⚠ 請換發token"){
+            const status = "error"
+            const message = "⚠ 請換發token"
+            res.push(status, message)
+            return res
+        }else if(fetchMemberData["message"] == "⚠ 請登入會員"){
+            const status = "error"
+            const message = "⚠ 請登入會員"
+            res.push(status, message)
+            return res
+        }else{
+            const status = "error"
+            res.push(status,fetchMemberData)
+            return res
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}
