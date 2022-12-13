@@ -436,13 +436,6 @@ goBookingNavButton.addEventListener("click",async() => {
             dialogMask.classList.remove("none")
             loginBox.classList.remove("none")
             deleteAccessToken()
-            console.log(fetchMemberData["message"])
-            if(pathname == "/user"){
-                logoutButton.classList.add("none")
-                location.href = "/"
-            }else{
-                memberCenterButton.classList.add("none")
-            }
         }
     }
     catch(err){
