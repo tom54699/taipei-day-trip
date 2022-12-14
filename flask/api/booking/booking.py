@@ -68,10 +68,10 @@ def sendBookingData():
         member_email =identity
         print("Booking Data:",data,member_email)
         # 存到資料庫
-        filters = {"member_email": member_email,"attraction_id": attraction_id, "date": date, "time": time}
+        filters = {"member_email": member_email, "date": date, "time": time}
         result = Booking.query.filter_by(**filters).all()
         if len(result) >=1:
-            return jsonify(error="true",message="⚠ 已在重複時段預約行程"),400
+            return jsonify(error="true",message="⚠ 已在這個時段預約行程"),400
         print(result)
         data = Booking(member_email, attraction_id, date, time, price)
         db.session.add(data)
@@ -85,8 +85,9 @@ def sendBookingData():
 def deleteBookingData():
     try:
         data = request.get_json()
+        member_email = get_jwt_identity()
         booking_id = data["bookingId"]
-        query = Booking.query.filter_by(id=booking_id).first()
+        query = Booking.query.filter_by(member_email=member_email,id=booking_id).first()
         db.session.delete(query)
         db.session.commit()
         return jsonify(ok="true")

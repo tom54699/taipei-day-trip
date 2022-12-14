@@ -124,7 +124,7 @@ aside{
     display: flex; justify-content: center;
 }
 aside>div{
-    width: 80%; height: 50px;
+    width: min(90%, 960px);; height: 50px;
     display: flex;justify-content: space-around;align-items: center;
     
 }
@@ -135,6 +135,12 @@ aside>div>div{
     line-height: 24px;
     text-align: center;
     color: #666666;
+}
+aside>div>div:nth-child(5){
+    text-align: start;
+}
+aside>div>div:nth-child(2),aside>div>div:nth-child(4){
+    width: 20px;
 }
 main{
     width: min(100%, 1200px);
@@ -208,7 +214,7 @@ legend {
     width: auto;
 }
 .memberProfile>div>div:nth-child(2),.memberPassword>div>div:nth-child(2),.memberHistoryOrderNumber,.memberHistoryConsume>div>div:nth-child(2){
-    width: 80px; height: 24px;
+    height: 24px;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
@@ -225,6 +231,10 @@ hr{
 .separator2{
     width: min(100%, 1200px);
 }
+.separator1{
+    margin-top: 30px;
+    width: min(60%, 1200px);
+}
 .calendarBox{
     width: min(85%, 1200px);height: 660px;
     margin-bottom: 50px; margin-top: 40px;
@@ -234,8 +244,129 @@ hr{
     box-shadow: 5px 10px 7px gray;
     padding: 20px;
 }
-
+/* ---------------------------------------------------------------*/
 /*-----------------------------------------------------*/
+.popupHistoryOrder{
+    position: absolute;top:20px;
+    width: min(90%, 1200px);
+    background: #FFFFFF;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 6px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 100;
+}
+.popupHistoryOrder>div:nth-child(1){
+    width: 100%; height: 10px; 
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-radius: 6px 6px 0px 0px;
+}
+.popupHistoryOrder>div:nth-child(3){
+    margin-top: 30px;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 16px;
+    color: #666666;
+}
+.popupHistoryOrder>div:nth-child(5){
+    height: 800px; overflow-y:scroll;
+    width: min(90%, 1200px);
+}
+.popupHistoryOrder>div:nth-child(7){
+    width: min(90%, 1200px);
+    margin-top: 20px; margin-bottom: 30px;
+}
+.popupHistoryOrder>div:nth-child(7)>div{
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex; justify-content: flex-start;
+}
+.popupHistoryOrder>div:nth-child(7)>div>div:nth-child(1){
+    width: 70px;
+}
+.popupHistoryOrder>div:nth-child(7)>div>div:nth-child(2){
+    margin-left: 30px;
+}
+.popupHistoryOrderCancelButton{
+    position: absolute; top: 30px; right: 20px;
+    width: 16px; height: 16px;
+    background: url(/static/pic/icon_close.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+.bookingCardBox{
+    width: 90%;
+    margin-bottom: 30px;
+    display: flex;flex-direction: column;
+}
+.bookingCard{
+    position: relative;
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex; justify-content: flex-start; align-items: center;
+}
+/* icon / delete */
+.deleteIcon{
+    position: absolute;
+    width: 0px; height: 0px;
+    right: 0px; top: 0px;
+    cursor: pointer;
+}
+/* picture */
+.attractionImageBox{
+    width: 250px; height: 200px;
+    box-shadow: 0px 4px 10px #AAAAAA;
+}
+.attractionImage{
+    width: 250px; height: 200px;
+    object-fit: cover;
+    object-position: center;
+}
+/* info */    
+.infoBox{
+    width: min(100%, 700px); height: 170px;
+    margin-left: 30px; margin-bottom: 30px;
+    display: flex; flex-direction: column; align-items: flex-start;
+}
+/* 台北一日遊：平安鐘 */
+.attractionName{
+    height: 14px;
+    margin-top: 5px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    color: #448899;
+}
+/* Frame 1  Frame 2  Frame 3  Frame 4 */
+.bookingDateBox,.bookingTimeBox,.bookingPriceBox,.attractionAddressBox,.bookingIdBox{
+    width: min(100%, 700px); height: 24px;
+    margin-top: 15px;
+    display: flex; justify-content: flex-start; align-items: center;
+}
+.bookingDateBox{
+    margin-top: 25px;
+}
+/* 日期： */
+.bookingDateTitle,.bookingTimeTitle,.bookingPriceTitle,.attractionAddressTitle,.bookingIdTitle{
+    height: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    letter-spacing: 1px;
+    color: #666666;
+}
+/* 2021-04-23 */
+.bookingDate,.bookingTime,.bookingPrice,.attractionAddress,.bookingId{
+    height: 14px;
+    margin-left: 5px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    color: #666666; 
+}
+/*----------------------------------------------------------*/
+
 /* footer */
 footer{
     /* Auto layout */
@@ -275,4 +406,84 @@ footer>div>div{
     align-items: center;
     /* Additional Color/White */
     color: #FFFFFF; 
+}
+/*-----------------------------------------------------*/
+
+@media (max-width:640px){
+    .bookingCard{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .attractionImageBox,.attractionImage{
+        width: 100%; height: 256px; 
+    }
+    .deleteIcon{
+        top:461px;
+    }
+    .infoBox{
+        margin-left: 0px; margin-top: 35px;
+    }
+    /*---------------*/
+    .memberPassword>div{
+        width: 80%;
+    }
+    .memberProfile>div>input,.memberPassword>div>input{
+        width: min(80%,200px);
+        margin-left: 20px;
+    }
+}
+@media (max-width:400px){
+    header{
+        width: 340px
+    }
+    .emptyState{
+        width: 340px;
+    }
+    section{
+        width: 340px;
+    }
+    .attractionImageBox,.attractionImage{
+        width: 340px; height: 200px; 
+    }
+    .deleteIcon{
+        top:405px;
+    }
+    main{
+        width: 340px;
+    }
+    .confirmBox{
+        margin-bottom: 62px;
+    }
+    nav{
+        width: 360px;
+        height: 54px;
+    }
+    nav>div{
+        width: 360px;
+        top:0;left: 0;
+    }
+    nav>div>h2{
+        padding-left: 10px;
+    }
+    .separator1{
+        border:0px;
+        height: 0px;
+    }
+    
+    .sloganBar{
+        width: 340px; 
+        top: 76px; 
+         
+    }
+    .sloganBar>div{
+        width: 320px;
+        margin-left: 10px;
+    }
+    .slogan,.slogan>h1,.slogan>div{
+        width: 320px;  
+    }
+    /* ------------------------ */
+    .memberProfile>div>input,.memberPassword>div>input{
+        margin-left: 0px;
+    }
 }

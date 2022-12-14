@@ -341,3 +341,47 @@ export async function getMemberCenterData(){
         console.log("Something Wrong:",err)
     }
 }
+
+
+/* GET Order Data By Order Number */
+export async function getOrderDataByOrderNumber(orderNumber){
+    try{
+        const res = []
+        const access_token = getAccessToken()
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        const config = {
+            method: "GET",
+            headers: headers,
+        }
+        const response = await fetch(`api/orders/${orderNumber}`,config)
+        const fetchOrderDataByOrderNumber = await response.json()
+        console.log("後端login回傳的資料",fetchOrderDataByOrderNumber)
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,fetchOrderDataByOrderNumber)
+            return res
+        }
+        if(fetchOrderDataByOrderNumber["message"] == "⚠ 請換發token"){
+            const status = "error"
+            const message = "⚠ 請換發token"
+            res.push(status, message)
+            return res
+        }else if(fetchOrderDataByOrderNumber["message"] == "⚠ 請登入會員"){
+            const status = "error"
+            const message = "⚠ 請登入會員"
+            res.push(status, message)
+            return res
+        }else{
+            const status = "error"
+            res.push(status,fetchOrderDataByOrderNumber)
+            return res
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}

@@ -134,7 +134,7 @@ header>div{
     margin-top: 35px; margin-bottom: 40px;
 }
 /*-----------------------------------------------------*/
-section{
+.bookingCardBox{
     position: relative;
     width: min(90%, 980px);
     display: flex;flex-direction: column;
@@ -155,6 +155,7 @@ section{
 /* picture */
 .attractionImageBox{
     width: 250px; height: 200px;
+    box-shadow: 0px 4px 10px #AAAAAA;
 }
 .attractionImage{
     width: 250px; height: 200px;
@@ -279,7 +280,7 @@ main{
 }
 /* 總價：新台幣 2000 元 */
 .confirmBox>div:nth-child(1){
-    width: 157px; height: 14px;
+    width: auto; height: 14px;
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;

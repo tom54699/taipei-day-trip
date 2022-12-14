@@ -5,6 +5,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,get_jwt,
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
+from .get_data import Get_data
 import re
 import redis
 from datetime import timedelta
@@ -100,6 +101,7 @@ def logout():
     try:
         response = jsonify({"ok": "true"})
         unset_refresh_cookies(response)
+        unset_access_cookies(response)
         a = get_jwt()
         if a == {}:
             return response,200
@@ -162,35 +164,15 @@ def get_member_center_data():
     try:
         identity = get_jwt_identity()
         member_email =identity
-        member = Member.query.filter_by(email=member_email).first()
-        booking_lists = []
-        order_lists = []
-        for booking in member.bookings:
-            booking_data = {
-                "attraction_id": booking.attraction_id,
-                "date": booking.date,
-                "time": booking.time,
-            }
-            booking_lists.append(booking_data)
-        for order in member.orders:
-            order_data = {
-                "order_number": order.order_number,
-                "price": order.price
-            }
-            order_lists.append(order_data)
+
+        member_info = Get_data.get_member_info_by_email(member_email)
+        bookings = Get_data.get_member_bookings_by_email(member_email)
+        orders = Get_data.get_member_orders_by_email(member_email)
+
         member_center_data = {
-            "member": {
-                "id": member.id,
-                "name": member.name,
-                "nick_name": member.nick_name,
-                "email": member.email,
-                "password": member.password,
-                "birthday": member.birthday,
-                "phone_number": member.phone_number,
-                "country": member.country
-            },
-            "bookings": booking_lists,
-            "orders": order_lists
+            "member": member_info,
+            "bookings": bookings,
+            "orders": orders
         }
         return jsonify(ok="true",data=member_center_data),200
     except Exception as ex:

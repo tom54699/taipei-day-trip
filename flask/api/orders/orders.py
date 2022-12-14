@@ -122,6 +122,8 @@ def get_new_order(orderNumber):
                     "address": attraction.address,
                     "image": image_urls
                 },
+                "booking_id": booking.id,
+                "booking_price": booking.price,
                 "date": booking.date,
                 "time": booking.time
             }

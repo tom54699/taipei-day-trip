@@ -231,7 +231,7 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
                     }
                 })
             }
-            if(res[1] == "⚠ 已在重複時段預約行程"){
+            if(res[1] == "⚠ 已在這個時段預約行程"){
                 bookingMessage.textContent = res[1]
                 bookingMessage.classList.remove("none")
                 goBookingButton.classList.add("none")

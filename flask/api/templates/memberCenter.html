@@ -58,8 +58,8 @@
     <hr class="separator1"/>
     <aside>
         <div>
-            <div class="memberProfileButton">會員個人資料</div><a>|</a>
-            <div class="memberHistoryOrderButton">歷史訂單</div><a>|</a>
+            <div class="memberProfileButton">會員資料</div><div>|</div>
+            <div class="memberHistoryOrderButton">歷史訂單</div><div>|</div>
             <div class="calendarButton">行事曆</div>
         </div>
     </aside>
@@ -102,7 +102,7 @@
                 <div class="editProfileButton none">送出</div>
             </fieldset>
             <fieldset class="memberPassword"> 
-                <legend>更改密碼<small>（至少 8 個字元，需包含英文及數字。）</small></legend> 
+                <legend>更改密碼<small>（至少 5 個字元，且禁止非法字元。）</small></legend> 
                 <div>
                     <div>舊密碼</div>
                     <input type="password" disabled="disabled" class="" placeholder="輸入舊密碼"/>
@@ -122,6 +122,8 @@
         <section id="memberHistoryOrderBox" class="none">
             <fieldset class="memberHistoryOrder"> 
                 <legend>歷史訂單</small></legend> 
+                <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
+                <div class="editProfileButton none">送出</div>
             </fieldset>
             <fieldset class="memberHistoryConsume"> 
                 <legend>歷史花費</small></legend> 
@@ -138,6 +140,34 @@
             </fieldset>
         </section>
     </main>
+    <div class="popupHistoryOrder none">
+        <div></div>
+        <div class="popupHistoryOrderCancelButton"></div>
+        <div>歷史訂單資訊</div>
+        <hr class="separator1"/>
+        <div>
+            <section class="bookingCardBox"></section>
+        </div>
+        <hr class="separator1"/>
+        <div>
+            <div>
+                <div>聯絡人: </div>
+                <div id="contactName"></div>
+            </div>
+            <div>
+                <div>聯絡信箱:</div>
+                <div id="contactEmail"></div>
+            </div>
+            <div>
+                <div>聯絡電話:</div>
+                <div id="contactPhone"></div>
+            </div>
+            <div>
+                <div>總費用:</div>
+                <div id="totalPrice"></div>
+            </div>
+        </div>
+    </div>
     <div class="calendarBox">
         <div class="calendar" id='calendar'></div>
     </div>
