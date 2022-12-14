@@ -15,7 +15,7 @@ class BaseConfig:
     "pool_pre_ping": True,
     "pool_recycle": 300,
     'pool_timeout': 900,
-    'pool_size': 5,
+    'pool_size': 10,
     'max_overflow': 5,
     }  
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -28,3 +28,4 @@ class BaseConfig:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
     JWT_COOKIE_SECURE = False  # 開true要有https
     JWT_COOKIE_CSRF_PROTECT = False
+

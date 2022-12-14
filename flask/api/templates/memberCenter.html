@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Taipei Trip 台北一日遊 | 會員中心">
+    <title>Taipei Trip 台北一日遊 | 會員中心</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/memberCenter.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/calendar.css">
+    <link rel="shortcut icon" href="/static/pic/flag.png" />
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div>
+            <h2><a href="/">台北一日遊 </a></h2>
+            <div>
+                <div><a id="goBookingNavButton" class="navButton1">預定行程</a></div>
+                <div>
+                    <a id="goLoginButton" class="navButton2 " >登入/註冊</a>
+                    <a  href="/user" id="memberCenterButton" class="navButton2 none">會員中心</a>
+                    <a id="logoutButton" class="navButton2 none">登出</a>
+                </div>
+            </div>
+        </div>  
+    </nav>
+    <!-- Login -->
+    <div id="dialogMask" class="dialogMask none"></div>
+    <div id="loginBox" class="loginBox none"> 
+        <div></div>
+        <div class="loginMainBox">
+            <div class="cancelButton"></div>
+            <div>登入會員帳號</div>
+            <input id="loginEmail" type="email" placeholder="輸入電子信箱" required/>
+            <div class="errorMessage none"></div>
+            <input id="loginPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
+            <div class="errorMessage none"></div>
+            <button id="loginButton" disabled>登入帳戶</button>
+            <div id="goRegisterButton">還沒有帳戶？點此註冊</div>
+        </div>
+    </div>
+    <div id="registerBox" class="registerBox none">
+        <div></div>
+        <div class="registerMainBox">
+            <div class="cancelButton"></div>
+            <div>註冊會員帳號</div>
+            <input id="registerName"  type="text" placeholder="輸入姓名" required/>
+            <input id="registerEmail" type="email" placeholder="輸入電子信箱" required/>
+            <div class="errorMessage none">信箱格式錯誤</div>
+            <input id="registerPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
+            <div class="errorMessage none">⚠ 密碼長度須介於5到10字元，禁止非法字元</div>
+            <button id="registerButton" disabled>註冊新帳戶</button>
+            <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
+        </div>
+    </div>
+    <hr class="separator1"/>
+    <aside>
+        <div>
+            <div class="memberProfileButton">會員個人資料</div><a>|</a>
+            <div class="memberHistoryOrderButton">歷史訂單</div><a>|</a>
+            <div class="calendarButton">行事曆</div>
+        </div>
+    </aside>
+    <main>
+        <hr class="separator2"/>
+        <section id="memberProfileBox" class=" none">
+            <fieldset class="memberProfile"> 
+                <legend>會員個人資料</legend> 
+                <div>
+                    <div>註冊信箱</div>
+                    <div id="memberEmail"></div>
+                    <img class="hintMessage" src="https://i2.bahamut.com.tw/forum/icons/pixel-Q.svg">
+                </div>
+                <div>
+                    <div>姓名</div>
+                    <div id="memberName"></div>
+                    <input class="none"/>
+                </div>
+                <div>
+                    <div>暱稱</div>
+                    <div id="memberNickName"></div>
+                    <input class="none"/>
+                </div>
+                <div>
+                    <div>出生日期</div>
+                    <div id="memberBirthday"></div>
+                    <input class="none"/>
+                </div>
+                <div>
+                    <div>電話號碼</div>
+                    <div id="memberPhoneNumber"></div>
+                    <input class="none"/>
+                </div>
+                <div>
+                    <div>國家/地區</div>
+                    <div id="memberCountry"></div>
+                    <input class="none"/>
+                </div>
+                <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
+                <div class="editProfileButton none">送出</div>
+            </fieldset>
+            <fieldset class="memberPassword"> 
+                <legend>更改密碼<small>（至少 8 個字元，需包含英文及數字。）</small></legend> 
+                <div>
+                    <div>舊密碼</div>
+                    <input type="password" disabled="disabled" class="" placeholder="輸入舊密碼"/>
+                </div>
+                <div>
+                    <div>新密碼</div>
+                    <input type="password" disabled="disabled" class="" placeholder="輸入新密碼"/>
+                </div>
+                <div>
+                    <div>確認密碼</div>
+                    <input type="password" disabled="disabled" class="" placeholder="確認新密碼"/>
+                </div>
+                <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
+                <div class="editProfileButton none">送出</div>
+            </fieldset>
+        </section>
+        <section id="memberHistoryOrderBox" class="none">
+            <fieldset class="memberHistoryOrder"> 
+                <legend>歷史訂單</small></legend> 
+            </fieldset>
+            <fieldset class="memberHistoryConsume"> 
+                <legend>歷史花費</small></legend> 
+                <div>
+                    <div>總花費</div>
+                    <div id="memberHistoryConsume"></div>
+                </div>
+            </fieldset>
+            <fieldset class="memberHistoryTour"> 
+                <legend>旅遊歷史</small></legend> 
+                <div class="chartBox">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </fieldset>
+        </section>
+    </main>
+    <div class="calendarBox">
+        <div class="calendar" id='calendar'></div>
+    </div>
+    <!-- Footer -->
+    <footer id=footer>
+        <div>
+            <div>COPYRIGHT © 2021 台北一日遊</div>
+        </div>
+    </footer>
+    <script rel="preload" as="script" type="module" src="/static/js/memberCenter.js"></script>
+    <script type="module" src="/static/js/member.js"></script>
+    <script src="/static/js/calendar.js"></script>
+    <script src="/static/js/locales-all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</body>
+</html>

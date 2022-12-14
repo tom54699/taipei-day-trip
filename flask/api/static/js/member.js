@@ -9,6 +9,7 @@ const goRegisterButton = document.getElementById("goRegisterButton")
 const goBackLoginButton = document.getElementById("goBackLoginButton")
 const cancelButton = document.getElementsByClassName("cancelButton")
 const logoutButton = document.getElementById("logoutButton")
+const memberCenterButton = document.getElementById("memberCenterButton")
 let memberName
 let pathname = location.pathname
 
@@ -22,11 +23,12 @@ window.addEventListener("load", () => {
 })
 
 export async function checkLogin(){
-    console.log(pathname)
     try{
+        let access_token = getAccessToken()
         let headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
         }
         let config = {
             method: "GET",
@@ -35,21 +37,41 @@ export async function checkLogin(){
         let response = await fetch("/api/user/auth",config)
         let fetchMemberData = await response.json()
         console.log("後端login回傳的資料",fetchMemberData)
-        if(response.status == 200){
+        if(fetchMemberData["message"] == "⚠ 請換發token"){
+            let fetchRefreshAccessToken = refreshAccessToken()
+            fetchRefreshAccessToken.then(res =>{
+                console.log(res)
+                if(res == "error"){
+                    logout()
+                }else{
+                    checkLogin()
+                }
+            })
+        }else if(response.status == 200){
             memberName = fetchMemberData["data"]["name"]
             dialogMask.classList.add("none")
             loginBox.classList.add("none")
-            logoutButton.classList.remove("none")
             goLoginButton.classList.add("none")
             if(pathname.slice(0,12) == "/attraction/"){
                 bookingMessage.classList.add("none")
             }
+            if(pathname == "/user"){
+                logoutButton.classList.remove("none")
+            }else{
+                memberCenterButton.classList.remove("none")
+            }
         }else{
+            goLoginButton.classList.remove("none")
             deleteAccessToken()
             console.log(fetchMemberData["message"])
+            if(pathname == "/user"){
+                logoutButton.classList.add("none")
+                location.href = "/"
+            }else{
+                memberCenterButton.classList.add("none")
+            }
         }
     }
-    
     catch(err){
         console.log("Something Wrong:",err)
     }
@@ -218,10 +240,11 @@ registerButton.addEventListener("click",() => {
             errorMessage[3].style.color = "red"
             clearInputValue()
         }else if(res[0] == "true"){
-            console.log(res[1])
-            errorMessage[3].classList.remove("none")
-            errorMessage[3].textContent = "註冊成功，請返回登入"
-            errorMessage[3].style.color = "blue"
+            registerBox.classList.add("none")
+            loginBox.classList.remove("none")
+            errorMessage[1].classList.remove("none")
+            errorMessage[1].textContent = "註冊成功，請登入"
+            errorMessage[1].style.color = "blue"
             clearInputValue()
         }else{
             console.log(res[1])
@@ -356,7 +379,7 @@ export async function refreshAccessToken(){
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/refresh",config)
+        let response = await fetch("/api/refresh",config)
         if(response.status == 401){
             //以防refresh token過期
             //location.href = pathname
@@ -379,3 +402,43 @@ export async function refreshAccessToken(){
 }
 
 
+/* 預定行程按鈕 */
+const goBookingNavButton = document.getElementById("goBookingNavButton")
+goBookingNavButton.addEventListener("click",async() => {
+    try{
+        let access_token = getAccessToken()
+        let headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        let config = {
+            method: "GET",
+            headers: headers,
+        }
+        let response = await fetch("/api/user/auth",config)
+        let fetchMemberData = await response.json()
+        console.log("後端login回傳的資料",fetchMemberData)
+        if(fetchMemberData["message"] == "⚠ 請換發token"){
+            let fetchRefreshAccessToken = refreshAccessToken()
+            fetchRefreshAccessToken.then(res =>{
+                console.log(res)
+                if(res == "error"){
+                    logout()
+                }else{
+                    checkLogin()
+                }
+            })
+        }else if(response.status == 200){
+            location.href = "/booking"
+        }else{
+            goLoginButton.classList.remove("none")
+            dialogMask.classList.remove("none")
+            loginBox.classList.remove("none")
+            deleteAccessToken()
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+})

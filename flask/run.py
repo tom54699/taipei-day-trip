@@ -1,7 +1,4 @@
 from api import create_app,db
-
-
-
 app = create_app()
 
 
@@ -16,5 +13,5 @@ if __name__ == '__main__':
 
 
 
-# $$env:FLASK_APP = "run.py" powershell要用這一個
+# $env:FLASK_APP = "run.py" powershell要用這一個
 # flask createdb 創立資料庫 ，要更新用migrate

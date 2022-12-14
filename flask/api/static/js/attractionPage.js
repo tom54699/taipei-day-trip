@@ -33,7 +33,7 @@ export async function generateAttraction(id){
         fetchDescription = data["data"]["description"]
         fetchAddress = data["data"]["address"]
         fetchTransport = data["data"]["transport"]
-
+        titleChange()
  
         /* Define Node */
         let dotBoxNode=document.getElementsByClassName("dotBox")
@@ -180,10 +180,10 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
     let time
     let price
     if(morning.checked == true){
-        time = "上半天"
+        time = "morning"
         price = 2000
     }else if(afternoon.checked == true){
-        time = "下半天"
+        time = "afternoon"
         price = 2500
     }
     let fetchSendBookingData = sendBookingData(fetchId,date,time,price)
@@ -213,6 +213,7 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
                 bookingMessage.textContent = res[1]
                 bookingMessage.classList.remove("none")
                 goBookingButton.classList.add("none")
+                checkLogin()
             }
             if(res[1] == "⚠ 請換發token"){
                 bookingMessage.textContent = res[1]
@@ -223,20 +224,17 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
                     console.log(res)
                     if(res == "error"){
                         bookingMessage.textContent = "⚠ 發生異常，請重新登入"
-                        const fetchLogout = logout()
-                        fetchLogout.then(res => {
-                            if(res == "success"){
-                                logoutButton.classList.add("none")
-                                goLoginButton.classList.remove("none")
-                                checkLogin()
-                            }else{
-                                console.log(res)
-                            }
-                        })
+                        logout()
+                        checkLogin()
                     }else{
                         enterBookingPage()
                     }
                 })
+            }
+            if(res[1] == "⚠ 已在重複時段預約行程"){
+                bookingMessage.textContent = res[1]
+                bookingMessage.classList.remove("none")
+                goBookingButton.classList.add("none")
             }
         }else{
             bookingMessage.textContent = "⚠ 未知原因失敗"
@@ -245,3 +243,7 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
     })
 })
 
+/* title動態變化 */
+function titleChange(){
+    document.title = `Taipei Trip 台北一日遊 | ${fetchName}`
+}

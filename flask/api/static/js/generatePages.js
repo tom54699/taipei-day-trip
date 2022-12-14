@@ -15,7 +15,7 @@ export function generateStructure(data_length,fetchId){
         cards.setAttribute("href",`/attraction/${fetchId[i]}`)
         attractionBoxNode[0].appendChild(cards)
 
-        let cardsImage=document.createElement("div")
+        let cardsImage = document.createElement("div")
         cardsImage.setAttribute("class","cardsImage")
         cardsNode[i].appendChild(cardsImage)
         let cardsName = document.createElement("div")

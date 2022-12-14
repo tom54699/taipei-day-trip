@@ -25,7 +25,7 @@ def getBookingData():
         identity = get_jwt_identity()
         member_email =identity
         query_booking_lists = db.session.query(Booking, Attraction,Member). \
-            select_from(Booking).join(Attraction).join(Member).filter(Booking.member_email==member_email).all()
+            select_from(Booking).join(Attraction).join(Member).filter(Booking.member_email == member_email,Booking.order_number == None).all()
         if len(query_booking_lists) == 0:
             query = Member.query.filter_by(email=member_email).first()
             return jsonify(status="noData",name=query.name)
@@ -36,7 +36,7 @@ def getBookingData():
             booking_data = {
                 "data": {
                     "member":{
-                        "name":member.name
+                        "name": member.name,
                     },
                     "attraction": {
                         "id": attraction.id,
@@ -68,10 +68,12 @@ def sendBookingData():
         member_email =identity
         print("Booking Data:",data,member_email)
         # 存到資料庫
-        filters = {"member_email" : member_email}
+        filters = {"member_email": member_email,"attraction_id": attraction_id, "date": date, "time": time}
         result = Booking.query.filter_by(**filters).all()
+        if len(result) >=1:
+            return jsonify(error="true",message="⚠ 已在重複時段預約行程"),400
+        print(result)
         data = Booking(member_email, attraction_id, date, time, price)
-        print(data)
         db.session.add(data)
         db.session.commit()
         return jsonify(ok="true"),200
@@ -83,12 +85,10 @@ def sendBookingData():
 def deleteBookingData():
     try:
         data = request.get_json()
-        print(data)
         booking_id = data["bookingId"]
-        print(booking_id)
         query = Booking.query.filter_by(id=booking_id).first()
         db.session.delete(query)
         db.session.commit()
-        return jsonify(status="success")
+        return jsonify(ok="true")
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
