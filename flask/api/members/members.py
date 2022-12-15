@@ -142,7 +142,7 @@ def unauthorized_callback(e):
 
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="localhost", port=6379, db=0, decode_responses=True
+    host="redis", port=6379, db=0, decode_responses=True
 )
 
  
