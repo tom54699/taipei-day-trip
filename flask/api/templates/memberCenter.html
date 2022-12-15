@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/memberCenter.css">
     <link rel="stylesheet" type="text/css" href="/static/css/common.css">
     <link rel="stylesheet" type="text/css" href="/static/css/calendar.css">
+    <link rel="stylesheet" href="/static/css/phoneFlag.css"/>
     <link rel="shortcut icon" href="/static/pic/flag.png" />
 </head>
 <body>
@@ -66,54 +67,56 @@
     <main>
         <hr class="separator2"/>
         <section id="memberProfileBox" class=" none">
-            <fieldset class="memberProfile"> 
+            <fieldset class="memberProfileField"> 
                 <legend>會員個人資料</legend> 
                 <div>
                     <div>註冊信箱</div>
-                    <div id="memberEmail"></div>
+                    <div class="memberProfile"  id="memberEmail"></div>
                     <img class="hintMessage" src="https://i2.bahamut.com.tw/forum/icons/pixel-Q.svg">
                 </div>
                 <div>
                     <div>姓名</div>
-                    <div id="memberName"></div>
-                    <input class="none"/>
+                    <div class="memberProfile" id="memberName"></div>
+                    <input type="text" class="profileEditInput none" placeholder="輸入欲修改姓名" oninput="value=value.replace(/\s+/g,'')"/>
                 </div>
                 <div>
                     <div>暱稱</div>
-                    <div id="memberNickName"></div>
-                    <input class="none"/>
+                    <div class="memberProfile"  id="memberNickName"></div>
+                    <input type="text" class="profileEditInput none" placeholder="輸入新暱稱" oninput="value=value.replace(/\s+/g,'')"/>
                 </div>
                 <div>
                     <div>出生日期</div>
-                    <div id="memberBirthday"></div>
-                    <input class="none"/>
+                    <div class="memberProfile"  id="memberBirthday"></div>
+                    <input type="date" class="profileEditInput none" placeholder="輸入欲修改日期" oninput="value=value.replace(/\s+/g,'')"/>
                 </div>
                 <div>
-                    <div>電話號碼</div>
-                    <div id="memberPhoneNumber"></div>
-                    <input class="none"/>
+                    <div>手機號碼</div>
+                    <div class="memberProfile"  id="memberPhoneNumber"></div>
+                    <input name="memberPhone" type="text" id="memberPhone" class="profileEditInput none" placeholder="輸入新電話號碼" oninput="value=value.replace(/\s+/g,'')"/>
+                    <div class="errorProfileMessage none">⚠ 手機號碼格式錯誤</div>
                 </div>
                 <div>
-                    <div>國家/地區</div>
-                    <div id="memberCountry"></div>
-                    <input class="none"/>
+                    <div>自我介紹</div>
+                    <div class="memberProfile"  id="memberIntro"></div>
+                    <input class="profileEditInput none" placeholder="輸入欲修改自介">
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
-                <div class="editProfileButton none">送出</div>
+                <button class="sendProfileButton none" >送出</button>
+                <button class="resetProfileButton none">復原</button>
             </fieldset>
             <fieldset class="memberPassword"> 
                 <legend>更改密碼<small>（至少 5 個字元，且禁止非法字元。）</small></legend> 
                 <div>
-                    <div>舊密碼</div>
-                    <input type="password" disabled="disabled" class="" placeholder="輸入舊密碼"/>
+                    <div>驗證碼</div>
+                    <input type="password" disabled="disabled" class="passwordEditInput" placeholder="輸入舊密碼"/>
                 </div>
                 <div>
                     <div>新密碼</div>
-                    <input type="password" disabled="disabled" class="" placeholder="輸入新密碼"/>
+                    <input type="password" disabled="disabled" class="passwordEditInput" placeholder="輸入新密碼"/>
                 </div>
                 <div>
                     <div>確認密碼</div>
-                    <input type="password" disabled="disabled" class="" placeholder="確認新密碼"/>
+                    <input type="password" disabled="disabled" class="passwordEditInput" placeholder="確認新密碼"/>
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
                 <div class="editProfileButton none">送出</div>
@@ -182,5 +185,6 @@
     <script src="/static/js/calendar.js"></script>
     <script src="/static/js/locales-all.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 </body>
 </html>

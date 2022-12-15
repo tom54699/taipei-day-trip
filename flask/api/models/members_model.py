@@ -11,7 +11,7 @@ class Member(db.Model):
     password = db.Column(db.String(100), nullable=False)
     birthday = db.Column(db.String(100))
     phone_number = db.Column(db.String(100))
-    country = db.Column(db.String(100))
+    intro = db.Column(db.String(100))
     bookings = db.relationship("Booking", backref="member")
     orders = db.relationship("Orders", backref="member")
 

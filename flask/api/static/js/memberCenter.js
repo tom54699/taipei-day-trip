@@ -1,4 +1,4 @@
-import {getMemberCenterData,getOrderDataByOrderNumber} from "./sendDataToBackend.js"
+import {getMemberCenterData,getOrderDataByOrderNumber,updateMemberProfile} from "./sendDataToBackend.js"
 import {refreshAccessToken} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 
@@ -9,7 +9,7 @@ let memberPassword
 let memberEmail
 let memberBirthday
 let memberPhoneNumber
-let memberCountry
+let memberIntro
 const booking_lists = []
 const order_lists= []
 
@@ -39,7 +39,7 @@ function checkMemberCenterAuth(){
             memberPassword = String(memberCenterData.member.password)
             memberBirthday = memberCenterData.member.birthday
             memberPhoneNumber = memberCenterData.member.phone_number
-            memberCountry = memberCenterData.member.country
+            memberIntro = memberCenterData.member.intro
             for(let data of memberCenterData.bookings){
                 booking_lists.push(data)
             }
@@ -54,6 +54,7 @@ function checkMemberCenterAuth(){
             calendarGenerate()
             popupHistoryOrder()
             popupHistoryOrderCancel()
+            memberProfileEditButton()
         }else if(res[1] == "⚠ 請登入會員"){
             location.href = "/"
         }else if(res[1] == "⚠ 請換發token"){
@@ -109,7 +110,7 @@ function calendarAddEvent(tour_lists){
         center: "title",
         right: "listWeek timeGridDay,timeGridWeek,dayGridMonth"
         },
-        eventClick: function(info) {
+        /*eventClick: function(info) {
         var eventObj = info.event;
     
         if (eventObj.url) {
@@ -124,7 +125,7 @@ function calendarAddEvent(tour_lists){
         } else {
             alert('Clicked ' + eventObj.title);
         }
-        },
+        },*/
         events: tour_lists,  
         windowResize: function(arg) {
             calendarAddEvent(tours)
@@ -151,7 +152,7 @@ function smallCalendarAddEvent(tour_lists){
             smallCalendarAddEvent(tours)
         }  
     });
-    calendar.render();  
+    calendar.render();
 }
 
 
@@ -290,34 +291,29 @@ function memberHistoryOrderShow(data_length){
 
 /* 會員資料產生器 */
 function memberDateShow(){
-    const memberEmailNode = document.getElementById("memberEmail")
-    const memberNameNode = document.getElementById("memberName")
-    const memberNickNameNode = document.getElementById("memberNickName")
-    const memberBirthdayNode = document.getElementById("memberBirthday")
-    const memberPhoneNumberNode = document.getElementById("memberPhoneNumber")
-    const memberCountryNode = document.getElementById("memberCountry")
+    const memberProfile = document.getElementsByClassName("memberProfile")
 
-    memberEmailNode.textContent = memberEmail
-    memberNameNode.textContent = memberName
+    memberProfile[0].textContent = memberEmail
+    memberProfile[1].textContent = memberName
     if(memberNickName === null){
-        memberNickNameNode.textContent = "(空)"
+        memberProfile[2].textContent = "(空)"
     }else{
-        memberNickNameNode.textContent = memberNickName
+        memberProfile[2].textContent = memberNickName
     }
     if(memberBirthday === null){
-        memberBirthdayNode.textContent = "(空)"
+        memberProfile[3].textContent = "(空)"
     }else{
-        memberBirthdayNode.textContent = memberBirthday
+        memberProfile[3].textContent = memberBirthday
     }
     if(memberPhoneNumber === null){
-        memberPhoneNumberNode.textContent = "(空)"
+        memberProfile[4].textContent = "(空)"
     }else{
-        memberPhoneNumberNode.textContent = memberPhoneNumber
+        memberProfile[4].textContent = memberPhoneNumber
     }
-    if(memberCountry === null){
-        memberCountryNode.textContent = "(空)"
+    if(memberIntro === null){
+        memberProfile[5].textContent = "(空)"
     }else{
-        memberCountryNode.textContent = memberCountry
+        memberProfile[5].textContent = memberIntro
     }
 }
 
@@ -395,7 +391,6 @@ function popupHistoryOrder(){
 
 /* 插入歷史訂單popup畫面 */
 function generateBookingPage(data_length){
-    const memberNameNode = document.getElementById("memberName")
     const attractionImage = document.getElementsByClassName("attractionImage")
     const attractionName = document.getElementsByClassName("attractionName")
     const bookingDate = document.getElementsByClassName("bookingDate")
@@ -404,7 +399,6 @@ function generateBookingPage(data_length){
     const attractionAddress = document.getElementsByClassName("attractionAddress")
     const bookingId = document.getElementsByClassName("bookingId")
 
-    memberNameNode.textContent = memberName
     for(let i=0; i<data_length; i++){
         attractionImage[i].setAttribute("src",`${attractionImgList[i]}`)
         attractionName[i].textContent = `台北一日遊：${attractionNameList[i]}`
@@ -427,3 +421,101 @@ function popupHistoryOrderCancel(){
         bookingCardBox[0].innerHTML = ""
     })
 } 
+
+/* 會員個人資料修改按鈕 */ 
+let profileIsValidPhone = true
+
+function memberProfileEditButton(){
+    const editProfileButton = document.getElementsByClassName("editProfileButton")
+    const sendProfileButton = document.getElementsByClassName("sendProfileButton")
+    const resetProfileButton = document.getElementsByClassName("resetProfileButton")
+    const profileEditInput = document.getElementsByClassName("profileEditInput")
+    const passwordEditInput = document.getElementsByClassName("passwordEditInput")
+    const memberProfile = document.getElementsByClassName("memberProfile")
+    const phoneInput = document.querySelector("#memberPhone")
+    const errorProfileMessage = document.getElementsByClassName("errorProfileMessage")
+    let newPhone 
+    editProfileButton[0].addEventListener("click", () => {
+        editProfileButton[0].classList.add("none")
+        sendProfileButton[0].classList.remove("none")
+        resetProfileButton[0].classList.remove("none")
+        /* 電話區碼下拉 */
+        window.intlTelInput(phoneInput, {
+        separateDialCode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        preferredCountries: ["tw", "sg"]
+        });
+        for(let i of profileEditInput){
+            i.classList.remove("none")
+
+        }
+        for(let i of memberProfile){
+            if(i.id !== "memberEmail"){
+                i.classList.add("none")
+            }
+        }
+        profileEditInput[0].value = memberName
+        profileEditInput[1].value = memberNickName
+        profileEditInput[2].value = memberBirthday
+        profileEditInput[3].value = memberPhoneNumber
+        profileEditInput[4].value = memberIntro
+    })
+    resetProfileButton[0].addEventListener("click", () => {
+        profileEditInput[0].value = memberName
+        profileEditInput[1].value = memberNickName
+        profileEditInput[2].value = memberBirthday
+        profileEditInput[3].value = memberPhoneNumber
+        profileEditInput[4].value = memberIntro
+    })
+    sendProfileButton[0].addEventListener("click", function sendProfileButtonClick(){
+        const newName = profileEditInput[0].value
+        const newNickName = profileEditInput[1].value
+        const newBirthday = profileEditInput[2].value
+        newPhone = window.intlTelInputGlobals.getInstance(phoneInput).getNumber()
+        const newIntro = profileEditInput[4].value
+        if(!profileIsValidPhone){
+            console.log("不可以傳")
+            errorProfileMessage[0].classList.remove("none")
+        }else{
+            console.log(newName,newNickName,newBirthday,newPhone,newIntro)
+            let fetchUpdateMemberProfile = updateMemberProfile(newName,newNickName,newBirthday,newPhone,newIntro)
+            fetchUpdateMemberProfile.then(res =>{
+                console.log(res)
+                if(res[0] == "success"){
+                    location.href = "/user"
+                }else if(res[1] == "⚠ 請登入會員"){
+                    location.href = "/"
+                }else if(res[1] == "⚠ 請換發token"){
+                    const fetchRefreshAccessToken = refreshAccessToken()
+                    fetchRefreshAccessToken.then(res =>{
+                        if(res == "error"){
+                            location.href = "/"
+                        }else{
+                            sendProfileButtonClick()
+                        }
+                    })
+                }
+            })
+        }
+    })
+    /* 監控手機格式 */
+    phoneInput.addEventListener("input", () => {
+        checkProfilePhoneInput()
+    })
+
+    function checkProfilePhoneInput(){
+        const isValid = window.intlTelInputGlobals.getInstance(phoneInput).isValidNumber();
+        newPhone = window.intlTelInputGlobals.getInstance(phoneInput).getNumber()
+        if(newPhone == ""){
+            console.log("2",newPhone)
+            profileIsValidPhone = true
+            errorProfileMessage[0].classList.add("none")
+        }else if(!isValid){
+            profileIsValidPhone = false
+            errorProfileMessage[0].classList.remove("none")
+        }else{
+            profileIsValidPhone = true
+            errorProfileMessage[0].classList.add("none")
+        }
+    }
+}

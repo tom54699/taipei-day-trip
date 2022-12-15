@@ -313,7 +313,7 @@ export async function getMemberCenterData(){
             method: "GET",
             headers: headers,
         }
-        const response = await fetch("/api/membercenter",config)
+        const response = await fetch("/api/user/membercenter",config)
         const fetchMemberData = await response.json()
         console.log("後端login回傳的資料",fetchMemberData)
         if(response.status == 200){
@@ -378,6 +378,57 @@ export async function getOrderDataByOrderNumber(orderNumber){
         }else{
             const status = "error"
             res.push(status,fetchOrderDataByOrderNumber)
+            return res
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}
+
+/* 呼叫會員資料更新api */
+export async function updateMemberProfile(newName,newNickName,newBirthday,newPhone,newIntro){
+    let res = []
+    try{
+        const access_token = getAccessToken()
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        const content = {
+            "name": newName,
+            "nick_name": newNickName,
+            "birthday": newBirthday,
+            "phone_number": newPhone,
+            "intro": newIntro
+        }
+        const config = {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(content)
+        }
+        const response = await fetch("/api/user/profile",config)
+        const fetchUpdateMemberProfile = await response.json()
+        console.log("後端login回傳的資料",fetchUpdateMemberProfile)
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,fetchUpdateMemberProfile)
+            return res
+        }
+        if(fetchUpdateMemberProfile["message"] == "⚠ 請換發token"){
+            const status = "error"
+            const message = "⚠ 請換發token"
+            res.push(status, message)
+            return res
+        }else if(fetchUpdateMemberProfile["message"] == "⚠ 請登入會員"){
+            const status = "error"
+            const message = "⚠ 請登入會員"
+            res.push(status, message)
+            return res
+        }else{
+            const status = "error"
+            res.push(status,fetchUpdateMemberProfile)
             return res
         }
     }

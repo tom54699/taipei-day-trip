@@ -5,7 +5,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,get_jwt,
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
-from .get_data import Get_data
+from .get_data import Get_data,Update_data
 import re
 import redis
 from datetime import timedelta
@@ -42,7 +42,6 @@ def register():
         else:
             pw_hash = bcrypt.generate_password_hash(register_password, 10)
             data = Member(register_name,register_email,pw_hash)
-            print(data)
             db.session.add(data)
             db.session.commit()
             return jsonify(ok="true"),200
@@ -143,7 +142,7 @@ def unauthorized_callback(e):
 
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="redis", port=6379, db=0, decode_responses=True
+    host="localhost", port=6379, db=0, decode_responses=True
 )
 
  
@@ -158,7 +157,7 @@ def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
 
 # 會員中心拿全部資料 
 
-@members.route("api/membercenter",methods=["GET"])
+@members.route("api/user/membercenter",methods=["GET"])
 @jwt_required(fresh=True)
 def get_member_center_data():
     try:
@@ -175,5 +174,21 @@ def get_member_center_data():
             "orders": orders
         }
         return jsonify(ok="true",data=member_center_data),200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"),500
+
+# 會員中心更新個人資料
+@members.route("api/user/profile",methods=["PUT"])
+@jwt_required(fresh=True)
+def update_member_profile_data():
+    try:
+        identity = get_jwt_identity()
+        member_email =identity
+
+        # 拿使用者輸入的資料
+        data = request.get_json()
+        Update_data.update_member_profile(member_email,data)
+
+        return jsonify(ok="true"),200
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"),500

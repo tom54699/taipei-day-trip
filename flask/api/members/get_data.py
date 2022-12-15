@@ -14,7 +14,7 @@ class Get_data():
             "password": member.password,
             "birthday": member.birthday,
             "phone_number": member.phone_number,
-            "country": member.country
+            "intro": member.intro
         }
         return member_info
     def get_member_bookings_by_email(member_email):
@@ -43,3 +43,21 @@ class Get_data():
             }
             order_lists.append(order_data)
         return order_lists
+
+class Update_data():
+    def update_member_profile(member_email,data):
+        new_name = data["name"]
+        new_nick_name = data["nick_name"]
+        new_birthday = data["birthday"]
+        new_phone_number = data["phone_number"]
+        new_intro = data["intro"]
+
+        member = Member.query.filter_by(email=member_email).update({
+            "name": new_name,
+            "nick_name": new_nick_name,
+            "birthday": new_birthday,
+            "phone_number": new_phone_number,
+            "intro": new_intro
+        })
+        db.session.commit()
+        return "ok"
