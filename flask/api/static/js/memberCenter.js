@@ -92,9 +92,11 @@ function calendarGenerate(){
     }
     if(window.innerWidth <= 700){
         smallCalendarAddEvent(tours)
-    }else(
+    }else{
+        let calendarContainer = document.getElementsByClassName("fc-daygrid-body fc-daygrid-body-unbalanced ")
+        calendarContainer[0].style.width = `${window.innerWidth}`
         calendarAddEvent(tours)
-    )
+    }
 }
 /* Calendar */
 function calendarAddEvent(tour_lists){
@@ -571,6 +573,9 @@ function memberProfileEditButton(){
                         i.style.cursor = "not-allowed"
                     }
                     for(let i of openEye){
+                        i.classList.add("none")
+                    }
+                    for(let i of closedEye){
                         i.classList.add("none")
                     }
                     isValidOldPassword = false

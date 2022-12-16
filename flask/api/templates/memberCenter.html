@@ -101,8 +101,10 @@
                     <input class="profileEditInput none" placeholder="輸入欲修改自介" >
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
-                <button class="sendProfileButton none" >送出</button>
-                <button class="resetProfileButton none">復原</button>
+                <div>
+                    <button class="resetProfileButton none">復原</button>
+                    <button class="sendProfileButton none" >送出</button>
+                </div>
             </fieldset>
             <fieldset class="memberPassword"> 
                 <legend>更改密碼<small>（至少 5 個字元，且禁止非法字元。）</small></legend> 
@@ -134,8 +136,10 @@
                 </div>
                 <p class="errorProfilePassWordMessage none"></p>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
-                <button class="sendProfileButton none" disabled>送出</button>
-                <button class="resetProfileButton none">取消</button>
+                <div>
+                    <button class="resetProfileButton none">取消</button>
+                    <button class="sendProfileButton none" disabled style="cursor:not-allowed">送出</button>
+                </div>
             </fieldset>
         </section>
         <section id="memberHistoryOrderBox" class="none">

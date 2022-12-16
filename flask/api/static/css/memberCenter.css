@@ -164,19 +164,20 @@ legend {
     background:white;
 }
 .memberProfileField>div,.memberPassword>div,.memberHistoryOrderCard,.memberHistoryConsume>div{
-    width: 90%; height: 38px;
+    width: 95%; height: 38px;
     margin-left: 15px;margin-top: 10px;
     display: flex;
     justify-content: flex-start;
     align-items: center; 
     position: relative;
 }
-/*
-.memberProfileField>div:nth-child(9){
-    margin-left: 0;
-    width: 90%;
+
+.memberProfileField>div:nth-child(9),.memberPassword>div:nth-child(9){
+    margin-top: 30px; margin-left: 30px; margin-bottom: 20px;
+    width: 95%;
     justify-content: flex-end;
-}*/
+}
+
 .hintMessage{
     width: 12px; height: 12px;
     position: absolute; left:68px; bottom: 10px;
@@ -201,10 +202,10 @@ legend {
     background: #448899;
     width: 70px; height: 35px;
     border-radius: 6px;
-    position: absolute;
-    right: 15px; bottom: 15px;
+    /*position: absolute;
+    right: 15px; bottom: 15px;*/
     margin-left: 20px;
-    cursor: not-allowed; 
+    cursor: pointer;
 }
 .resetProfileButton{
     font-weight: 600;
@@ -215,8 +216,8 @@ legend {
     background: #448899;
     width: 70px; height: 35px;
     border-radius: 6px;
-    position: absolute;
-    right: 90px; bottom: 15px;
+    /*position: absolute;
+    right: 90px; bottom: 15px;*/
     cursor: pointer; 
 }
 
@@ -487,9 +488,21 @@ footer>div>div{
     .memberPassword>div{
         width: 80%;
     }
-    .memberProfile>div>input,.memberPassword>div>input{
+    .memberPassword>div>input{
         width: min(80%,200px);
         margin-left: 20px;
+    }
+    .profileEditInput{
+        text-indent: 0;
+        width: 190px;
+        margin-left: 20px;
+    }
+    .memberProfile{
+        margin-left: 20px;
+    }
+    .memberProfileField>div:nth-child(9), .memberPassword>div:nth-child(9){
+        margin-bottom: 0;
+        margin-left: 0;
     }
 }
 @media (max-width:400px){
@@ -545,5 +558,8 @@ footer>div>div{
     /* ------------------------ */
     .memberProfile>div>input,.memberPassword>div>input{
         margin-left: 0px;
+    }
+    .memberProfileField>div:nth-child(9), .memberPassword>div:nth-child(9){
+        justify-content: center;
     }
 }

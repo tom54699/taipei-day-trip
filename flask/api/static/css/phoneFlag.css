@@ -1,6 +1,6 @@
 .iti {
     position: relative;
-    display: inline-block;
+    display: block;
     margin-left: 50px; }
     .iti * {
       box-sizing: border-box;
@@ -57,6 +57,7 @@
         bottom: 100%;
         margin-bottom: -1px; }
       @media (max-width: 500px) {
+        
         .iti__country-list {
           white-space: normal; } }
     .iti__flag-box {
@@ -927,3 +928,12 @@
   
   .iti__flag.iti__np {
     background-color: transparent; }
+
+@media (max-width:640px){
+  .iti {
+    margin-left: 20px; }
+}
+@media (max-width:520px){
+  .iti {
+    margin-left: 22px; }
+}
