@@ -10,14 +10,7 @@
 a{
     color: #448899;
 }
-input{
-    border: none;
-    appearance:none;
-    -moz-appearance:none;
-}
-input:focus{
- outline:none;/*input標籤聚焦不出現預設邊框:*/
- }
+
 
 /* [Desktop] index (w:1920) */
 body{
@@ -286,6 +279,7 @@ input{
     /* White */
     background: #FFFFFF;
 }
+
 
 /* 輸入景點名稱查詢 */
 .sloganInput>input::placeholder{

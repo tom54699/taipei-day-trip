@@ -3,7 +3,14 @@ from api.models.bookings_model import Booking
 from api.models.attractions_model import Attraction
 from api.models.members_model import Member
 
+
 class Get_data():
+    def get_member_password_by_email(member_email):
+        filters = {"email" : member_email}
+        member = Member.query.filter_by(**filters).first()
+        member_password = member.password
+        return member_password
+
     def get_member_info_by_email(member_email):
         member = Member.query.filter_by(email=member_email).first() 
         member_info = {
@@ -58,6 +65,15 @@ class Update_data():
             "birthday": new_birthday,
             "phone_number": new_phone_number,
             "intro": new_intro
+        })
+        db.session.commit()
+        return "ok"
+
+    def update_member_password(member_email,data):
+        new_password = data["new_password"]
+        pw_hash = bcrypt.generate_password_hash(new_password, 10)
+        member = Member.query.filter_by(email=member_email).update({
+            "password": pw_hash,
         })
         db.session.commit()
         return "ok"

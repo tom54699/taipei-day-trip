@@ -436,3 +436,53 @@ export async function updateMemberProfile(newName,newNickName,newBirthday,newPho
         console.log("Something Wrong:",err)
     }
 }
+
+
+/* 呼叫會員密碼更新api */
+export async function updateMemberPassword(old_password,new_password,check_password){
+    let res = []
+    try{
+        const access_token = getAccessToken()
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization" : `Bearer ${access_token}`
+        }
+        const content = {
+            "old_password": old_password,
+            "new_password": new_password,
+            "check_password": check_password
+        }
+        const config = {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(content)
+        }
+        const response = await fetch("api/user/password",config)
+        const fetchUpdateMemberProfile = await response.json()
+        console.log("後端login回傳的資料",fetchUpdateMemberProfile)
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,fetchUpdateMemberProfile)
+            return res
+        }
+        if(fetchUpdateMemberProfile["message"] == "⚠ 請換發token"){
+            const status = "error"
+            const message = "⚠ 請換發token"
+            res.push(status, message)
+            return res
+        }else if(fetchUpdateMemberProfile["message"] == "⚠ 請登入會員"){
+            const status = "error"
+            const message = "⚠ 請登入會員"
+            res.push(status, message)
+            return res
+        }else{
+            const status = "error"
+            res.push(status,fetchUpdateMemberProfile["message"])
+            return res
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}

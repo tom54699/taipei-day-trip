@@ -1,4 +1,4 @@
-import {getMemberCenterData,getOrderDataByOrderNumber,updateMemberProfile} from "./sendDataToBackend.js"
+import {getMemberCenterData,getOrderDataByOrderNumber,updateMemberProfile, updateMemberPassword} from "./sendDataToBackend.js"
 import {refreshAccessToken} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 
@@ -434,7 +434,11 @@ function memberProfileEditButton(){
     const memberProfile = document.getElementsByClassName("memberProfile")
     const phoneInput = document.querySelector("#memberPhone")
     const errorProfileMessage = document.getElementsByClassName("errorProfileMessage")
+    const openEye = document.getElementsByClassName("open-eye")
+    const closedEye = document.getElementsByClassName("closed-eye")
+
     let newPhone 
+    /* 會員資料修改按鈕 */
     editProfileButton[0].addEventListener("click", () => {
         editProfileButton[0].classList.add("none")
         sendProfileButton[0].classList.remove("none")
@@ -517,5 +521,188 @@ function memberProfileEditButton(){
             profileIsValidPhone = true
             errorProfileMessage[0].classList.add("none")
         }
+    }
+    /* 會員密碼修改 */
+    editProfileButton[1].addEventListener("click", () => {
+        editProfileButton[1].classList.add("none")
+        sendProfileButton[1].classList.remove("none")
+        resetProfileButton[1].classList.remove("none")
+        for(let i of passwordEditInput){
+            i.removeAttribute("disabled")
+            i.style.cursor = "pointer"
+        }
+        passwordEditInputValid()
+        eyeInputControl()
+        for(let i of openEye){
+            i.classList.remove("none")
+        }
+        resetProfileButton[1].addEventListener("click", () => {
+            for(let i of passwordEditInput){
+                i.value = ""
+            }
+            editProfileButton[1].classList.remove("none")
+            sendProfileButton[1].classList.add("none")
+            resetProfileButton[1].classList.add("none")
+            for(let i of passwordEditInput){
+                i.setAttribute("disabled","")
+                i.style.cursor = "not-allowed"
+            }
+            for(let i of errorProfilePassWordMessage){
+                i.classList.add("none")
+            }
+            for(let i of openEye){
+                i.classList.add("none")
+            }
+        })
+        sendProfileButton[1].addEventListener("click", function sendPasswordButton(){
+            const old_password = passwordEditInput[0].value
+            const new_password = passwordEditInput[1].value
+            const check_password = passwordEditInput[2].value
+            let fetchUpdateMemberPassword = updateMemberPassword(old_password,new_password,check_password)
+            fetchUpdateMemberPassword.then(res =>{
+                console.log(res)
+                if(res[0] == "success"){
+                    editProfileButton[1].classList.remove("none")
+                    sendProfileButton[1].classList.add("none")
+                    resetProfileButton[1].classList.add("none")
+                    for(let i of passwordEditInput){
+                        i.value = ""
+                        i.setAttribute("disabled","")
+                        i.style.cursor = "not-allowed"
+                    }
+                    for(let i of openEye){
+                        i.classList.add("none")
+                    }
+                    isValidOldPassword = false
+                    isValidNewPassword = false
+                    isValidNewCheckPassword = false
+                }else if(res[1] == "⚠ 舊密碼輸入錯誤"){
+                    errorProfilePassWordMessage[0].classList.remove("none")
+                    errorProfilePassWordMessage[0].textContent = "⚠ 舊密碼輸入錯誤"
+                    isValidOldPassword = false
+                    sendProfileButton[1].setAttribute("disabled","")
+                    sendProfileButton[1].style.cursor = "not-allowed"
+                }else if(res[1] == "⚠ 請登入會員"){
+                    location.href = "/"
+                }else if(res[1] == "⚠ 請換發token"){
+                    const fetchRefreshAccessToken = refreshAccessToken()
+                    fetchRefreshAccessToken.then(res =>{
+                        if(res == "error"){
+                            location.href = "/"
+                        }else{
+                            sendPasswordButton()
+                        }
+                    })
+                }
+            })
+        })
+    })
+}
+
+/* 眼睛控制 */
+export function eyeInputControl(){
+    const openEye = document.getElementsByClassName("open-eye")
+    const closedEye = document.getElementsByClassName("closed-eye")
+    const passwordEditInput = document.getElementsByClassName("passwordEditInput")
+    const eyes = Array.from(openEye)
+    for(let i in eyes){
+        openEye[i].addEventListener("click", () => {
+            openEye[i].classList.add("none")
+            closedEye[i].classList.remove("none")
+            passwordEditInput[i].type = "text"
+        })
+        closedEye[i].addEventListener("click", () => {
+            closedEye[i].classList.add("none")
+            openEye[i].classList.remove("none")
+            passwordEditInput[i].type = "password"
+        })
+    }
+}
+let isValidOldPassword = false
+let isValidNewPassword = false
+let isValidNewCheckPassword = false
+const passwordEditInput = document.getElementsByClassName("passwordEditInput")
+const errorProfilePassWordMessage = document.getElementsByClassName("errorProfilePassWordMessage")
+const sendProfileButton = document.getElementsByClassName("sendProfileButton")
+/* 修改密碼格式監控 */ 
+function passwordEditInputValid(){
+    window.addEventListener("input", () => {
+        if(isValidNewCheckPassword && isValidNewPassword && isValidOldPassword){
+            sendProfileButton[1].removeAttribute("disabled")
+            sendProfileButton[1].style.cursor = "pointer"
+        }else{
+            sendProfileButton[1].setAttribute("disabled","")
+            sendProfileButton[1].style.cursor = "not-allowed"
+        }
+    })
+    passwordEditInput[1].addEventListener("input", () => {
+        checkIsValidNewPassword()
+        checkOldNewPassword()
+        checkNewCheckPassword()
+    })
+    passwordEditInput[0].addEventListener("input", () => {
+        checkIsValidOldPassword()
+        checkOldNewPassword()
+        checkNewCheckPassword()
+    })
+    passwordEditInput[2].addEventListener("input", () => {
+        checkIsValidNewCheckPassword()
+        checkOldNewPassword()
+        checkNewCheckPassword()
+    })
+}
+
+function checkIsValidOldPassword(){
+    isValidOldPassword = passwordEditInput[0].checkValidity()
+    if(isValidOldPassword != true){
+        errorProfilePassWordMessage[0].classList.remove("none")
+        errorProfilePassWordMessage[0].textContent = "⚠ 密碼長度須介於5到12字元，禁止非法字"
+    }else{
+        errorProfilePassWordMessage[0].classList.add("none")
+    }
+}
+
+function checkIsValidNewPassword(){
+    isValidNewPassword = passwordEditInput[1].checkValidity()
+    if(isValidNewPassword != true){
+        errorProfilePassWordMessage[1].classList.remove("none")
+        errorProfilePassWordMessage[1].textContent = "⚠ 密碼長度須介於5到12字元，禁止非法字"
+    }else{
+        errorProfilePassWordMessage[1].classList.add("none")
+    }
+}
+
+function checkIsValidNewCheckPassword(){
+    isValidNewCheckPassword = passwordEditInput[2].checkValidity()
+    if(isValidNewCheckPassword != true){
+        errorProfilePassWordMessage[2].classList.remove("none")
+        errorProfilePassWordMessage[2].textContent = "⚠ 密碼長度須介於5到12字元，禁止非法字"
+    }else{
+        errorProfilePassWordMessage[2].classList.add("none")
+    }
+}
+function checkOldNewPassword(){
+    if(passwordEditInput[1].value == passwordEditInput[0].value){
+        isValidNewPassword = false
+        errorProfilePassWordMessage[1].classList.remove("none")
+        errorProfilePassWordMessage[1].textContent = "⚠ 請勿與舊密碼重複"
+    }else if(passwordEditInput[1].value == ""){
+        isValidNewPassword = false
+    }else{
+        isValidNewPassword = true
+        errorProfilePassWordMessage[1].classList.add("none")
+    }
+}
+
+function checkNewCheckPassword(){
+    if(passwordEditInput[1].value !== passwordEditInput[2].value){
+        isValidNewCheckPassword = false
+        errorProfilePassWordMessage[2].classList.remove("none")
+        errorProfilePassWordMessage[2].textContent = "⚠ 確認密碼輸入不符"
+    }else if(passwordEditInput[1].value == "" || passwordEditInput[2].value == ""){
+        isValidNewCheckPassword = false
+    }else{
+        isValidNewCheckPassword = true
+        errorProfilePassWordMessage[2].classList.add("none")
     }
 }

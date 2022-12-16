@@ -51,7 +51,7 @@
             <input id="registerEmail" type="email" placeholder="輸入電子信箱" required/>
             <div class="errorMessage none">信箱格式錯誤</div>
             <input id="registerPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
-            <div class="errorMessage none">⚠ 密碼長度須介於5到10字元，禁止非法字元</div>
+            <div class="errorMessage none">⚠ 密碼長度須介於5到12字元，禁止非法字元</div>
             <button id="registerButton" disabled>註冊新帳戶</button>
             <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
         </div>
@@ -98,7 +98,7 @@
                 <div>
                     <div>自我介紹</div>
                     <div class="memberProfile"  id="memberIntro"></div>
-                    <input class="profileEditInput none" placeholder="輸入欲修改自介">
+                    <input class="profileEditInput none" placeholder="輸入欲修改自介" >
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
                 <button class="sendProfileButton none" >送出</button>
@@ -108,18 +108,34 @@
                 <legend>更改密碼<small>（至少 5 個字元，且禁止非法字元。）</small></legend> 
                 <div>
                     <div>舊密碼</div>
-                    <input type="password" disabled="disabled" class="passwordEditInput" placeholder="輸入舊密碼"/>
+                    <input type="password" disabled class="passwordEditInput" placeholder="輸入舊密碼" pattern="[0-9a-zA-Z]{5,12}" required oninput="value=value.replace(/\s+/g,'')"/>
+                    <div>
+                        <img src="/static/pic/eye-solid.svg" class="eye open-eye none">
+                        <img src="/static/pic/eye-slash-solid.svg" class="eye closed-eye none">
+                    </div>
                 </div>
+                <p class="errorProfilePassWordMessage none"></p>
                 <div>
                     <div>新密碼</div>
-                    <input type="password" disabled="disabled" class="passwordEditInput" placeholder="輸入新密碼"/>
+                    <input type="password" disabled class="passwordEditInput" placeholder="輸入新密碼" pattern="[0-9a-zA-Z]{5,12}" required oninput="value=value.replace(/\s+/g,'')"/>
+                    <div>
+                        <img src="/static/pic/eye-solid.svg" class="eye open-eye none">
+                        <img src="/static/pic/eye-slash-solid.svg" class="eye closed-eye none">
+                    </div>
                 </div>
+                <p class="errorProfilePassWordMessage none">元</p>
                 <div>
                     <div>確認密碼</div>
-                    <input type="password" disabled="disabled" class="passwordEditInput" placeholder="確認新密碼"/>
+                    <input type="password" disabled class="passwordEditInput" placeholder="確認新密碼" pattern="[0-9a-zA-Z]{5,12}" required oninput="value=value.replace(/\s+/g,'')"/>
+                    <div>
+                        <img src="/static/pic/eye-solid.svg" class="eye open-eye none">
+                        <img src="/static/pic/eye-slash-solid.svg" class="eye closed-eye none">
+                    </div>
                 </div>
+                <p class="errorProfilePassWordMessage none"></p>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
-                <div class="editProfileButton none">送出</div>
+                <button class="sendProfileButton none" disabled>送出</button>
+                <button class="resetProfileButton none">取消</button>
             </fieldset>
         </section>
         <section id="memberHistoryOrderBox" class="none">

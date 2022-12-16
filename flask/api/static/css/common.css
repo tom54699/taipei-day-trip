@@ -165,6 +165,18 @@ button:disabled {
     line-height: 22px;
     margin-left: 10px;
 }
+.errorProfilePassWordMessage{
+    color: red;
+    height: 38px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 38px;
+    margin-left: 15px;
+}
 
-
+/* 移除預設眼睛 */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
 

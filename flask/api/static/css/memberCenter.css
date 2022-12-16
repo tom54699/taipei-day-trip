@@ -7,15 +7,6 @@
     text-decoration: none;
 }
 
-input{
-    border: none;
-    appearance:none;
-    -moz-appearance:none;
-}
-input:focus{
- outline:none;/*input標籤聚焦不出現預設邊框:*/
- }
-
 /* [Desktop] index (w:1920) */
 body{
     width: 100%;
@@ -180,6 +171,12 @@ legend {
     align-items: center; 
     position: relative;
 }
+/*
+.memberProfileField>div:nth-child(9){
+    margin-left: 0;
+    width: 90%;
+    justify-content: flex-end;
+}*/
 .hintMessage{
     width: 12px; height: 12px;
     position: absolute; left:68px; bottom: 10px;
@@ -189,6 +186,7 @@ legend {
     position: absolute;
     right: 15px; bottom: 15px;
     cursor: pointer;
+    z-index: 30;
 }
 .editProfileButton:hover{
     scale: 1.05;
@@ -205,7 +203,8 @@ legend {
     border-radius: 6px;
     position: absolute;
     right: 15px; bottom: 15px;
-    cursor: pointer; 
+    margin-left: 20px;
+    cursor: not-allowed; 
 }
 .resetProfileButton{
     font-weight: 600;
@@ -234,6 +233,8 @@ legend {
     line-height: 16px;
     color: #000000;
     margin-left: 50px;
+    cursor: not-allowed;
+    position: relative;
 }
 
 input[type=date]{
@@ -261,13 +262,18 @@ input[type=date]{
 .memberHistoryOrderNumber:hover{
     scale: 1.1;
 }
-.memberProfile,.memberPassword>div>div:nth-child(2),.memberHistoryOrderNumber,.memberHistoryConsume>div>div:nth-child(2){
+.memberProfile,.memberHistoryOrderNumber,.memberHistoryConsume>div>div:nth-child(2){
     height: 24px;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     color: #666666;
     margin-left: 50px;
+}
+.memberPassword>div>div:nth-child(3){
+    height: 20px;
+    margin-left: -10px;
+    position: relative;
 }
 /*-----------------------------------------------------*/
 /* 分隔線 */
@@ -291,6 +297,10 @@ hr{
     width: 100%;height: 660px;
     box-shadow: 5px 10px 7px gray;
     padding: 20px;
+}
+.eye{
+   width: 18px;height: 18px; 
+   position: absolute; right: 0px;
 }
 /* ---------------------------------------------------------------*/
 /*-----------------------------------------------------*/

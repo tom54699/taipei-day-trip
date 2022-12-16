@@ -8,14 +8,6 @@
     text-decoration: none;
 }
 
-input{
-    border: none;
-    appearance:none;
-    -moz-appearance:none;
-}
-input:focus{
- outline:none;/*input標籤聚焦不出現預設邊框:*/
- }
 
 /* [Desktop] index (w:1920) */
 body{

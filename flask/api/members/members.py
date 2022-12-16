@@ -6,6 +6,7 @@ from flask_jwt_extended import (
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
 from .get_data import Get_data,Update_data
+from .send_mail import send_update__password_email,send_register_email
 import re
 import redis
 from datetime import timedelta
@@ -44,6 +45,7 @@ def register():
             data = Member(register_name,register_email,pw_hash)
             db.session.add(data)
             db.session.commit()
+            send_register_email(register_email)
             return jsonify(ok="true"),200
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
@@ -142,7 +144,7 @@ def unauthorized_callback(e):
 
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="redis", port=6379, db=0, decode_responses=True
+    host="localhost", port=6379, db=0, decode_responses=True
 )
 
  
@@ -190,5 +192,39 @@ def update_member_profile_data():
         Update_data.update_member_profile(member_email,data)
 
         return jsonify(ok="true"),200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"),500
+
+@members.route("api/user/password",methods=["PUT"])
+@jwt_required(fresh=True)
+def update_member_password_data():
+    try:
+        identity = get_jwt_identity()
+        member_email =identity
+        # 拿使用者輸入的資料
+        data = request.get_json()
+        # 驗證
+        old_password = data["old_password"]
+        new_password = data["new_password"]
+        check_password = data["check_password"]
+        if new_password != check_password:
+            return jsonify(error="true" ,message="⚠ 確認密碼輸入錯誤"),400
+        if old_password == new_password:
+            return jsonify(error="true" ,message="⚠ 請勿與舊密碼重複"),400
+
+        # 確保格式正確
+        password_regex = r"[A-Za-z0-9]{5,12}"
+        if not bool(re.match(password_regex, new_password)):
+            return jsonify(error="true", message="⚠ 密碼格式不正確"),400
+
+        member_password = Get_data.get_member_password_by_email(member_email)
+        if bcrypt.check_password_hash(member_password, old_password):
+            # 更新
+            Update_data.update_member_password(member_email,data)
+            # 寄信
+            send_update__password_email(member_email)
+            return jsonify(ok="true"),200
+        else:
+            return jsonify(error="true" ,message="⚠ 舊密碼輸入錯誤"),400
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"),500
