@@ -54,13 +54,35 @@
             <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
         </div>
     </div>
+    <div id="findPasswordBox" class="findPasswordBox none"> 
+        <div></div>
+        <div class="findPasswordMainBox">
+            <div class="cancelButton"></div>
+            <div>找回密碼</div>
+            <input id="confirmEmail" type="email" placeholder="輸入註冊電子信箱"/>
+            <div class="errorMessage none"></div>
+            <input id="verifyCode" type="text" placeholder="輸入驗證碼"/>
+            <div class="errorMessage none"></div>
+            <button id="confirmEmailButton" disabled>確認信箱</button>
+            <button id="verifyButton" disabled>確認驗證碼</button>
+        </div>
+    </div>
+    <div id="getBackupPasswordBox" class="getBackupPasswordBox none"> 
+        <div></div>
+        <div class="getBackupPasswordMainBox">
+            <div class="cancelButton"></div>
+            <div>取得新密碼</div>
+            <input id="getBackupPassword" readonly type="text"/>
+            <div class="errorMessage none">☣ 建議盡快去會員中心更新密碼</div>
+            <button id="returnLoginButton">返回登入</button>
+        </div>
+    </div>
     <div id="errorMessageBox" class="messageBox none"> 
         <div></div>
         <div class="messageMainBox">
             <div class="errorMessageCancelButton"></div>
             <div>錯誤訊息</div>
             <div id="errorPopup">出現不明異常問題!</div>
-            
         </div>
     </div>
     <div id="successMessageBox" class="messageBox none"> 
@@ -69,7 +91,7 @@
             <div class="successMessageCancelButton"></div>
             <div>訂購成功</div>
             <div>祝您旅途愉快✈️</div>
-            <button><a>查看歷史訂單</a></button>
+            <button><a href="/user">查看歷史訂單</a></button>
             <button><a href="/">返回首頁</a></button>
         </div>
     </div>

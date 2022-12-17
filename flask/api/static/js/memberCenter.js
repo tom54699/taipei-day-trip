@@ -206,7 +206,10 @@ function memberHistoryTourShow(){
     }
     for(let i of booking_lists){
         let date = i.date.slice(5,7)
-        date_lists.push(date)
+        let years = i.date.slice(0,4)
+        if(year == years){
+            date_lists.push(date)
+        }
     }
     for(let i of date_lists){
         switch(true){

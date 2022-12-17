@@ -54,6 +54,29 @@
             <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
         </div>
     </div>
+    <div id="findPasswordBox" class="findPasswordBox none"> 
+        <div></div>
+        <div class="findPasswordMainBox">
+            <div class="cancelButton"></div>
+            <div>找回密碼</div>
+            <input id="confirmEmail" type="email" placeholder="輸入註冊電子信箱"/>
+            <div class="errorMessage none"></div>
+            <input id="verifyCode" type="text" placeholder="輸入驗證碼"/>
+            <div class="errorMessage none"></div>
+            <button id="confirmEmailButton" disabled>確認信箱</button>
+            <button id="verifyButton" disabled>確認驗證碼</button>
+        </div>
+    </div>
+    <div id="getBackupPasswordBox" class="getBackupPasswordBox none"> 
+        <div></div>
+        <div class="getBackupPasswordMainBox">
+            <div class="cancelButton"></div>
+            <div>取得新密碼</div>
+            <input id="getBackupPassword" readonly type="text"/>
+            <div class="errorMessage none">☣ 建議盡快去會員中心更新密碼</div>
+            <button id="returnLoginButton">返回登入</button>
+        </div>
+    </div>
     <hr class="separator1"/>
     <main>
         <section>
@@ -61,8 +84,7 @@
             <div class="attractionImgBox">
                 <div id="leftArrow"></div>
                 <div id="rightArrow"></div>
-                <div class="dotBox">
-                </div>
+                <div class="dotBox"></div>
             </div>
             <!-- 預定行程 -->
             <div class="attractionProfileBox">
