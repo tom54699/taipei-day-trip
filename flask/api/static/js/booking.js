@@ -4,6 +4,7 @@ import { generateBookingPageStructure } from "./generatePages.js"
 
 
 let memberName
+let memberEmail
 const bookingIdList = []
 const attractionNameList = []
 const attractionAddressList = []
@@ -35,6 +36,7 @@ export function checkBookingAuth(){
             for(let i=0; i <data_length; i++){
                 let data = res[1][i]["data"]
                 memberName = data["member"]["name"]
+                memberEmail  = data["member"]["email"]
                 bookingIdList.push(data["id"])
                 attractionNameList.push(data["attraction"]["name"])
                 attractionAddressList.push(data["attraction"]["address"])
@@ -129,6 +131,7 @@ export function deleteBookingButton(data_length){
             "Authorization" : `Bearer ${access_token}`
         }
         const content = {
+            "member_email": memberEmail,
             "bookingId": bookingId
         }
         const config = {

@@ -37,6 +37,7 @@ def getBookingData():
                 "data": {
                     "member":{
                         "name": member.name,
+                        "email": member.email
                     },
                     "attraction": {
                         "id": attraction.id,
@@ -87,7 +88,8 @@ def deleteBookingData():
         data = request.get_json()
         member_email = get_jwt_identity()
         booking_id = data["bookingId"]
-        query = Booking.query.filter_by(member_email=member_email,id=booking_id).first()
+        email = data["member_email"]
+        query = Booking.query.filter_by(member_email=email,id=booking_id).first()
         db.session.delete(query)
         db.session.commit()
         return jsonify(ok="true")

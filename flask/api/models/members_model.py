@@ -12,6 +12,7 @@ class Member(db.Model):
     birthday = db.Column(db.String(100))
     phone_number = db.Column(db.String(100))
     intro = db.Column(db.String(100))
+    verify_code = db.Column(db.String(100))
     bookings = db.relationship("Booking", backref="member")
     orders = db.relationship("Orders", backref="member")
 

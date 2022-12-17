@@ -486,3 +486,61 @@ export async function updateMemberPassword(old_password,new_password,check_passw
         console.log("Something Wrong:",err)
     }
 }
+/* 發驗證碼到信箱 */
+export async function confirmEmailForVerifyCode(confirmEmail){
+    try{
+        const res = []
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        const content = {
+            "confirm_email": confirmEmail,
+        }
+        const config = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(content)
+        }
+        const response = await fetch("/api/user/verifycode",config)
+        const fetchConfirmEmailForVerifyCode = await response.json()
+        console.log("後端login回傳的資料",fetchConfirmEmailForVerifyCode)
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,fetchConfirmEmailForVerifyCode)
+            return res
+        }else{
+            return fetchConfirmEmailForVerifyCode
+        }
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}
+
+/* 驗證碼確認正確與否 */ 
+export async function checkVerifyCode(confirmEmail,verifyCode){
+    try{
+        const res = []
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        const content = {
+            "confirm_email": confirmEmail,
+            "verify_code": verifyCode
+        }
+        const config = {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(content)
+        }
+        const response = await fetch("/api/user/verifycode",config)
+        const fetchConfirmEmailForVerifyCode = await response.json()
+        console.log("後端login回傳的資料",fetchConfirmEmailForVerifyCode)
+            return fetchConfirmEmailForVerifyCode
+    }
+    catch(err){
+        console.log("Something Wrong:",err)
+    }
+}

@@ -11,7 +11,7 @@ button{
     z-index: 40;
 }
 /* Dialog / signin */
-.loginBox,.messageBox{
+.loginBox,.messageBox,.findPasswordBox,.getBackupPasswordBox{
     width: min(100%,340px); height: auto;
     margin-left: -170px;
     display: flex; flex-direction: column; align-items: center;
@@ -23,13 +23,13 @@ button{
 }
 
 /* decorator bar */
-.loginBox>div:nth-child(1),.registerBox>div:nth-child(1),.messageBox>div:nth-child(1){
+.loginBox>div:nth-child(1),.registerBox>div:nth-child(1),.messageBox>div:nth-child(1),.findPasswordBox>div:nth-child(1),.getBackupPasswordBox>div:nth-child(1){
     width: min(100%,340px); height: 10px; 
     background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
     border-radius: 6px 6px 0px 0px;
 }
 /* main */
-.loginMainBox,.messageMainBox{
+.loginMainBox,.messageMainBox,.findPasswordMainBox,.getBackupPasswordMainBox{
     width: min(100%,310px); height: auto;
     margin-top: 15px;
     position: relative;
@@ -46,7 +46,7 @@ button{
     cursor: pointer;
 }
 /* 登入會員帳號 */
-.loginMainBox>div:nth-child(2),.registerMainBox>div:nth-child(2),.messageMainBox>div:nth-child(2){
+.loginMainBox>div:nth-child(2),.registerMainBox>div:nth-child(2),.messageMainBox>div:nth-child(2),.findPasswordMainBox>div:nth-child(2),.getBackupPasswordMainBox>div:nth-child(2){
     width: min(100%,310px); height: 27px;
     margin-bottom: 5px;
     font-weight: 700;
@@ -64,7 +64,7 @@ button{
     color: #666666;
     text-align: center;
 }
-.loginMainBox>input,.registerMainBox>input{
+.loginMainBox>input,.registerMainBox>input,.findPasswordMainBox>input,.getBackupPasswordMainBox>input{
     box-sizing: border-box;
     width: min(100%,310px); height: 47px;
     margin-top: 10px;
@@ -78,7 +78,7 @@ button{
     text-indent: 15px;
 }
 /* Button [forDialog] */
-.loginMainBox>button,.registerMainBox>button,.messageMainBox>button{
+.loginMainBox>button,.registerMainBox>button,.messageMainBox>button,.findPasswordMainBox>button,.getBackupPasswordMainBox>button{
     box-sizing: border-box;
     width: min(100%,310px); height: 47px;
     margin-top: 10px;
@@ -91,6 +91,13 @@ button{
     line-height: 27px;
     color: #FFFFFF;
     text-align: center;
+}
+.findPasswordMainBox>button:nth-child(8){
+    margin-bottom: 10px;
+}
+.getBackupPasswordMainBox>button:nth-child(5){
+    margin-bottom: 10px;
+    cursor: pointer;
 }
 .messageMainBox>button{
     width: min(100%,200px);
@@ -117,7 +124,9 @@ button:disabled {
     cursor: pointer;
     cursor: pointer;
 }
-
+.loginMainBox>div:nth-child(8){
+    display: flex; justify-content:space-around;
+}
 .registerBox{
     width: min(95%,340px); height: auto;
     margin-left: -170px;

@@ -5,8 +5,8 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,get_jwt,
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
-from .get_data import Get_data,Update_data
-from .send_mail import send_update__password_email,send_register_email
+from .get_data import Get_data,Update_data,Check_data
+from .send_mail import *
 import re
 import redis
 from datetime import timedelta
@@ -220,7 +220,7 @@ def update_member_password_data():
         member_password = Get_data.get_member_password_by_email(member_email)
         if bcrypt.check_password_hash(member_password, old_password):
             # 更新
-            Update_data.update_member_password(member_email,data)
+            Update_data.update_member_password(member_email,new_password)
             # 寄信
             send_update__password_email(member_email)
             return jsonify(ok="true"),200
@@ -228,3 +228,37 @@ def update_member_password_data():
             return jsonify(error="true" ,message="⚠ 舊密碼輸入錯誤"),400
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"),500
+
+# 忘記密碼拿驗證碼
+@members.route("api/user/verifycode",methods=["POST"])
+def get_verify_code_for_password():
+    try:
+        # 拿使用者輸入的資料
+        data = request.get_json()
+        confirm_email = data["confirm_email"]
+        response = Check_data.check_member_email(confirm_email)
+        if len(response) <= 0:
+            return jsonify(error="true", message="⚠ 這組信箱沒有註冊過"),400
+        verify_code = random_code_generate(6)
+        Update_data.update_member_verify_code(confirm_email,verify_code)
+        send_verify_code_email(confirm_email,verify_code)
+        return jsonify(ok="true"),200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"),500
+
+@members.route("api/user/verifycode",methods=["PUT"])
+def check_verify_code_for_password():
+    try:
+        # 拿使用者輸入的資料
+        data = request.get_json()
+        confirm_email = data["confirm_email"]
+        verify_code = data["verify_code"]
+        response = Check_data.check_verify_code(confirm_email,verify_code)
+        if len(response) <= 0:
+            return jsonify(error="true", message="⚠ 驗證碼錯誤"),400
+        new_password = random_code_generate(8)
+        Update_data.update_member_password(confirm_email,new_password)
+        return jsonify(ok="true",data=new_password),200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"),500
+

@@ -69,11 +69,28 @@ class Update_data():
         db.session.commit()
         return "ok"
 
-    def update_member_password(member_email,data):
-        new_password = data["new_password"]
+    def update_member_password(member_email,new_password):
         pw_hash = bcrypt.generate_password_hash(new_password, 10)
         member = Member.query.filter_by(email=member_email).update({
             "password": pw_hash,
         })
         db.session.commit()
         return "ok"
+
+    def update_member_verify_code(member_email,verify_code):
+        member = Member.query.filter_by(email=member_email).update({
+            "verify_code": verify_code,
+        })
+        db.session.commit()
+        return "ok"
+
+class Check_data():
+    def check_member_email(member_email):
+        response = Member.query.filter_by(email=member_email).all()
+        print(response)
+        return response
+
+    def check_verify_code(confirm_email,verify_code):
+        response = Member.query.filter_by(email=confirm_email,verify_code=verify_code).all()
+        print(response)
+        return response

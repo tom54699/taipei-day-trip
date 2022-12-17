@@ -279,7 +279,9 @@ input{
     /* White */
     background: #FFFFFF;
 }
-
+.sloganInput>input:focus{
+    outline: none;
+}
 
 /* 輸入景點名稱查詢 */
 .sloganInput>input::placeholder{
