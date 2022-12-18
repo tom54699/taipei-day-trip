@@ -105,7 +105,6 @@ function calendarAddEvent(tour_lists){
         initialView: 'dayGridMonth',
         navLinks: true,
         locale: "zh-tw",
-        navLinks: true,
         height: "100%",
         headerToolbar: {
         left: "prev,next today",

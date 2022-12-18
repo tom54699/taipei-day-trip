@@ -37,7 +37,10 @@
             <input id="loginPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
             <div class="errorMessage none"></div>
             <button id="loginButton" disabled>登入帳戶</button>
-            <div id="goRegisterButton">還沒有帳戶？點此註冊</div>
+            <div>
+                <div id="goRegisterButton">點此註冊</div>
+                <div id="findPasswordButton">忘記密碼</div>
+            </div>
         </div>
     </div>
     <div id="registerBox" class="registerBox none">
@@ -85,6 +88,10 @@
                 <div id="leftArrow"></div>
                 <div id="rightArrow"></div>
                 <div class="dotBox"></div>
+                <div class="loadingBox">
+                    <div class="lds-dual-ring"></div>
+                    <div class="loadingNumber">0 %</div>
+                </div>
             </div>
             <!-- 預定行程 -->
             <div class="attractionProfileBox">

@@ -88,8 +88,7 @@ def deleteBookingData():
         data = request.get_json()
         member_email = get_jwt_identity()
         booking_id = data["bookingId"]
-        email = data["member_email"]
-        query = Booking.query.filter_by(member_email=email,id=booking_id).first()
+        query = Booking.query.filter_by(member_email=member_email,id=booking_id).first()
         db.session.delete(query)
         db.session.commit()
         return jsonify(ok="true")

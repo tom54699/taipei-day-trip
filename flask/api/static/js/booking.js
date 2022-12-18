@@ -131,7 +131,6 @@ export function deleteBookingButton(data_length){
             "Authorization" : `Bearer ${access_token}`
         }
         const content = {
-            "member_email": memberEmail,
             "bookingId": bookingId
         }
         const config = {
