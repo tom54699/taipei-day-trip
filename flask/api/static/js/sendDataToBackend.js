@@ -218,8 +218,7 @@ export async function getBookingData(){
             const status = "success"
             res.push(status,getBookingData)
             return res
-        }
-        if(getBookingData["message"] == "⚠ 請換發token"){
+        }else if(getBookingData["message"] == "⚠ 請換發token"){
             const status = "error"
             const message = "⚠ 請換發token"
             res.push(status, message)
@@ -263,7 +262,11 @@ export async function sendOrderData(orderContent){
         const response = await fetch("/api/orders",config)
         const sendOrderData = await response.json()
         console.log("後端sendOrderData回傳的資料",sendOrderData)
-        if(sendOrderData["message"] == "⚠ 請換發token"){
+        if(response.status == 200){
+            const status = "success"
+            res.push(status,sendOrderData)
+            return res
+        }else if(sendOrderData["message"] == "⚠ 請換發token"){
             const status = "error"
             const message = "⚠ 請換發token"
             res.push(status, message)
@@ -285,8 +288,8 @@ export async function sendOrderData(orderContent){
             return res
         }
         else{
-            const status = "success"
-            res.push(status,sendOrderData)
+            const status = "error"
+            res.push(status,sendOrderData["message"])
             return res
         }
     }

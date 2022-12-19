@@ -5,8 +5,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,get_jwt,
     create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
 )
-from .get_data import Get_data,Update_data,Check_data
-from .send_mail import *
+from ..send_mail import *
 import re
 import redis
 from datetime import timedelta
@@ -29,22 +28,18 @@ def register():
         register_name = data["name"]
         register_email = data["email"]
         register_password = data["password"]
-        print(register_name,register_email,register_password)
         # 確保格式正確
         password_regex = r"[A-Za-z0-9]{5,12}"
         if register_email == "" or not bool(re.match(password_regex, register_password)):
             return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
         # 確認account、email有無重複
-        filters = {"email" : register_email}
-        result = Member.query.filter_by(**filters).all()
+        result = Member.check_member_email(register_email)
         print("篩選結果:",len(result))
         if len(result) != 0:
             return jsonify(error="true",message="⚠ 信箱已被註冊"),400
         else:
             pw_hash = bcrypt.generate_password_hash(register_password, 10)
-            data = Member(register_name,register_email,pw_hash)
-            db.session.add(data)
-            db.session.commit()
+            Member.update_member_register_data(register_name,register_email,pw_hash)
             send_register_email(register_email)
             return jsonify(ok="true"),200
     except Exception as ex:
@@ -57,16 +52,13 @@ def login():
         data = request.get_json()
         login_email = data["email"]
         login_password = data["password"]
-        filters = {"email" : login_email}
-        result = Member.query.filter_by(**filters).all()
+        result = Member.check_member_email(login_email)
         print("篩選結果:",len(result)) 
         if len(result) == 0:
             return jsonify(error="true", message="⚠ 未註冊的信箱，或是輸入錯誤"),400
         if bcrypt.check_password_hash(result[0].password,login_password):
-            # 帶JWT
             access_token = create_access_token(identity = login_email, fresh=True)
             refresh_token = create_refresh_token(identity = login_email)
-            # 把access_token和status都弄成json傳過去
             status = "true"
             resp = jsonify(access_token=access_token,ok=status)
             set_refresh_cookies(resp,refresh_token)
@@ -80,16 +72,8 @@ def login():
 @jwt_required(fresh=True)
 def get_member():
     try:
-        identity = get_jwt_identity()
-        member_email =identity
-        member = Member.query.filter_by(email=member_email).first()
-        member_data ={
-            "data": {
-                "id": member.id,
-                "name": member.name,
-                "email": member.email,
-            }
-        }
+        member_email = get_jwt_identity()
+        member_data = Member.get_member_auth_data(member_email)
         return member_data,200
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"),500
@@ -112,7 +96,7 @@ def logout():
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500
 
-# 小隱憂 如果有人把refreshtoken拔掉 會無限loop
+
 @members.route("api/refresh", methods=["GET"])
 @jwt_required(refresh=True)
 def refresh():
@@ -144,7 +128,7 @@ def unauthorized_callback(e):
 
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="redis", port=6379, db=0, decode_responses=True
+    host="localhost", port=6379, db=0, decode_responses=True
 )
 
  
@@ -163,12 +147,11 @@ def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
 @jwt_required(fresh=True)
 def get_member_center_data():
     try:
-        identity = get_jwt_identity()
-        member_email =identity
+        member_email = get_jwt_identity()
 
-        member_info = Get_data.get_member_info_by_email(member_email)
-        bookings = Get_data.get_member_bookings_by_email(member_email)
-        orders = Get_data.get_member_orders_by_email(member_email)
+        member_info = Member.get_member_info_by_email(member_email)
+        bookings = Member.get_member_bookings_by_email(member_email)
+        orders = Member.get_member_orders_by_email(member_email)
 
         member_center_data = {
             "member": member_info,
@@ -184,12 +167,11 @@ def get_member_center_data():
 @jwt_required(fresh=True)
 def update_member_profile_data():
     try:
-        identity = get_jwt_identity()
-        member_email =identity
+        member_email = get_jwt_identity()
 
         # 拿使用者輸入的資料
         data = request.get_json()
-        Update_data.update_member_profile(member_email,data)
+        Member.update_member_profile(member_email,data)
 
         return jsonify(ok="true"),200
     except Exception as ex:
@@ -199,8 +181,7 @@ def update_member_profile_data():
 @jwt_required(fresh=True)
 def update_member_password_data():
     try:
-        identity = get_jwt_identity()
-        member_email =identity
+        member_email = get_jwt_identity()
         # 拿使用者輸入的資料
         data = request.get_json()
         # 驗證
@@ -217,10 +198,10 @@ def update_member_password_data():
         if not bool(re.match(password_regex, new_password)):
             return jsonify(error="true", message="⚠ 密碼格式不正確"),400
 
-        member_password = Get_data.get_member_password_by_email(member_email)
+        member_password = Member.get_member_password_by_email(member_email)
         if bcrypt.check_password_hash(member_password, old_password):
             # 更新
-            Update_data.update_member_password(member_email,new_password)
+            Member.update_member_password(member_email,new_password)
             # 寄信
             send_update__password_email(member_email)
             return jsonify(ok="true"),200
@@ -236,11 +217,11 @@ def get_verify_code_for_password():
         # 拿使用者輸入的資料
         data = request.get_json()
         confirm_email = data["confirm_email"]
-        response = Check_data.check_member_email(confirm_email)
+        response = Member.check_member_email(confirm_email)
         if len(response) <= 0:
             return jsonify(error="true", message="⚠ 這組信箱沒有註冊過"),400
         verify_code = random_code_generate(6)
-        Update_data.update_member_verify_code(confirm_email,verify_code)
+        Member.update_member_verify_code(confirm_email,verify_code)
         send_verify_code_email(confirm_email,verify_code)
         return jsonify(ok="true"),200
     except Exception as ex:
@@ -253,11 +234,11 @@ def check_verify_code_for_password():
         data = request.get_json()
         confirm_email = data["confirm_email"]
         verify_code = data["verify_code"]
-        response = Check_data.check_verify_code(confirm_email,verify_code)
+        response = Member.check_verify_code(confirm_email,verify_code)
         if len(response) <= 0:
             return jsonify(error="true", message="⚠ 驗證碼錯誤"),400
         new_password = random_code_generate(8)
-        Update_data.update_member_password(confirm_email,new_password)
+        Member.update_member_password(confirm_email,new_password)
         return jsonify(ok="true",data=new_password),200
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"),500

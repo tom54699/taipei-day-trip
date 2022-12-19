@@ -237,7 +237,9 @@ legend {
     cursor: not-allowed;
     position: relative;
 }
-
+.profileEditInput{
+    cursor: pointer;
+}
 input[type=date]{
     position: relative;
 }
@@ -255,7 +257,7 @@ input[type=date]{
     color: #666666;
 }
 .memberHistoryOrderTitle{
-    width: auto;
+    width: 90px;
 }
 .memberHistoryOrderNumber{
     cursor: pointer;
@@ -469,8 +471,7 @@ footer>div>div{
 
 
 /*-----------------------------------------------------*/
-
-@media (max-width:640px){
+@media (max-width:850px){
     .bookingCard{
         flex-wrap: wrap;
         justify-content: center;
@@ -484,6 +485,9 @@ footer>div>div{
     .infoBox{
         margin-left: 0px; margin-top: 35px;
     }
+}
+@media (max-width:640px){
+
     /*---------------*/
     .memberPassword>div{
         width: 80%;

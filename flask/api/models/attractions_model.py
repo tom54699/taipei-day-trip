@@ -1,4 +1,5 @@
 from api import db
+from sqlalchemy import or_,and_
 
 print("db_attraction 運行")
 
@@ -27,6 +28,21 @@ class Attraction(db.Model):
         self.lat = lat
         self.lng = lng
         self.images = images
+    
+    def get_attraction_pages(page):
+        pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
+        return pages
+
+    def get_attraction_pages_by_keywords(keyword,page):
+        pages = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12,error_out=False)
+        return pages
+    
+    def get_attraction_data_by_attractionId(attractionId):
+        query = Attraction.query.filter(Attraction.id==attractionId).first()
+        return query
+    def get_attraction_categories():
+        query = Attraction.query.with_entities(Attraction.category).distinct().all()
+        return query
 
 class Image(db.Model):
     __tablename__="image"

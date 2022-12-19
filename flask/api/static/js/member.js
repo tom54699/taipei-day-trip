@@ -186,6 +186,7 @@ loginButton.addEventListener("click",() => {
         }else if(res[1] == "⚠ 密碼輸入錯誤"){
             errorMessage[1].classList.remove("none")
             errorMessage[1].textContent = res[1]
+            errorMessage[1].style.color = "red"
             loginPassword.style.borderColor = "red"
             loginPassword.style.borderWidth = "2px"
             isValidPassword = false
@@ -298,6 +299,7 @@ function checkLoginPasswordInput(){
     if(isValidPassword != true){
         errorMessage[1].classList.remove("none")
         errorMessage[1].textContent = "⚠ 密碼長度須介於5到10字元，禁止非法字元"
+        errorMessage[1].style.color = "red"
         loginPassword.style.borderColor = "#CCCCCC"
         loginPassword.style.borderWidth = "1px"
     }else{

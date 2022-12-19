@@ -1,6 +1,5 @@
 from flask import Flask,Blueprint,jsonify,request,render_template
-from api.models.attractions_model import Attraction,Image
-from sqlalchemy import or_,and_
+from api.models.attractions_model import Attraction
 
 
 attractions = Blueprint("attractions",
@@ -30,9 +29,9 @@ def get_all_attractions():
         page = int(page)+1
         # 有無keyword
         if keyword == None:
-            pages = Attraction.query.paginate(page=page,per_page=12,error_out=False)
+            pages = Attraction.get_attraction_pages(page)
         else:
-            pages = Attraction.query.filter(or_(Attraction.category==keyword,Attraction.name.like("%"+f"{keyword}"+"%"))).paginate(page=page,per_page=12,error_out=False)
+            pages = Attraction.get_attraction_pages_by_keywords(keyword,page)
         # 頁數判斷，如果下一頁沒有資料就顯示null
         if page >= pages.pages:
             page_data["nextPage"] = None
@@ -62,7 +61,7 @@ def get_all_attractions():
 @attractions.route("api/attraction/<attractionId>",methods=["GET"])
 def get_attraction(attractionId):
     try:
-        query = Attraction.query.filter(Attraction.id==attractionId).first()
+        query = Attraction.get_attraction_data_by_attractionId(attractionId)
         # 錯誤可能
         if query == None:
             return jsonify(error="true",message="沒有此景點編號"),400
@@ -93,7 +92,7 @@ def get_attraction(attractionId):
 def get_attraction_categories():
     try:
         # 不重複查詢
-        query = Attraction.query.with_entities(Attraction.category).distinct().all()
+        query = Attraction.get_attraction_categories()
         categories = []
         for data in query:
            categories.append(data[0])

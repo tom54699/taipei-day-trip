@@ -418,6 +418,7 @@ bookingButton.addEventListener("click", () => {
                     errorPopup.textContent = res[1]
                 }else{
                     errorMessageBox.classList.remove("none")
+                    errorPopup.textContent = res[1]
                 }
     
             })
