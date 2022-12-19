@@ -395,7 +395,8 @@ bookingButton.addEventListener("click", () => {
             fetchSendOrderData.then( res => {
                 console.log("order",res)
                 if(res[0] == "success"){
-                    successMessageBox.classList.remove("none")
+                    location.href = `/thankyou/${res[1].data.number}`
+                    //successMessageBox.classList.remove("none")
                 }else if(res[1] == "⚠ 請登入會員"){
                     noAuthBookingPage()
                 }else if(res[1] == "⚠ 請換發token"){
@@ -438,6 +439,7 @@ successMessageCancelButton[0].addEventListener("click", () => {
     location.href = "/booking"
 })
 errorMessageCancelButton[0].addEventListener("click", () => {
+    location.href = "/booking"
     errorMessageBox.classList.add("none")
 })
 }

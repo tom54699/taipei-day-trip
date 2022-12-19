@@ -286,7 +286,7 @@ export async function sendOrderData(orderContent){
         }
         else{
             const status = "success"
-            res.push(status,getBookingData)
+            res.push(status,sendOrderData)
             return res
         }
     }
