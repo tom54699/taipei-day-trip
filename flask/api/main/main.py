@@ -1,4 +1,6 @@
-from flask import Blueprint,render_template
+from flask import Blueprint,render_template,jsonify
+from api import jwt
+
 
 main = Blueprint("main",
     __name__,
@@ -19,3 +21,19 @@ def handle_404(err):
 @main.app_errorhandler(500)
 def handle_500(err):
     return render_template('500.html'), 500
+
+
+@jwt.invalid_token_loader
+def invalid_token_callback(e):
+    return jsonify(error="true",message="⚠ 請登入會員"),401
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header,jwt_data):
+    return jsonify(error="true",message="⚠ 請換發token"),403
+
+@jwt.unauthorized_loader
+def unauthorized_callback(e):
+    #return render_template("error.html"),401
+    return jsonify(error="true",message="⚠ 未登入會員"), 401
+
+ 

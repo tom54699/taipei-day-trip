@@ -1,95 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Taipei Trip 台北一日遊 | 訂購成功">
-    <title>Taipei Trip 台北一日遊 | 訂購成功</title>
+{% extends "base.html" %}
+    {% block description %}<meta name="description" content="Taipei Trip 台北一日遊 | 訂購成功">{% endblock %}
+    {% block title %}<title>Taipei Trip 台北一日遊 | 訂購成功</title>{% endblock %}
+    {% block link %}
     <link rel="stylesheet" type="text/css" href="/static/css/thankyou.css">
     <link rel="stylesheet" type="text/css" href="/static/css/common.css">
-    <link rel="shortcut icon" href="/static/pic/flag.png" />
-</head>
-<body id="body">
-    <!-- Navigation -->
-    <nav>
-        <div>
-            <h2><a href="/">台北一日遊 </a></h2>
-            <div>
-                <div><a id="goBookingNavButton" class="navButton1">預定行程</a></div>
-                <div>
-                    <a id="goLoginButton" class="navButton2 " >登入/註冊</a>
-                    <a  href="/user" id="memberCenterButton" class="navButton2 none">會員中心</a>
-                    <a id="logoutButton" class="navButton2 none">登出</a>
-                </div>
-            </div>
-        </div>  
-    </nav>
-    <!-- Login -->
-    <div id="dialogMask" class="dialogMask none"></div>
-    <div id="loginBox" class="loginBox none"> 
-        <div></div>
-        <div class="loginMainBox">
-            <div class="cancelButton"></div>
-            <div>登入會員帳號</div>
-            <input id="loginEmail" type="email" placeholder="輸入電子信箱" required/>
-            <div class="errorMessage none"></div>
-            <input id="loginPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
-            <div class="errorMessage none"></div>
-            <button id="loginButton" disabled>登入帳戶</button>
-            <div>
-                <div id="goRegisterButton">點此註冊</div>
-                <div id="findPasswordButton">忘記密碼</div>
-            </div>
-        </div>
-    </div>
-    <div id="registerBox" class="registerBox none">
-        <div></div>
-        <div class="registerMainBox">
-            <div class="cancelButton"></div>
-            <div>註冊會員帳號</div>
-            <input id="registerName"  type="text" placeholder="輸入姓名" required/>
-            <input id="registerEmail" type="email" placeholder="輸入電子信箱" required/>
-            <div class="errorMessage none">信箱格式錯誤</div>
-            <input id="registerPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
-            <div class="errorMessage none">⚠ 密碼長度須介於5到10字元，禁止非法字元</div>
-            <button id="registerButton" disabled>註冊新帳戶</button>
-            <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
-        </div>
-    </div>
-    <div id="findPasswordBox" class="findPasswordBox none"> 
-        <div></div>
-        <div class="findPasswordMainBox">
-            <div class="cancelButton"></div>
-            <div>找回密碼</div>
-            <input id="confirmEmail" type="email" placeholder="輸入註冊電子信箱"/>
-            <div class="errorMessage none"></div>
-            <input id="verifyCode" type="text" placeholder="輸入驗證碼"/>
-            <div class="errorMessage none"></div>
-            <button id="confirmEmailButton" disabled>確認信箱</button>
-            <button id="verifyButton" disabled>確認驗證碼</button>
-        </div>
-    </div>
-    <div id="getBackupPasswordBox" class="getBackupPasswordBox none"> 
-        <div></div>
-        <div class="getBackupPasswordMainBox">
-            <div class="cancelButton"></div>
-            <div>取得新密碼</div>
-            <input id="getBackupPassword" readonly type="text"/>
-            <div class="errorMessage none">☣ 建議盡快去會員中心更新密碼</div>
-            <button id="returnLoginButton">返回登入</button>
-        </div>
-    </div>
-    <div id="successMessageBox" class="messageBox none"> 
-        <div></div>
-        <div class="messageMainBox">
-            <div class="successMessageCancelButton"></div>
-            <div>訂購成功</div>
-            <div>祝您旅途愉快✈️</div>
-            <button><a href="/user">查看歷史訂單</a></button>
-            <button><a href="/">返回首頁</a></button>
-        </div>
-    </div>
+    {% endblock %}
+
+    {% block main %}
     <div class="banner"></div>
     <hr class="separator1"/>
     <header id="header">
@@ -97,12 +14,7 @@
         <div>您的訂單編號：{{order_number}}</div>
         <div>更多歷史訂單資訊，請至<a href="/user">會員中心</a>查看</div>
     </header>
-    <!-- Footer -->
-    <footer id=footer>
-        <div>
-            <div>COPYRIGHT © 2021 台北一日遊</div>
-        </div>
-    </footer>
+    {% endblock %}
+    {% block script %}
     <script type="module" src="/static/js/member.js"></script>
-</body>
-</html>
+    {% endblock %}

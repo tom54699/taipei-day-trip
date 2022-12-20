@@ -1,4 +1,4 @@
-import {getMemberCenterData,getOrderDataByOrderNumber,updateMemberProfile, updateMemberPassword} from "./sendDataToBackend.js"
+import {getMemberCenterData,getOrderDataByOrderNumber,updateMemberProfile, updateMemberPassword} from "./fetchAPI.js"
 import {refreshAccessToken} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 
@@ -111,22 +111,6 @@ function calendarAddEvent(tour_lists){
         center: "title",
         right: "listWeek timeGridDay,timeGridWeek,dayGridMonth"
         },
-        /*eventClick: function(info) {
-        var eventObj = info.event;
-    
-        if (eventObj.url) {
-            alert(
-            'Clicked ' + eventObj.title + '.\n' +
-            'Will open ' + eventObj.url + ' in a new tab'
-            );
-    
-            window.open(eventObj.url);
-    
-            info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
-        } else {
-            alert('Clicked ' + eventObj.title);
-        }
-        },*/
         events: tour_lists,  
         windowResize: function(arg) {
             calendarAddEvent(tours)
@@ -555,6 +539,9 @@ function memberProfileEditButton(){
                 i.classList.add("none")
             }
             for(let i of openEye){
+                i.classList.add("none")
+            }
+            for(let i of closedEye){
                 i.classList.add("none")
             }
         })

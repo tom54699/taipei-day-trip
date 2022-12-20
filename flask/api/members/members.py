@@ -1,14 +1,14 @@
-from flask import Flask,Blueprint,jsonify,request,render_template
-from api import db,bcrypt,jwt
+from flask import Blueprint,jsonify,request,render_template
+from api import bcrypt,jwt
 from api.models.members_model import Member
 from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,get_jwt,
-    create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_access_cookies,set_refresh_cookies,
+    jwt_required, create_access_token,get_jwt,
+    create_refresh_token, get_jwt_identity,unset_access_cookies,unset_refresh_cookies,set_refresh_cookies,
 )
 from ..send_mail import *
-import re
-import redis
+from api.utils.utils import check_password_regex, check_email_regex
 from datetime import timedelta
+import redis
 
 members = Blueprint("members",
     __name__,
@@ -23,14 +23,14 @@ def enterMemberCenter():
 @members.route("api/user",methods=["POST"])
 def register():
     try:
-        # 拿使用者輸入的資料
         data = request.get_json()
         register_name = data["name"]
         register_email = data["email"]
         register_password = data["password"]
         # 確保格式正確
-        password_regex = r"[A-Za-z0-9]{5,12}"
-        if register_email == "" or not bool(re.match(password_regex, register_password)):
+        password_regex_result = check_password_regex(register_password)
+        email_regex_result = check_email_regex(register_email)
+        if not email_regex_result or not password_regex_result:
             return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
         # 確認account、email有無重複
         result = Member.check_member_email(register_email)
@@ -78,7 +78,16 @@ def get_member():
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"),500
 
+jwt_redis_blocklist = redis.StrictRedis(
+    host="redis", port=6379, db=0, decode_responses=True
+)
 
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    print(jwt_redis_blocklist.ping())
+    jti = jwt_payload["jti"]
+    token_in_redis = jwt_redis_blocklist.get(jti)
+    return token_in_redis is not None
 
 @members.route("api/user/auth",methods=["DELETE"])
 @jwt_required(refresh=True,optional=True)
@@ -110,35 +119,6 @@ def refresh():
     except Exception as ex:
         return jsonify(error="true",message=f"{ex}"),500  
 
-# JWT Auth Setting
-
-@jwt.invalid_token_loader
-def invalid_token_callback(e):
-    return jsonify(error="true",message="⚠ 請登入會員"),401
-
-@jwt.expired_token_loader
-def expired_token_callback(jwt_header,jwt_data):
-    return jsonify(error="true",message="⚠ 請換發token"),403
-
-
-@jwt.unauthorized_loader
-def unauthorized_callback(e):
-    #return render_template("error.html"),401
-    return jsonify(error="true",message="⚠ 未登入會員"), 401
-
-
-jwt_redis_blocklist = redis.StrictRedis(
-    host="localhost", port=6379, db=0, decode_responses=True
-)
-
- 
-@jwt.token_in_blocklist_loader
-def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
-    print(jwt_redis_blocklist.ping())
-    jti = jwt_payload["jti"]
-    token_in_redis = jwt_redis_blocklist.get(jti)
-    return token_in_redis is not None
-
 
 
 # 會員中心拿全部資料 
@@ -168,8 +148,6 @@ def get_member_center_data():
 def update_member_profile_data():
     try:
         member_email = get_jwt_identity()
-
-        # 拿使用者輸入的資料
         data = request.get_json()
         Member.update_member_profile(member_email,data)
 
@@ -182,7 +160,6 @@ def update_member_profile_data():
 def update_member_password_data():
     try:
         member_email = get_jwt_identity()
-        # 拿使用者輸入的資料
         data = request.get_json()
         # 驗證
         old_password = data["old_password"]
@@ -194,8 +171,8 @@ def update_member_password_data():
             return jsonify(error="true" ,message="⚠ 請勿與舊密碼重複"),400
 
         # 確保格式正確
-        password_regex = r"[A-Za-z0-9]{5,12}"
-        if not bool(re.match(password_regex, new_password)):
+        password_regex_result = check_password_regex(new_password)
+        if not password_regex_result:
             return jsonify(error="true", message="⚠ 密碼格式不正確"),400
 
         member_password = Member.get_member_password_by_email(member_email)

@@ -1,5 +1,4 @@
 from flask import Blueprint,render_template,request,jsonify
-from api import db,bcrypt,jwt
 from api.models.bookings_model import Booking
 from api.models.members_model import Member
 from flask_jwt_extended import (jwt_required, get_jwt_identity)

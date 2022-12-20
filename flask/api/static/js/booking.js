@@ -1,4 +1,4 @@
-import {getBookingData,logout,getAccessToken,sendBookingData, sendOrderData} from "./sendDataToBackend.js"
+import {getBookingData,logout,getAccessToken,sendBookingData, sendOrderData} from "./fetchAPI.js"
 import { refreshAccessToken,checkLogin,} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 

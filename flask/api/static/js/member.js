@@ -1,4 +1,4 @@
-import {register,login,logout,storeAccessToken,getAccessToken,deleteAccessToken,confirmEmailForVerifyCode,checkVerifyCode} from "./sendDataToBackend.js"
+import {register,login,logout,storeAccessToken,getAccessToken,deleteAccessToken,confirmEmailForVerifyCode,checkVerifyCode} from "./fetchAPI.js"
 const dialogMask = document.getElementById("dialogMask")
 const loginButton = document.getElementById("loginButton")
 const registerButton = document.getElementById("registerButton")
@@ -561,6 +561,7 @@ const getBackupPasswordBox = document.getElementById("getBackupPasswordBox")
 const returnLoginButton = document.getElementById("returnLoginButton")
 cancelButton[3].addEventListener("click", () => {
     getBackupPasswordBox.classList.add("none")
+    dialogMask.classList.add("none")
     errorMessage[6].classList.add("none")
 })
 returnLoginButton.addEventListener("click", () => {

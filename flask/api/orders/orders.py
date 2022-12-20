@@ -1,11 +1,9 @@
 from flask import Blueprint,jsonify,request
-from api import db
 from api.models.bookings_model import Booking
-from api.models.attractions_model import Attraction
 from api.models.orders_model import Orders
 from flask_jwt_extended import (jwt_required,get_jwt_identity)
 import time
-import re
+from api.utils.utils import check_email_regex, check_phone_regex
 import os 
 from dotenv import load_dotenv
 import requests
@@ -28,8 +26,9 @@ def create_new_order():
         contact_phone = data["order"]["contact"]["phone"]
         contact_name = data["order"]["contact"]["name"]
         order_price = data["order"]["price"]
-        regex = r"^09[0-9]{8}$"
-        if contact_email == "" or not bool(re.match(regex, contact_phone)):
+        phone_regex_result = check_phone_regex(contact_phone)
+        mail_regex_result = check_email_regex(contact_email)
+        if not mail_regex_result or not phone_regex_result:
             return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
         data_length = len(data["order"]["trip"])
         booking_id_list = []

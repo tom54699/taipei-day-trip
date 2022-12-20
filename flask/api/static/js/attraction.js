@@ -1,5 +1,5 @@
-import {fetchAttraction} from "./fetchLocation.js"
-import{sendBookingData,logout} from "./sendDataToBackend.js"
+
+import{sendBookingData,logout,fetchAttraction} from "./fetchAPI.js"
 import {refreshAccessToken,checkLogin} from "./member.js"
 
 let fetchId
