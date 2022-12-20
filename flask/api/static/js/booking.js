@@ -1,9 +1,10 @@
-import {getBookingData,logout,getAccessToken,sendBookingData, sendOrderData} from "./sendDataToBackend.js"
+import {getBookingData,logout,getAccessToken,sendBookingData, sendOrderData} from "./fetchAPI.js"
 import { refreshAccessToken,checkLogin,} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 
 
 let memberName
+let memberEmail
 const bookingIdList = []
 const attractionNameList = []
 const attractionAddressList = []
@@ -35,6 +36,7 @@ export function checkBookingAuth(){
             for(let i=0; i <data_length; i++){
                 let data = res[1][i]["data"]
                 memberName = data["member"]["name"]
+                memberEmail  = data["member"]["email"]
                 bookingIdList.push(data["id"])
                 attractionNameList.push(data["attraction"]["name"])
                 attractionAddressList.push(data["attraction"]["address"])
@@ -393,7 +395,8 @@ bookingButton.addEventListener("click", () => {
             fetchSendOrderData.then( res => {
                 console.log("order",res)
                 if(res[0] == "success"){
-                    successMessageBox.classList.remove("none")
+                    location.href = `/thankyou/${res[1].data.number}`
+                    //successMessageBox.classList.remove("none")
                 }else if(res[1] == "⚠ 請登入會員"){
                     noAuthBookingPage()
                 }else if(res[1] == "⚠ 請換發token"){
@@ -415,6 +418,7 @@ bookingButton.addEventListener("click", () => {
                     errorPopup.textContent = res[1]
                 }else{
                     errorMessageBox.classList.remove("none")
+                    errorPopup.textContent = res[1]
                 }
     
             })
@@ -436,6 +440,7 @@ successMessageCancelButton[0].addEventListener("click", () => {
     location.href = "/booking"
 })
 errorMessageCancelButton[0].addEventListener("click", () => {
+    location.href = "/booking"
     errorMessageBox.classList.add("none")
 })
 }

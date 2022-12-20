@@ -23,12 +23,12 @@ def create_app():
     jwt.init_app(app)
     # Blueprint
     with app.app_context():
-        from api.attractions.attractions import attractions
-        app.register_blueprint(attractions, url_prefix="")
         from api.main.main import main
         app.register_blueprint(main, url_prefix="")
         from api.members.members import members
         app.register_blueprint(members, url_prefix="")
+        from api.attractions.attractions import attractions
+        app.register_blueprint(attractions, url_prefix="")
         from api.booking.booking import booking
         app.register_blueprint(booking, url_prefix="")
         from api.orders.orders import orders

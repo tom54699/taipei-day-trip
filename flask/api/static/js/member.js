@@ -1,4 +1,4 @@
-import {register,login,logout,storeAccessToken,getAccessToken,deleteAccessToken} from "./sendDataToBackend.js"
+import {register,login,logout,storeAccessToken,getAccessToken,deleteAccessToken,confirmEmailForVerifyCode,checkVerifyCode} from "./fetchAPI.js"
 const dialogMask = document.getElementById("dialogMask")
 const loginButton = document.getElementById("loginButton")
 const registerButton = document.getElementById("registerButton")
@@ -20,6 +20,8 @@ window.addEventListener("load", () => {
     checkLogin()
     checkLoginInput()
     checkRegisterInput()
+    forgerPasswordButton()
+    goConfirmEmailButton()
 })
 
 export async function checkLogin(){
@@ -136,6 +138,7 @@ function cancelLoginBox(){
     dialogMask.classList.add("none")
     loginBox.classList.add("none")
     registerBox.classList.add("none")
+    findPasswordBox.classList.add("none")
     // 清空input的值
     clearInputValue()
     // 禁用按鈕
@@ -165,6 +168,7 @@ let isValidPassword
 document.addEventListener("input", ()=>{
     checkLoginInput()
     checkRegisterInput()
+    checkConfirmEmailButton()
 })
 
 loginButton.addEventListener("click",() => {
@@ -182,6 +186,7 @@ loginButton.addEventListener("click",() => {
         }else if(res[1] == "⚠ 密碼輸入錯誤"){
             errorMessage[1].classList.remove("none")
             errorMessage[1].textContent = res[1]
+            errorMessage[1].style.color = "red"
             loginPassword.style.borderColor = "red"
             loginPassword.style.borderWidth = "2px"
             isValidPassword = false
@@ -294,6 +299,7 @@ function checkLoginPasswordInput(){
     if(isValidPassword != true){
         errorMessage[1].classList.remove("none")
         errorMessage[1].textContent = "⚠ 密碼長度須介於5到10字元，禁止非法字元"
+        errorMessage[1].style.color = "red"
         loginPassword.style.borderColor = "#CCCCCC"
         loginPassword.style.borderWidth = "1px"
     }else{
@@ -355,6 +361,8 @@ function clearErrorMessage(){
     errorMessage[1].classList.add("none")
     errorMessage[2].classList.add("none")
     errorMessage[3].classList.add("none")
+    errorMessage[4].classList.add("none")
+    errorMessage[5].classList.add("none")
     loginEmail.style.borderColor = "#CCCCCC"
     loginPassword.style.borderColor = "#CCCCCC"
     registerEmail.style.borderColor = "#CCCCCC"
@@ -365,6 +373,7 @@ function clearErrorMessage(){
     registerPassword.style.borderWidth = "1px"
     isValidEmail = false
     isValidPassword = false
+    isValidConfirmEmail = false
 }
 
 
@@ -441,4 +450,122 @@ goBookingNavButton.addEventListener("click",async() => {
     catch(err){
         console.log("Something Wrong:",err)
     }
+})
+const findPasswordBox = document.getElementById("findPasswordBox")
+/* 忘記密碼+取消找回密碼頁面按鈕 */
+function forgerPasswordButton(){
+    const findPasswordButton = document.getElementById("findPasswordButton")
+    const confirmEmailButton = document.getElementById("confirmEmailButton")
+    const verifyCode = document.getElementById("verifyCode")
+    const verifyButton = document.getElementById("verifyButton")
+    findPasswordButton.addEventListener("click", () => {
+        loginBox.classList.add("none")
+        findPasswordBox.classList.remove("none")
+        confirmEmailButton.textContent = "確認信箱"
+        confirmEmailButton.setAttribute("disabled",true)
+        confirmEmailButton.style.cursor = "not-allowed"
+        confirmEmail.removeAttribute("readonly")
+        verifyButton.setAttribute("disabled",true)
+        verifyButton.style.cursor = "not-allowed"
+        clearInputValue()
+        clearErrorMessage()
+        cancelButton[2].addEventListener("click", () => {
+            cancelLoginBox()
+            confirmEmail.value = ""
+            verifyCode.value = ""
+        })
+    })
+}
+
+let isValidConfirmEmail = false
+const confirmEmail = document.getElementById("confirmEmail")
+function checkIsValidConfirmEmail(){
+    isValidConfirmEmail = confirmEmail.checkValidity()
+    if(!isValidConfirmEmail || confirmEmail.value == ""){
+        isValidConfirmEmail = false
+        errorMessage[4].classList.remove("none")
+        errorMessage[4].textContent = "⚠ 信箱格式錯誤"
+    }else{
+        isValidConfirmEmail = true
+        errorMessage[4].classList.add("none")
+    }
+}
+confirmEmail.addEventListener("input", ()=>{
+    checkIsValidConfirmEmail()
+})
+
+function checkConfirmEmailButton(){
+    const confirmEmailButton = document.getElementById("confirmEmailButton")
+    if(isValidConfirmEmail){
+        confirmEmailButton.removeAttribute("disabled")
+        confirmEmailButton.style.cursor = "pointer"
+    }else{
+        confirmEmailButton.setAttribute("disabled","")
+        confirmEmailButton.style.cursor = "not-allowed"
+    }
+}
+function goConfirmEmailButton(){
+    const confirmEmailButton = document.getElementById("confirmEmailButton")
+    const verifyButton = document.getElementById("verifyButton")
+    confirmEmailButton.addEventListener("click", () => {
+        const confirmEmailValue = confirmEmail.value
+        const fetchConfirmEmailForVerifyCode = confirmEmailForVerifyCode(confirmEmailValue)
+        fetchConfirmEmailForVerifyCode.then( res => {
+            console.log(res)
+            if(res[0] == "success"){
+                errorMessage[4].classList.remove("none")
+                errorMessage[4].textContent = "✉ 請去信箱收取驗證碼"
+                verifyButton.removeAttribute("disabled")
+                verifyButton.style.cursor = "pointer"
+                confirmEmail.setAttribute("readonly",true)
+                confirmEmailButton.textContent = "再傳送一次驗證碼"
+                check_verify_code_button()
+            }else if(res["message"] == "⚠ 這組信箱沒有註冊過"){
+                errorMessage[4].classList.remove("none")
+                errorMessage[4].textContent = "⚠ 這組信箱沒有註冊過"
+            }
+        })
+    })
+}
+
+/* 確認驗證碼按鈕 */
+function check_verify_code_button(){
+    const verifyCode = document.getElementById("verifyCode")
+    const getBackupPasswordBox = document.getElementById("getBackupPasswordBox")
+    const findPasswordBox = document.getElementById("findPasswordBox")
+    const getBackupPassword = document.getElementById("getBackupPassword")
+    verifyButton.addEventListener("click", () => {
+        const verifyCode = document.getElementById("verifyCode")
+        const confirmEmailValue = confirmEmail.value
+        const verifyCodeValue = verifyCode.value
+        const fetchCheckVerifyCode = checkVerifyCode(confirmEmailValue,verifyCodeValue)
+        fetchCheckVerifyCode.then( res => {
+            console.log(res)
+            if(res["ok"] == "true"){
+                errorMessage[5].classList.add("none")
+                findPasswordBox.classList.add("none")
+                getBackupPasswordBox.classList.remove("none")
+                getBackupPassword.value = res["data"]
+                errorMessage[6].classList.remove("none")
+            }else if(res["message"] == "⚠ 驗證碼錯誤"){
+                errorMessage[5].classList.remove("none")
+                errorMessage[5].textContent = "⚠ 驗證碼錯誤"
+            }
+        })
+    })
+
+}
+
+/* 取得新密碼頁面按鈕 */
+const getBackupPasswordBox = document.getElementById("getBackupPasswordBox")
+const returnLoginButton = document.getElementById("returnLoginButton")
+cancelButton[3].addEventListener("click", () => {
+    getBackupPasswordBox.classList.add("none")
+    dialogMask.classList.add("none")
+    errorMessage[6].classList.add("none")
+})
+returnLoginButton.addEventListener("click", () => {
+    getBackupPasswordBox.classList.add("none")
+    errorMessage[6].classList.add("none")
+    loginBox.classList.remove("none")
 })

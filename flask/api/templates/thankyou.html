@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+    {% block description %}<meta name="description" content="Taipei Trip 台北一日遊 | 訂購成功">{% endblock %}
+    {% block title %}<title>Taipei Trip 台北一日遊 | 訂購成功</title>{% endblock %}
+    {% block link %}
+    <link rel="stylesheet" type="text/css" href="/static/css/thankyou.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+    {% endblock %}
+
+    {% block main %}
+    <div class="banner"></div>
+    <hr class="separator1"/>
+    <header id="header">
+        <div>您好，恭喜完成訂單!!</div>
+        <div>您的訂單編號：{{order_number}}</div>
+        <div>更多歷史訂單資訊，請至<a href="/user">會員中心</a>查看</div>
+    </header>
+    {% endblock %}
+    {% block script %}
+    <script type="module" src="/static/js/member.js"></script>
+    {% endblock %}

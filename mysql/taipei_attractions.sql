@@ -70,7 +70,7 @@ CREATE TABLE `booking` (
   CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`member_email`) REFERENCES `member` (`email`),
   CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attraction` (`id`),
   CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`order_number`) REFERENCES `orders` (`order_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,7 +79,6 @@ CREATE TABLE `booking` (
 
 LOCK TABLES `booking` WRITE;
 /*!40000 ALTER TABLE `booking` DISABLE KEYS */;
-INSERT INTO `booking` VALUES (1,'789@789',1,'20221213102050','2022-12-13','morning',2000),(2,'789@789',2,'20221213102050','2022-12-13','morning',2000),(3,'789@789',4,'20221213102050','2022-12-13','morning',2000),(4,'789@789',1,'20221213102208','2022-12-13','afternoon',2500),(5,'789@789',1,NULL,'2022-12-29','afternoon',2500);
 /*!40000 ALTER TABLE `booking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,10 +124,11 @@ CREATE TABLE `member` (
   `password` varchar(100) NOT NULL,
   `birthday` varchar(100) DEFAULT NULL,
   `phone_number` varchar(100) DEFAULT NULL,
-  `country` varchar(100) DEFAULT NULL,
+  `intro` varchar(100) DEFAULT NULL,
+  `verify_code` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +137,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'789',NULL,'789@789','$2b$10$sVpji6YZbC.IQggPYIBZB.g4tdMJY3atPPWqDDdbS9ECreaTVCPg2',NULL,NULL,NULL);
+INSERT INTO `member` VALUES (1,'789',NULL,'789@789','$2b$10$RCa1MeleI8/XGQBQWEkTvOAh2wqqw4uXHEqqLkQfkmHI5pbCxatYy',NULL,NULL,NULL,'eyqFEf'),(2,'tom54699',NULL,'tom54699@gmail.com','$2b$10$hwScO5ALDjCyqVLQNbt5Gezd467HP02XCJYOybLL90R0zata1qjaS',NULL,NULL,NULL,'P2Iedz'),(3,'123',NULL,'123@123','$2b$10$mYV/gOHCIm7FHndfrpoqT.1O7qZls.fQZrLGgzrhoVOZl.CgRcwG.',NULL,NULL,NULL,NULL),(4,'11111',NULL,'bqq57832@cdfaq.com','$2b$10$e/X9a77gq.cLFeIY2ddd..SktMjQWcF5LTj0/VEFPU7Uo4yBQhvR6',NULL,NULL,NULL,'zjpV7f');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +167,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES ('20221213102050','789@789','789','789@789','0978954512',6000),('20221213102208','789@789','789','789@789','0978787878',2500);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -180,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-13 15:26:48
+-- Dump completed on 2022-12-17 12:14:08

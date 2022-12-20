@@ -1,127 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Taipei Trip 台北一日遊 | 會員中心">
-    <title>Taipei Trip 台北一日遊 | 會員中心</title>
+{% extends "base.html" %}
+
+    {% block description %}<meta name="description" content="Taipei Trip 台北一日遊 | 會員中心">{% endblock %}
+    {% block title %}<title>Taipei Trip 台北一日遊 | 會員中心</title>{% endblock %}
+    {% block link %}    
     <link rel="stylesheet" type="text/css" href="/static/css/memberCenter.css">
     <link rel="stylesheet" type="text/css" href="/static/css/common.css">
     <link rel="stylesheet" type="text/css" href="/static/css/calendar.css">
-    <link rel="shortcut icon" href="/static/pic/flag.png" />
-</head>
-<body>
-    <!-- Navigation -->
-    <nav>
-        <div>
-            <h2><a href="/">台北一日遊 </a></h2>
-            <div>
-                <div><a id="goBookingNavButton" class="navButton1">預定行程</a></div>
-                <div>
-                    <a id="goLoginButton" class="navButton2 " >登入/註冊</a>
-                    <a  href="/user" id="memberCenterButton" class="navButton2 none">會員中心</a>
-                    <a id="logoutButton" class="navButton2 none">登出</a>
-                </div>
-            </div>
-        </div>  
-    </nav>
-    <!-- Login -->
-    <div id="dialogMask" class="dialogMask none"></div>
-    <div id="loginBox" class="loginBox none"> 
-        <div></div>
-        <div class="loginMainBox">
-            <div class="cancelButton"></div>
-            <div>登入會員帳號</div>
-            <input id="loginEmail" type="email" placeholder="輸入電子信箱" required/>
-            <div class="errorMessage none"></div>
-            <input id="loginPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
-            <div class="errorMessage none"></div>
-            <button id="loginButton" disabled>登入帳戶</button>
-            <div id="goRegisterButton">還沒有帳戶？點此註冊</div>
-        </div>
-    </div>
-    <div id="registerBox" class="registerBox none">
-        <div></div>
-        <div class="registerMainBox">
-            <div class="cancelButton"></div>
-            <div>註冊會員帳號</div>
-            <input id="registerName"  type="text" placeholder="輸入姓名" required/>
-            <input id="registerEmail" type="email" placeholder="輸入電子信箱" required/>
-            <div class="errorMessage none">信箱格式錯誤</div>
-            <input id="registerPassword" type="password" placeholder="輸入密碼" pattern="[0-9a-zA-Z]{5,12}" required/>
-            <div class="errorMessage none">⚠ 密碼長度須介於5到10字元，禁止非法字元</div>
-            <button id="registerButton" disabled>註冊新帳戶</button>
-            <div id="goBackLoginButton">已經有帳戶了？點此登入</div>
-        </div>
-    </div>
+    <link rel="stylesheet" href="/static/css/phoneFlag.css"/>
+    {% endblock %}
+
+    {% block main %}
     <hr class="separator1"/>
     <aside>
         <div>
-            <div class="memberProfileButton">會員個人資料</div><a>|</a>
-            <div class="memberHistoryOrderButton">歷史訂單</div><a>|</a>
+            <div class="memberProfileButton">會員資料</div><div>|</div>
+            <div class="memberHistoryOrderButton">歷史訂單</div><div>|</div>
             <div class="calendarButton">行事曆</div>
         </div>
     </aside>
     <main>
         <hr class="separator2"/>
         <section id="memberProfileBox" class=" none">
-            <fieldset class="memberProfile"> 
+            <fieldset class="memberProfileField"> 
                 <legend>會員個人資料</legend> 
                 <div>
                     <div>註冊信箱</div>
-                    <div id="memberEmail"></div>
+                    <div class="memberProfile"  id="memberEmail"></div>
                     <img class="hintMessage" src="https://i2.bahamut.com.tw/forum/icons/pixel-Q.svg">
                 </div>
                 <div>
                     <div>姓名</div>
-                    <div id="memberName"></div>
-                    <input class="none"/>
+                    <div class="memberProfile" id="memberName"></div>
+                    <input type="text" class="profileEditInput none" placeholder="輸入欲修改姓名" oninput="value=value.replace(/\s+/g,'')"/>
                 </div>
                 <div>
                     <div>暱稱</div>
-                    <div id="memberNickName"></div>
-                    <input class="none"/>
+                    <div class="memberProfile"  id="memberNickName"></div>
+                    <input type="text" class="profileEditInput none" placeholder="輸入新暱稱" oninput="value=value.replace(/\s+/g,'')"/>
                 </div>
                 <div>
                     <div>出生日期</div>
-                    <div id="memberBirthday"></div>
-                    <input class="none"/>
+                    <div class="memberProfile"  id="memberBirthday"></div>
+                    <input type="date" class="profileEditInput none" placeholder="輸入欲修改日期" oninput="value=value.replace(/\s+/g,'')"/>
                 </div>
                 <div>
-                    <div>電話號碼</div>
-                    <div id="memberPhoneNumber"></div>
-                    <input class="none"/>
+                    <div>手機號碼</div>
+                    <div class="memberProfile"  id="memberPhoneNumber"></div>
+                    <input name="memberPhone" type="text" id="memberPhone" class="profileEditInput none" placeholder="輸入新電話號碼" oninput="value=value.replace(/\s+/g,'')"/>
+                    <div class="errorProfileMessage none">⚠ 手機號碼格式錯誤</div>
                 </div>
                 <div>
-                    <div>國家/地區</div>
-                    <div id="memberCountry"></div>
-                    <input class="none"/>
+                    <div>自我介紹</div>
+                    <div class="memberProfile"  id="memberIntro"></div>
+                    <input class="profileEditInput none" placeholder="輸入欲修改自介" >
                 </div>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
-                <div class="editProfileButton none">送出</div>
+                <div>
+                    <button class="resetProfileButton none">復原</button>
+                    <button class="sendProfileButton none" >送出</button>
+                </div>
             </fieldset>
             <fieldset class="memberPassword"> 
-                <legend>更改密碼<small>（至少 8 個字元，需包含英文及數字。）</small></legend> 
+                <legend>更改密碼<small>（至少 5 個字元，且禁止非法字元。）</small></legend> 
                 <div>
                     <div>舊密碼</div>
-                    <input type="password" disabled="disabled" class="" placeholder="輸入舊密碼"/>
+                    <input type="password" disabled class="passwordEditInput" placeholder="輸入舊密碼" pattern="[0-9a-zA-Z]{5,12}" required oninput="value=value.replace(/\s+/g,'')"/>
+                    <div>
+                        <img src="/static/pic/eye-solid.svg" class="eye open-eye none">
+                        <img src="/static/pic/eye-slash-solid.svg" class="eye closed-eye none">
+                    </div>
                 </div>
+                <p class="errorProfilePassWordMessage none"></p>
                 <div>
                     <div>新密碼</div>
-                    <input type="password" disabled="disabled" class="" placeholder="輸入新密碼"/>
+                    <input type="password" disabled class="passwordEditInput" placeholder="輸入新密碼" pattern="[0-9a-zA-Z]{5,12}" required oninput="value=value.replace(/\s+/g,'')"/>
+                    <div>
+                        <img src="/static/pic/eye-solid.svg" class="eye open-eye none">
+                        <img src="/static/pic/eye-slash-solid.svg" class="eye closed-eye none">
+                    </div>
                 </div>
+                <p class="errorProfilePassWordMessage none">元</p>
                 <div>
                     <div>確認密碼</div>
-                    <input type="password" disabled="disabled" class="" placeholder="確認新密碼"/>
+                    <input type="password" disabled class="passwordEditInput" placeholder="確認新密碼" pattern="[0-9a-zA-Z]{5,12}" required oninput="value=value.replace(/\s+/g,'')"/>
+                    <div>
+                        <img src="/static/pic/eye-solid.svg" class="eye open-eye none">
+                        <img src="/static/pic/eye-slash-solid.svg" class="eye closed-eye none">
+                    </div>
                 </div>
+                <p class="errorProfilePassWordMessage none"></p>
                 <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
-                <div class="editProfileButton none">送出</div>
+                <div>
+                    <button class="resetProfileButton none">取消</button>
+                    <button class="sendProfileButton none" disabled style="cursor:not-allowed">送出</button>
+                </div>
             </fieldset>
         </section>
         <section id="memberHistoryOrderBox" class="none">
             <fieldset class="memberHistoryOrder"> 
                 <legend>歷史訂單</small></legend> 
+                <img class="editProfileButton" src="/static/pic/icon_tech_drawings.png">
+                <div class="editProfileButton none">送出</div>
             </fieldset>
             <fieldset class="memberHistoryConsume"> 
                 <legend>歷史花費</small></legend> 
@@ -138,19 +117,43 @@
             </fieldset>
         </section>
     </main>
+    <div class="popupHistoryOrder none">
+        <div></div>
+        <div class="popupHistoryOrderCancelButton"></div>
+        <div>歷史訂單資訊</div>
+        <hr class="separator1"/>
+        <div>
+            <section class="bookingCardBox"></section>
+        </div>
+        <hr class="separator1"/>
+        <div>
+            <div>
+                <div>聯絡人: </div>
+                <div id="contactName"></div>
+            </div>
+            <div>
+                <div>聯絡信箱:</div>
+                <div id="contactEmail"></div>
+            </div>
+            <div>
+                <div>聯絡電話:</div>
+                <div id="contactPhone"></div>
+            </div>
+            <div>
+                <div>總費用:</div>
+                <div id="totalPrice"></div>
+            </div>
+        </div>
+    </div>
     <div class="calendarBox">
         <div class="calendar" id='calendar'></div>
     </div>
-    <!-- Footer -->
-    <footer id=footer>
-        <div>
-            <div>COPYRIGHT © 2021 台北一日遊</div>
-        </div>
-    </footer>
+    {% endblock %}
+    {% block script %}
     <script rel="preload" as="script" type="module" src="/static/js/memberCenter.js"></script>
     <script type="module" src="/static/js/member.js"></script>
-    <script src="/static/js/calendar.js"></script>
-    <script src="/static/js/locales-all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-</body>
-</html>
+    <script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    {% endblock %}

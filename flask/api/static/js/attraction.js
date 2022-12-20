@@ -1,5 +1,5 @@
-import {fetchAttraction} from "./fetchLocation.js"
-import{sendBookingData,logout} from "./sendDataToBackend.js"
+
+import{sendBookingData,logout,fetchAttraction} from "./fetchAPI.js"
 import {refreshAccessToken,checkLogin} from "./member.js"
 
 let fetchId
@@ -44,6 +44,8 @@ export async function generateAttraction(id){
         let attractionAddressNode = document.getElementsByClassName("attractionAddress")
         let attractionTransportNode = document.getElementsByClassName("attractionTransport")
         let googleMap = document.getElementById("googleMap")
+        const loadingBox = document.getElementsByClassName("loadingBox")
+        const loadingNumber = document.getElementsByClassName("loadingNumber")
         /* Add Data To Node */
         attractionNameNode[0].textContent = fetchName
         attractionCategoryNode[0].textContent = `${fetchCategories} at ${fetchMrt}`
@@ -51,14 +53,31 @@ export async function generateAttraction(id){
         attractionAddressNode[0].textContent = fetchAddress
         attractionTransportNode[0].textContent = fetchTransport
         googleMap.src = `https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${fetchAddress}&z=16&output=embed&t=`
+        const images = []
+        let imageCounter = 0
+        let imageLoadPercentage = 0
+        for(let i in fetchImg){
+            let image = new Image()
+            images.push(image)
+        }
         for(let i=0;i<imageLength;i++){
-            let image = document.createElement("img")
-            image.setAttribute("src",`${fetchImg[i]}`)
-            image.setAttribute("class","attractionImg fade")
-            if(i != 0){
-                image.setAttribute("class","attractionImg fade none")
+            attractionImgBoxNode[0].appendChild(images[i])
+            images[i].onload = () => {
+                if(images[i].complete){
+                    imageCounter ++
+                    imageLoadPercentage = Math.round((imageCounter / imageLength) * 100)
+                    loadingNumber[0].textContent = `${imageLoadPercentage} %`
+                    console.log(`圖片第${i}好了`)
+                }
+                if(imageCounter == imageLength){
+                    loadingBox[0].classList.add("none")
+                }
             }
-            attractionImgBoxNode[0].appendChild(image)
+            images[i].setAttribute("src",`${fetchImg[i]}`)
+            images[i].setAttribute("class","attractionImg fade")
+            if(i != 0){
+                images[i].setAttribute("class","attractionImg fade none")
+            }
         }
         /* Add Dot*/
         for(let i=0;i<imageLength;i++){
@@ -231,7 +250,7 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
                     }
                 })
             }
-            if(res[1] == "⚠ 已在重複時段預約行程"){
+            if(res[1] == "⚠ 已在這個時段預約行程"){
                 bookingMessage.textContent = res[1]
                 bookingMessage.classList.remove("none")
                 goBookingButton.classList.add("none")
