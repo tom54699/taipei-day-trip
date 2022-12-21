@@ -10,8 +10,8 @@ let memberEmail
 let memberBirthday
 let memberPhoneNumber
 let memberIntro
-const booking_lists = []
-const order_lists= []
+let booking_lists = []
+let order_lists= []
 
 /* 載入 */
 window.addEventListener("DOMContentLoaded", () => {
@@ -30,9 +30,8 @@ window.addEventListener("resize", () => {
 function checkMemberCenterAuth(){
     const fetchGetMemberCenterData = getMemberCenterData()
     fetchGetMemberCenterData.then(res => {
-        console.log("MemberCenter",res)
         if(res[0] == "success"){
-            let memberCenterData = res[1].data
+            const memberCenterData = res[1].data
             memberName = memberCenterData.member.name
             memberNickName = memberCenterData.member.nick_name
             memberEmail = memberCenterData.member.email
@@ -93,7 +92,7 @@ function calendarGenerate(){
     if(window.innerWidth <= 700){
         smallCalendarAddEvent(tours)
     }else{
-        let calendarContainer = document.getElementsByClassName("fc-daygrid-body fc-daygrid-body-unbalanced ")
+        const calendarContainer = document.getElementsByClassName("fc-daygrid-body fc-daygrid-body-unbalanced ")
         calendarContainer[0].style.width = `${window.innerWidth}`
         calendarAddEvent(tours)
     }
@@ -306,13 +305,13 @@ function memberDateShow(){
 }
 
 
-let bookingIdList = []
-let attractionNameList = []
-let attractionAddressList = []
-let attractionImgList = []
-let bookingPriceList = []
-let bookingDateList = []
-let bookingTimeList = []
+const bookingIdList = []
+const attractionNameList = []
+const attractionAddressList = []
+const attractionImgList = []
+const bookingPriceList = []
+const bookingDateList = []
+const bookingTimeList = []
 
 /* 點擊歷史訂單彈出畫面 */
 function popupHistoryOrder(){
@@ -328,12 +327,10 @@ function popupHistoryOrder(){
     for(let i of memberHistoryOrderNumber){
         i.addEventListener("click", function generatePopupHistoryOrder(){
             let order_number = i.textContent
-            console.log(order_number)
             popupHistoryOrder[0].classList.remove("none")
             dialogMask.classList.remove("none")
-            let fetchGetOrderDataByOrderNumber = getOrderDataByOrderNumber(order_number)
+            const fetchGetOrderDataByOrderNumber = getOrderDataByOrderNumber(order_number)
             fetchGetOrderDataByOrderNumber.then(res =>{
-                console.log(res)
                 if(res[0] == "success"){
                     const order_data = res[1].data
                     trip_length = order_data.trip.length
@@ -466,13 +463,10 @@ function memberProfileEditButton(){
         newPhone = window.intlTelInputGlobals.getInstance(phoneInput).getNumber()
         const newIntro = profileEditInput[4].value
         if(!profileIsValidPhone){
-            console.log("不可以傳")
             errorProfileMessage[0].classList.remove("none")
         }else{
-            console.log(newName,newNickName,newBirthday,newPhone,newIntro)
             let fetchUpdateMemberProfile = updateMemberProfile(newName,newNickName,newBirthday,newPhone,newIntro)
             fetchUpdateMemberProfile.then(res =>{
-                console.log(res)
                 if(res[0] == "success"){
                     location.href = "/user"
                 }else if(res[1] == "⚠ 請登入會員"){
@@ -499,7 +493,6 @@ function memberProfileEditButton(){
         const isValid = window.intlTelInputGlobals.getInstance(phoneInput).isValidNumber();
         newPhone = window.intlTelInputGlobals.getInstance(phoneInput).getNumber()
         if(newPhone == ""){
-            console.log("2",newPhone)
             profileIsValidPhone = true
             errorProfileMessage[0].classList.add("none")
         }else if(!isValid){
@@ -549,9 +542,8 @@ function memberProfileEditButton(){
             const old_password = passwordEditInput[0].value
             const new_password = passwordEditInput[1].value
             const check_password = passwordEditInput[2].value
-            let fetchUpdateMemberPassword = updateMemberPassword(old_password,new_password,check_password)
+            const fetchUpdateMemberPassword = updateMemberPassword(old_password,new_password,check_password)
             fetchUpdateMemberPassword.then(res =>{
-                console.log(res)
                 if(res[0] == "success"){
                     editProfileButton[1].classList.remove("none")
                     sendProfileButton[1].classList.add("none")

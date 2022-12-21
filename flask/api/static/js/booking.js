@@ -1,17 +1,17 @@
-import {getBookingData,logout,getAccessToken,sendBookingData, sendOrderData} from "./fetchAPI.js"
+import {getBookingData,logout,getAccessToken, sendOrderData} from "./fetchAPI.js"
 import { refreshAccessToken,checkLogin,} from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
 
 
 let memberName
 let memberEmail
-const bookingIdList = []
-const attractionNameList = []
-const attractionAddressList = []
-const attractionImgList = []
-const bookingPriceList = []
-const bookingDateList = []
-const bookingTimeList = []
+let bookingIdList = []
+let attractionNameList = []
+let attractionAddressList = []
+let attractionImgList = []
+let bookingPriceList = []
+let bookingDateList = []
+let bookingTimeList = []
 let data_length
 
 window.addEventListener("load", () => {
@@ -22,28 +22,25 @@ window.addEventListener("load", () => {
 export function checkBookingAuth(){
     const fetchGetBookingData = getBookingData()
     fetchGetBookingData.then( res => {
-        console.log("booking",res)
         if(res[0] == "success"){
-            // 如果沒資料
-            if(res[1]["status"] == "noData"){
+            if(res[1].status == "noData"){
                 const memberNameNode = document.getElementById("memberName")
-                memberName = res[1]["name"]
+                memberName = res[1].name
                 memberNameNode.textContent = memberName
                 noBookingPage()
             }else{
-            //memberName = res[1][0]["data"]["member"]["name"]
             data_length = Number(res[1].length)
             for(let i=0; i <data_length; i++){
-                let data = res[1][i]["data"]
-                memberName = data["member"]["name"]
-                memberEmail  = data["member"]["email"]
-                bookingIdList.push(data["id"])
-                attractionNameList.push(data["attraction"]["name"])
-                attractionAddressList.push(data["attraction"]["address"])
-                attractionImgList.push(data["attraction"]["image"][0])
-                bookingPriceList.push(data["price"])
-                bookingDateList.push(data["date"])
-                bookingTimeList.push(data["time"])
+                const data = res[1][i].data
+                memberName = data.member.name
+                memberEmail  = data.member.email
+                bookingIdList.push(data.id)
+                attractionNameList.push(data.attraction.name)
+                attractionAddressList.push(data.attraction.address)
+                attractionImgList.push(data.attraction.image[0])
+                bookingPriceList.push(data.price)
+                bookingDateList.push(data.date)
+                bookingTimeList.push(data.time)
             }
             // 產生畫面
             generateBookingPageStructure(data_length)
@@ -98,11 +95,9 @@ export function deleteBookingButton(data_length){
         deleteIcon[i].addEventListener("click",() => {
             let fetchDeleteBooking = deleteBooking(Number(bookingId[i].textContent))
             fetchDeleteBooking.then(res => {
-                console.log(res)
                 if(res["message"] == "⚠ 請換發token"){
                     let fetchRefreshAccessToken = refreshAccessToken()
                     fetchRefreshAccessToken.then(res =>{
-                        console.log(res)
                         if(res == "error"){
                             bookingId[i].textContent = "⚠ 發生異常，請重新登入"
                             logout()
@@ -138,10 +133,8 @@ export function deleteBookingButton(data_length){
             headers: headers,
             body: JSON.stringify(content)
         }
-        console.log(bookingId)
         const response = await fetch("/api/booking",config)
         const getBookingData = await response.json()
-        console.log("後端getBookingData回傳的資料",getBookingData)
         if(getBookingData["message"] == "⚠ 請換發token"){
             return getBookingData
         }
@@ -186,14 +179,13 @@ function noBookingPage(){
     const body = document.getElementById("body")
     const main = document.getElementById("main")
     const footer = document.getElementById("footer")
-    const header = document.getElementById("header")
     // 頁面清除
     main.remove()
-    let emptyState = document.createElement("div")
+    const emptyState = document.createElement("div")
     emptyState.setAttribute("class","emptyState")
     emptyState.textContent = "目前沒有任何待預訂的行程"
     body.insertBefore(emptyState,footer)
-    let emptyFooter = document.createElement("div")
+    const emptyFooter = document.createElement("div")
     emptyFooter.setAttribute("class","emptyFooter")
     body.appendChild(emptyFooter)
 }
@@ -347,20 +339,17 @@ bookingButton.addEventListener("click", () => {
     }
     // 取得 TapPay Fields 的 status
     const tappayStatus = TPDirect.card.getTappayFieldsStatus()
-    console.log(tappayStatus)
 
     // 確認是否可以 getPrime
 
     // Get prime
     TPDirect.card.getPrime((result) => {
         if (result.status !== 0) {
-            console.log('get prime error' + result.msg)
             errorCardMessage[0].classList.remove("none")
             return
         }
         prime = result.card.prime
         errorCardMessage[0].classList.add("none")
-        console.log('get prime 成功，prime: ' + result.card.prime)
 
         const order_data = {
             "prime": prime,
@@ -393,7 +382,6 @@ bookingButton.addEventListener("click", () => {
         function fetchSendOrder(order_data){
             const fetchSendOrderData = sendOrderData(order_data)
             fetchSendOrderData.then( res => {
-                console.log("order",res)
                 if(res[0] == "success"){
                     location.href = `/thankyou/${res[1].data.number}`
                     //successMessageBox.classList.remove("none")
@@ -432,18 +420,14 @@ bookingButton.addEventListener("click", () => {
 function buttonEventSetting(){
     const successMessageCancelButton = document.getElementsByClassName("successMessageCancelButton")
     const errorMessageCancelButton = document.getElementsByClassName("errorMessageCancelButton")
-    const successMessageBox = document.getElementById("successMessageBox")
     const errorMessageBox = document.getElementById("errorMessageBox")
-    const errorPopup = document.getElementById("errorPopup")
 
-successMessageCancelButton[0].addEventListener("click", () => {
-    location.href = "/booking"
-})
-errorMessageCancelButton[0].addEventListener("click", () => {
-    location.href = "/booking"
-    errorMessageBox.classList.add("none")
-})
+    successMessageCancelButton[0].addEventListener("click", () => {
+        location.href = "/booking"
+    })
+    errorMessageCancelButton[0].addEventListener("click", () => {
+        location.href = "/booking"
+        errorMessageBox.classList.add("none")
+    })
 }
-
-
 

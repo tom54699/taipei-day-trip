@@ -31,19 +31,19 @@ def register():
         password_regex_result = check_password_regex(register_password)
         email_regex_result = check_email_regex(register_email)
         if not email_regex_result or not password_regex_result:
-            return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"),400
+            return jsonify(error="true", message="⚠ 信箱或密碼格式不正確"), 400
         # 確認account、email有無重複
         result = Member.check_member_email(register_email)
         print("篩選結果:",len(result))
         if len(result) != 0:
-            return jsonify(error="true",message="⚠ 信箱已被註冊"),400
+            return jsonify(error="true",message="⚠ 信箱已被註冊"), 400
         else:
             pw_hash = bcrypt.generate_password_hash(register_password, 10)
             Member.update_member_register_data(register_name,register_email,pw_hash)
             send_register_email(register_email)
-            return jsonify(ok="true"),200
+            return jsonify(ok="true"), 200
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}"),500
+        return jsonify(error="true",message=f"{ex}"), 500
   
 @members.route("api/user/auth",methods=["PUT"])
 def login():
@@ -55,18 +55,18 @@ def login():
         result = Member.check_member_email(login_email)
         print("篩選結果:",len(result)) 
         if len(result) == 0:
-            return jsonify(error="true", message="⚠ 未註冊的信箱，或是輸入錯誤"),400
+            return jsonify(error="true", message="⚠ 未註冊的信箱，或是輸入錯誤"), 400
         if bcrypt.check_password_hash(result[0].password,login_password):
             access_token = create_access_token(identity = login_email, fresh=True)
             refresh_token = create_refresh_token(identity = login_email)
             status = "true"
-            resp = jsonify(access_token=access_token,ok=status)
+            resp = jsonify(access_token=access_token,ok=status) , 200
             set_refresh_cookies(resp,refresh_token)
         else:
-            return jsonify(error="true" ,message="⚠ 密碼輸入錯誤"),400
-        return resp,200
+            return jsonify(error="true" ,message="⚠ 密碼輸入錯誤"), 400
+        return resp, 200
     except Exception as ex:
-        return jsonify(error="true" ,message=f"{ex}"),500
+        return jsonify(error="true" ,message=f"{ex}"), 500
 
 @members.route("api/user/auth",methods=["GET"])
 @jwt_required(fresh=True)
@@ -76,10 +76,10 @@ def get_member():
         member_data = Member.get_member_auth_data(member_email)
         return member_data,200
     except Exception as ex:
-        return jsonify(error="true", message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"), 500
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="redis", port=6379, db=0, decode_responses=True
+    host="localhost", port=6379, db=0, decode_responses=True
 )
 
 @jwt.token_in_blocklist_loader
@@ -103,7 +103,7 @@ def logout():
         jwt_redis_blocklist.set(jti, "", ex=timedelta(days=7))
         return response,200
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}"),500
+        return jsonify(error="true",message=f"{ex}"), 500
 
 
 @members.route("api/refresh", methods=["GET"])
@@ -115,9 +115,9 @@ def refresh():
         resp = jsonify(access_token=access_token,status="success")
         refresh_token = create_refresh_token(identity = identity)
         set_refresh_cookies(resp,refresh_token)
-        return resp,200
+        return resp, 200
     except Exception as ex:
-        return jsonify(error="true",message=f"{ex}"),500  
+        return jsonify(error="true",message=f"{ex}"), 500  
 
 
 
@@ -138,9 +138,9 @@ def get_member_center_data():
             "bookings": bookings,
             "orders": orders
         }
-        return jsonify(ok="true",data=member_center_data),200
+        return jsonify(ok="true",data=member_center_data), 200
     except Exception as ex:
-        return jsonify(error="true", message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"), 500
 
 # 會員中心更新個人資料
 @members.route("api/user/profile",methods=["PUT"])
@@ -151,9 +151,9 @@ def update_member_profile_data():
         data = request.get_json()
         Member.update_member_profile(member_email,data)
 
-        return jsonify(ok="true"),200
+        return jsonify(ok="true"), 200
     except Exception as ex:
-        return jsonify(error="true", message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"), 500
 
 @members.route("api/user/password",methods=["PUT"])
 @jwt_required(fresh=True)
@@ -166,14 +166,14 @@ def update_member_password_data():
         new_password = data["new_password"]
         check_password = data["check_password"]
         if new_password != check_password:
-            return jsonify(error="true" ,message="⚠ 確認密碼輸入錯誤"),400
+            return jsonify(error="true" ,message="⚠ 確認密碼輸入錯誤"), 400
         if old_password == new_password:
-            return jsonify(error="true" ,message="⚠ 請勿與舊密碼重複"),400
+            return jsonify(error="true" ,message="⚠ 請勿與舊密碼重複"), 400
 
         # 確保格式正確
         password_regex_result = check_password_regex(new_password)
         if not password_regex_result:
-            return jsonify(error="true", message="⚠ 密碼格式不正確"),400
+            return jsonify(error="true", message="⚠ 密碼格式不正確"), 400
 
         member_password = Member.get_member_password_by_email(member_email)
         if bcrypt.check_password_hash(member_password, old_password):
@@ -183,9 +183,9 @@ def update_member_password_data():
             send_update__password_email(member_email)
             return jsonify(ok="true"),200
         else:
-            return jsonify(error="true" ,message="⚠ 舊密碼輸入錯誤"),400
+            return jsonify(error="true" ,message="⚠ 舊密碼輸入錯誤"), 400
     except Exception as ex:
-        return jsonify(error="true", message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"), 500
 
 # 忘記密碼拿驗證碼
 @members.route("api/user/verifycode",methods=["POST"])
@@ -196,13 +196,13 @@ def get_verify_code_for_password():
         confirm_email = data["confirm_email"]
         response = Member.check_member_email(confirm_email)
         if len(response) <= 0:
-            return jsonify(error="true", message="⚠ 這組信箱沒有註冊過"),400
+            return jsonify(error="true", message="⚠ 這組信箱沒有註冊過"), 400
         verify_code = random_code_generate(6)
         Member.update_member_verify_code(confirm_email,verify_code)
         send_verify_code_email(confirm_email,verify_code)
-        return jsonify(ok="true"),200
+        return jsonify(ok="true"), 200
     except Exception as ex:
-        return jsonify(error="true", message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"), 500
 
 @members.route("api/user/verifycode",methods=["PUT"])
 def check_verify_code_for_password():
@@ -213,10 +213,10 @@ def check_verify_code_for_password():
         verify_code = data["verify_code"]
         response = Member.check_verify_code(confirm_email,verify_code)
         if len(response) <= 0:
-            return jsonify(error="true", message="⚠ 驗證碼錯誤"),400
+            return jsonify(error="true", message="⚠ 驗證碼錯誤"), 400
         new_password = random_code_generate(8)
         Member.update_member_password(confirm_email,new_password)
-        return jsonify(ok="true",data=new_password),200
+        return jsonify(ok="true",data=new_password), 200
     except Exception as ex:
-        return jsonify(error="true", message=f"{ex}"),500
+        return jsonify(error="true", message=f"{ex}"), 500
 

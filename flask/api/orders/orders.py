@@ -35,7 +35,7 @@ def create_new_order():
         for i in range(data_length):
             booking_id = data["order"]["trip"][i]["attraction"]["bookingId"]
             booking_id_list.append(booking_id)
-            query_order_number = Booking.get_payed_bookingId(booking_id_list[i])
+            query_order_number = Booking.get_payed_bookingId(booking_id_list[i], member_email)
             result = len(query_order_number)
             if result != 0:
                 return jsonify(error="true",message="⚠ 請勿重複付款"),400
@@ -73,7 +73,7 @@ def create_new_order():
             }
             Orders.build_new_order_data(number, member_email, contact_name, contact_email, contact_phone, order_price)
             for i in range(data_length):
-                Booking.update_booking_order_number(booking_id_list[i], number)
+                Booking.update_booking_order_number(booking_id_list[i], member_email, number)
             return success,200
         else:
             return jsonify(error="true",message=req.json()["msg"])

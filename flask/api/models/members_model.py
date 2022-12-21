@@ -124,7 +124,7 @@ class Member(db.Model):
         new_phone_number = data["phone_number"]
         new_intro = data["intro"]
 
-        member = Member.query.filter_by(email=member_email).update({
+        Member.query.filter_by(email=member_email).update({
             "name": new_name,
             "nick_name": new_nick_name,
             "birthday": new_birthday,

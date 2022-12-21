@@ -59,8 +59,8 @@ class Booking(db.Model):
             trip_lists.append(trip)
         return orders_query_data
         
-    def get_payed_bookingId(booking_id):
-        query_order_number = Booking.query.filter(Booking.id == booking_id, Booking.order_number != None).all()
+    def get_payed_bookingId(booking_id, member_email):
+        query_order_number = Booking.query.filter(Booking.id == booking_id, Booking.member_email == member_email, Booking.order_number != None).all()
         return query_order_number
 
     def build_new_booking_data(data, member_email):
@@ -73,8 +73,8 @@ class Booking(db.Model):
         db.session.commit()
         return 
     
-    def update_booking_order_number(booking_id, number):
-        booking_upload_data = Booking.query.filter_by(id=booking_id).update({"order_number":number})
+    def update_booking_order_number(booking_id, member_email, number):
+        Booking.query.filter_by(id=booking_id, member_email=member_email).update({"order_number":number})
         db.session.commit()
 
     def check_booking_data_by_time(data, member_email):

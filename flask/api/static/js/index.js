@@ -11,48 +11,40 @@ let fetchCategories = []
 let fetchImg = []
 let fetchId = []
 
-export async function generateAttractions(page = 0,keyword=""){
+export const generateAttractions = async (page = 0,keyword="") => {
     isLoading = true
     await fetchAttractionPageData(page,keyword).then(data=>{
         // 定義拿到的資料
-        console.log(data)
-        let data_length=Number(data["data"].length)
+        const dataLength = Number(data.data.length)
+
         if(data["nextPage"] == null){
             nextPage = null
         }else{
             nextPage = Number(data["nextPage"])+1
         }
-        let startId = Number(page)*12
-        let endId = startId+data_length
+        const startId = Number(page)*12
+        const endId = startId + dataLength
      
-        for(let i=0;i<data_length;i++){
-            let newFetchId = data["data"][i]["id"]
-            fetchId.push(newFetchId)
-            let newFetchName = data["data"][i]["name"]
-            fetchName.push(newFetchName)
-            let newFetchMrt = data["data"][i]["mrt"]
-            fetchMrt.push(newFetchMrt)
-            let newFetchCategories = data["data"][i]["category"]
-            fetchCategories.push(newFetchCategories)
-            let newFetchImg = data["data"][i]["images"][0]
-            fetchImg.push(newFetchImg)
+        for (const item of data.data) {
+            fetchId.push(item.id);
+            fetchName.push(item.name);
+            fetchMrt.push(item.mrt);
+            fetchCategories.push(item.category);
+            fetchImg.push(item.images[0]);
         }
-
-        // 準備產生畫面
-
         // 畫面結構
-        generateStructure(data_length,fetchId)
+        generateStructure(dataLength,fetchId)
         // 註冊
-        let picNode = document.getElementsByClassName("cardsImage")
-        let nameNode = document.getElementsByClassName("cardName")
-        let mrtNode = document.getElementsByClassName("cardMrt")
-        let categoryNode = document.getElementsByClassName("cardCategory")
+        const picNode = document.getElementsByClassName("cardsImage")
+        const nameNode = document.getElementsByClassName("cardName")
+        const mrtNode = document.getElementsByClassName("cardMrt")
+        const categoryNode = document.getElementsByClassName("cardCategory")
         // 建立後面12張
         for(let i = startId;i<endId;i++){
-            let image = document.createElement("img")
-            let name = document.createElement("div")
-            let mrt = document.createElement("div")
-            let category = document.createElement("div")
+            const image = document.createElement("img")
+            const name = document.createElement("div")
+            const mrt = document.createElement("div")
+            const category = document.createElement("div")
 
             image.setAttribute("src",`${fetchImg[i]}`)
             name.textContent=fetchName[i]
@@ -74,24 +66,19 @@ export async function generateAttractions(page = 0,keyword=""){
 
 // 取得景點分類
 export async function generateCategories(){
-    let categories = []
+    const categories = []
     await fetchCategoryData().then(data=>{
-        let data_length=Number(data["data"].length)
-        for(let i=0;i<data_length;i++){
-            let newFetchCategories = data["data"][i]
-            categories.push(newFetchCategories)
+        for(let i of data.data){
+            categories.push(i)
         }
-        // 建立結構
-        let categoriesListNode = document.getElementsByClassName("categoriesList")
-        for(let i=0;i<data_length;i++){
+        // 建立畫面
+        for(let i in data.data){
+        const categoriesListNode = document.getElementsByClassName("categoriesList")
+        const categoryBoxNode = document.getElementsByClassName("category")
+        const category = document.createElement("div")
         let categoryBox = document.createElement("div")
         categoryBox.setAttribute("class","category")
         categoriesListNode[0].appendChild(categoryBox)
-        }
-        // 建立畫面
-        for(let i=0;i<data_length;i++){
-        let categoryBoxNode = document.getElementsByClassName("category")
-        let category = document.createElement("div")
         category.textContent = categories[i]
         categoryBoxNode[i].appendChild(category)
         }
@@ -104,11 +91,11 @@ window.addEventListener("DOMContentLoaded",async(e) => {
     await generateAttractions(nextPage)
     await generateCategories()
     // 景點分類名稱填入搜尋框
-    let category=document.getElementsByClassName("category");
-    let cardCategoryInput=document.getElementById("cardCategoryInput"); 
-    for(let i =0; i<category.length; i++){
-        category[i].addEventListener("mousedown", async(e) => {
-            cardCategoryInput.value = category[i].textContent
+    const category=document.getElementsByClassName("category");
+    const cardCategoryInput=document.getElementById("cardCategoryInput"); 
+    for(let i of category){
+        i.addEventListener("mousedown", async(e) => {
+            cardCategoryInput.value = i.textContent
             queryAttractionInput = cardCategoryInput.value
         })
     }
@@ -117,7 +104,6 @@ window.addEventListener("DOMContentLoaded",async(e) => {
 
 // 輸入關鍵字
 cardCategoryInput.addEventListener("input", e => {
-    console.log(e.target.value.trim() === "")
     if(e.target.value.trim() === ""){
         queryAttractionInput = undefined
     }else{
@@ -127,7 +113,7 @@ cardCategoryInput.addEventListener("input", e => {
 
 
 // 按下搜尋按鈕
-let sloganBtn = document.getElementById("sloganBtn");
+const sloganBtn = document.getElementById("sloganBtn");
 sloganBtn.addEventListener("click", async() => {
     keyword = queryAttractionInput
     fetchName = []
@@ -136,7 +122,7 @@ sloganBtn.addEventListener("click", async() => {
     fetchImg = []
     fetchId = []
     // 把畫面清空
-    let attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
+    const attractionMainBoxNode=document.getElementsByClassName("attractionMainBox")
     attractionMainBoxNode[0].innerHTML = ""
     if(keyword == undefined){
         noPageGenerate()
@@ -145,7 +131,7 @@ sloganBtn.addEventListener("click", async() => {
             if(data["data"].length == 0){
                 noPageGenerate()
             }else{
-                let attractionBox = document.createElement("section")
+                const attractionBox = document.createElement("section")
                 attractionBox.setAttribute("class","attractionBox")
                 attractionMainBoxNode[0].appendChild(attractionBox)
                 generateAttractions(0,keyword)
@@ -156,10 +142,9 @@ sloganBtn.addEventListener("click", async() => {
 
 
 // 卷軸滾動判斷
-let scroll = document.getElementById("footer")
-let callback = async function ([obj]) {
+const scroll = document.getElementById("footer")
+const callback = async function ([obj]) {
     if(obj.isIntersecting){
-        console.log(isLoading)
         if(isLoading == false){
             nextPage = await generateAttractions(nextPage,keyword)
         }
@@ -169,7 +154,7 @@ let callback = async function ([obj]) {
         }
     }
 };
-let observer = new IntersectionObserver(callback, {
+const observer = new IntersectionObserver(callback, {
     root: null,
     rootMargin: "0px",
     threshold: 1,

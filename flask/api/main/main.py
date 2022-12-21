@@ -1,7 +1,6 @@
 from flask import Blueprint,render_template,jsonify
 from api import jwt
 
-
 main = Blueprint("main",
     __name__,
     static_folder='static',
@@ -33,7 +32,6 @@ def expired_token_callback(jwt_header,jwt_data):
 
 @jwt.unauthorized_loader
 def unauthorized_callback(e):
-    #return render_template("error.html"),401
     return jsonify(error="true",message="⚠ 未登入會員"), 401
 
  

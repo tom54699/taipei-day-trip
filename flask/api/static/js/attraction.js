@@ -19,31 +19,29 @@ window.addEventListener("load", () => {
 export async function generateAttraction(id){
     await fetchAttraction(id).then(data=>{
         /* Get Data */
-        console.log(data)
         
-        imageLength = data["data"]["images"].length
-        for(let i=0;i<imageLength;i++){
-            let newFetchImg = data["data"]["images"][i]
-            fetchImg.push(newFetchImg)
+        imageLength = data.data.images.length
+        for(let i of data.data.images){
+            fetchImg.push(i)
         }
-        fetchId = data["data"]["id"]
-        fetchName = data["data"]["name"]
-        fetchMrt = data["data"]["mrt"]
-        fetchCategories = data["data"]["category"]
-        fetchDescription = data["data"]["description"]
-        fetchAddress = data["data"]["address"]
-        fetchTransport = data["data"]["transport"]
+        fetchId = data.data.id
+        fetchName = data.data.name
+        fetchMrt = data.data.mrt
+        fetchCategories = data.data.category
+        fetchDescription = data.data.description
+        fetchAddress = data.data.address
+        fetchTransport = data.data.transport
         titleChange()
  
         /* Define Node */
-        let dotBoxNode=document.getElementsByClassName("dotBox")
-        let attractionNameNode = document.getElementsByClassName("attractionName")
-        let attractionImgBoxNode = document.getElementsByClassName("attractionImgBox")
-        let attractionCategoryNode = document.getElementsByClassName("attractionCategory")
-        let attractionDescriptionNode = document.getElementsByClassName("attractionDescription")
-        let attractionAddressNode = document.getElementsByClassName("attractionAddress")
-        let attractionTransportNode = document.getElementsByClassName("attractionTransport")
-        let googleMap = document.getElementById("googleMap")
+        const dotBoxNode=document.getElementsByClassName("dotBox")
+        const attractionNameNode = document.getElementsByClassName("attractionName")
+        const attractionImgBoxNode = document.getElementsByClassName("attractionImgBox")
+        const attractionCategoryNode = document.getElementsByClassName("attractionCategory")
+        const attractionDescriptionNode = document.getElementsByClassName("attractionDescription")
+        const attractionAddressNode = document.getElementsByClassName("attractionAddress")
+        const attractionTransportNode = document.getElementsByClassName("attractionTransport")
+        const googleMap = document.getElementById("googleMap")
         const loadingBox = document.getElementsByClassName("loadingBox")
         const loadingNumber = document.getElementsByClassName("loadingNumber")
         /* Add Data To Node */
@@ -57,7 +55,7 @@ export async function generateAttraction(id){
         let imageCounter = 0
         let imageLoadPercentage = 0
         for(let i in fetchImg){
-            let image = new Image()
+            const image = new Image()
             images.push(image)
         }
         for(let i=0;i<imageLength;i++){
@@ -67,7 +65,6 @@ export async function generateAttraction(id){
                     imageCounter ++
                     imageLoadPercentage = Math.round((imageCounter / imageLength) * 100)
                     loadingNumber[0].textContent = `${imageLoadPercentage} %`
-                    console.log(`圖片第${i}好了`)
                 }
                 if(imageCounter == imageLength){
                     loadingBox[0].classList.add("none")
@@ -81,7 +78,7 @@ export async function generateAttraction(id){
         }
         /* Add Dot*/
         for(let i=0;i<imageLength;i++){
-            let dot = document.createElement("section")
+            const dot = document.createElement("section")
             dot.setAttribute("class","dot")
             dotBoxNode[0].appendChild(dot)
         }
@@ -102,20 +99,20 @@ function getNumberAtEnd(str){
 
 /* First Loaded */
 window.addEventListener("DOMContentLoaded", async() => {
-    let pathname = location.pathname
-    let attractionId = getNumberAtEnd(pathname)
+    const pathname = location.pathname
+    const attractionId = getNumberAtEnd(pathname)
     await generateAttraction(attractionId)
     imgId = 0
     dot[imgId].style.backgroundImage = "url(/static/pic/circle_current.png)"
 })
 
 /* Img Button */
-let leftArrow = document.getElementById("leftArrow");
-let rightArrow = document.getElementById("rightArrow");
-let dot = document.getElementsByClassName("dot")
+const leftArrow = document.getElementById("leftArrow");
+const rightArrow = document.getElementById("rightArrow");
+const dot = document.getElementsByClassName("dot")
 
 rightArrow.addEventListener("click", () => {
-    let attractionImg = document.getElementsByClassName("attractionImg")
+    const attractionImg = document.getElementsByClassName("attractionImg")
     imgId = imgId +1
     if(imgId >= imageLength){
         imgId = 0
@@ -135,7 +132,7 @@ rightArrow.addEventListener("click", () => {
 })
 
 leftArrow.addEventListener("click", () => {
-    let attractionImg = document.getElementsByClassName("attractionImg")
+    const attractionImg = document.getElementsByClassName("attractionImg")
     imgId = imgId -1
     if(imgId < 0){
         imgId = imageLength-1
@@ -156,9 +153,9 @@ leftArrow.addEventListener("click", () => {
 
 
 /* 上下半天按鈕切換 */
-let morning = document.getElementById("morning")
-let afternoon = document.getElementById("afternoon")
-let tourFee = document.getElementById("tourFee")
+const morning = document.getElementById("morning")
+const afternoon = document.getElementById("afternoon")
+const tourFee = document.getElementById("tourFee")
 
 morning.addEventListener("click",() => {
     checkTourTime()
@@ -176,26 +173,26 @@ function checkTourTime(){
 }
 
 /* 預設 INPUT DATE */
-let bookingDate = document.getElementById("bookingDate") 
+const bookingDate = document.getElementById("bookingDate") 
 function setNowDate(){
-    let today = new Date();
+    const today = new Date();
     bookingDate.value = today.toISOString().substr(0, 10);
-    let year = today.getFullYear()+1
-    let month = ('0'+ (today.getMonth() + 1)).slice(-2)
-    let date = ('0' + today.getDate()).slice(-2)
-    let time = year+"-"+month+"-"+date
+    const year = today.getFullYear()+1
+    const month = ('0'+ (today.getMonth() + 1)).slice(-2)
+    const date = ('0' + today.getDate()).slice(-2)
+    const time = `${year}-${month}-${date}`
     bookingDate.setAttribute("max", time)
 }
 
 
 
 /* 開始預約行程按鈕 */
-let bookingAttractionButton = document.getElementById("bookingAttractionButton")
-let bookingMessage = document.getElementById("bookingMessage")
-let goBookingButton = document.getElementById("goBookingButton")
+const bookingAttractionButton = document.getElementById("bookingAttractionButton")
+const bookingMessage = document.getElementById("bookingMessage")
+const goBookingButton = document.getElementById("goBookingButton")
 bookingAttractionButton.addEventListener("click",async function enterBookingPage(){
     /* 抓取填寫的資料 */
-    let date = String(bookingDate.value)
+    const date = String(bookingDate.value)
     let time
     let price
     if(morning.checked == true){
@@ -205,18 +202,16 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
         time = "afternoon"
         price = 2500
     }
-    let fetchSendBookingData = sendBookingData(fetchId,date,time,price)
+    const fetchSendBookingData = sendBookingData(fetchId,date,time,price)
 
     fetchSendBookingData.then(res=>{
-        console.log(res)
         if(res[0] == "ok"){
             bookingMessage.textContent = res[1]
             bookingMessage.classList.remove("none")
             // 倒數自動跳轉
             goBookingButton.textContent = "3 ...自動跳轉中"
             let number = 3
-            let timeout1 = setInterval( () => {
-                console.log(number)
+            const timeout1 = setInterval( () => {
                 number --
                 goBookingButton.textContent = number + " ...自動跳轉中"
                 if(number <= 0){
@@ -238,9 +233,8 @@ bookingAttractionButton.addEventListener("click",async function enterBookingPage
                 bookingMessage.textContent = res[1]
                 bookingMessage.classList.remove("none")
                 goBookingButton.classList.add("none")
-                let fetchRefreshAccessToken = refreshAccessToken()
+                const fetchRefreshAccessToken = refreshAccessToken()
                 fetchRefreshAccessToken.then(res =>{
-                    console.log(res)
                     if(res == "error"){
                         bookingMessage.textContent = "⚠ 發生異常，請重新登入"
                         logout()

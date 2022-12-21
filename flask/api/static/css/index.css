@@ -1,117 +1,8 @@
-/*@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap);*/
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap);
-/* 取消一些預設樣式 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: auto;
-    text-decoration: none;
-}
+
 a{
     color: #448899;
 }
 
-
-/* [Desktop] index (w:1920) */
-body{
-    width: 100%;
-    min-height: 100vh;
-    background: #FFFFFF;
-    position: relative; 
-    font-family: "Noto Sans TC", sans-serif;
-    display: flex; flex-direction: column; 
-}
-
-/* [Desktop] Navigation */
-nav{
-    position: sticky; /*永遠在最上面*/
-    width: 100%;
-    height: 54px;
-    left: 0px;
-    top: 0px;
-    background: #FFFFFF;
-    z-index: 20;
-    display: flex;justify-content: center;align-items: center;
-}
-
-/* div */
-nav>div{
-    width: min(90%, 1200px);
-    height: 34px;
-    left: 360px;
-    top: 10px;
-    display: flex;justify-content: space-between;
-}
-
-/* 台北一日遊 */
-nav>div>h2>a{
-    width: 150px;
-    height: 34px;
-    /* Header 2 - Bold 30(34) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 34px;
-    color: #448899;
-}
-
-/* Frame 2 */
-nav>div>div{
-    /* Auto layout */
-    display: flex;justify-content: center;align-items: center;
-    
-    height: 34px;
-}
-
-/* Button1 [forNavigation] */
-nav>div>div>div:nth-child(1){
-    width: 84px;
-    height: 34px;
-    display: flex;justify-content: center;align-items: center;
-}
-
-/* BUTTON */
-.navButton1{
-    width: 64px;
-    height: 14px;
-    /* Body - Med 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 13px;
-    color: #666666;
-    cursor: pointer;
-}
-
-/* Button2 [forNavigation] */
-nav>div>div>div:nth-child(2){
-    width: 91px;
-    height: 34px;
-    display: flex;justify-content: center;align-items: center;
-}
-
-/* BUTTON */
-.navButton2{
-    width: 71px;
-    height: 14px;  
-    /* Body - Med 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 13px;
-    color: #666666;
-    cursor: pointer;
-}
-/*----------------------------------------------------------------------------*/
-
-.none {
-    display: none !important;
-}
-
-/*-----------------------------------------------------------------------------*/
 
 /* [Desktop] Hero section */
 
@@ -152,10 +43,7 @@ nav>div>div>div:nth-child(2){
     position: absolute;
     width: min(90%, 1180px);
     height: 149px;
-    /* Inside auto layout */
     flex: none;
-    order: 0;
-    flex-grow: 0;  
 }
 /* slogan */
 .slogan{
@@ -168,18 +56,12 @@ nav>div>div>div:nth-child(2){
     position: absolute;
     width: min(90%, 1180px);
     height: 41px;
-    /* Header 1 - Bold 28(24) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
     font-weight: 700;
     font-size: 28px;
     line-height: 24px;
-    /* or 86% */
     display: flex;
     align-items: center;  
-    /* Secondary Color/Gray 10 */
     color: #F8F8F8;
-    /* Text Shadow */
     text-shadow: 0px 0px 30px #AABBCC; 
 }
 /* 探索每個角落，體驗城市的深度旅遊行程 */
@@ -189,16 +71,11 @@ nav>div>div>div:nth-child(2){
     height: 22px;
     left: 0px;
     top: 56px;
-    /* Body - Bold 16(13.3) */
-    font-family: 'Noto Sans TC'; 
-    font-style: normal;
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;
-    /* or 83% */
     display: flex;
     align-items: center;
-    /* Secondary Color/Gray 10 */
     color: #F8F8F8;
 }
 /* search */
@@ -256,7 +133,6 @@ input{
     height: 46px;
     left: 0px;
     top: 0px;
-    /* Box Shadow */
     filter: drop-shadow(0px 0px 20px #AABBCC);
     z-index: 10;
 }
@@ -268,15 +144,11 @@ input{
     height: 46px;
     left: 0px;
     top: 0px;
-    /* Body - Bold 16(13.3) */
-    text-indent: 15px; /*這個很讚*/
-    font-family: 'Noto Sans TC';
-    font-style: normal;
+    text-indent: 15px; 
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;
     color: #4b4949; 
-    /* White */
     background: #FFFFFF;
 }
 .sloganInput>input:focus{
@@ -285,19 +157,13 @@ input{
 
 /* 輸入景點名稱查詢 */
 .sloganInput>input::placeholder{
-    /* Body - Bold 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;
-    /* or 83% */
     display: flex;
     align-items: center;
-    /* Secondary Color/Gray 50 */
     color: #757575; 
 }
-
 
 /* focus效果 */
 .sloganInput>input:focus +.categoriesList{
@@ -310,9 +176,7 @@ input{
     width: 100%;
     left: 0px;
     top: 51px;
-    /* Additional Color/White */
     background: #FFFFFF;
-    /* Box Shadow */
     box-shadow: 0px 0px 20px #AABBCC;
     border-radius: 5px; 
     display: flex;flex-wrap: wrap;justify-content:flex-start;
@@ -336,17 +200,11 @@ input{
 .categoriesList>div>div{
     width: 90px;
     height: 20px;
-    /* Category List - Med 14(auto) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
     color: #000000;
-    /* Inside auto layout */
     flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 .categoriesList>div:hover{
@@ -358,6 +216,7 @@ input{
 
 /* attractions */
 main{
+    width: min(100%, 1200px);;
     display: flex;justify-content: center;
     margin-top: 55px;margin-bottom: 40px;
     min-height: 816px;
@@ -378,19 +237,13 @@ main{
     position: relative;
     width: 270px;
     height: 242px;
-    left: 0px;
-    top: 0px;
     display: flex;flex-direction: column;
-    /* White */
     background: #FFFFFF;
-    /* Secondary Color/Gray 20 */
     border: 1px solid #E8E8E8;
     border-radius: 5px; 
-    /*margin-left: 5.5px;*/
 }
 /* details */
 .cardsInfo{
-    /* Auto layout */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -398,8 +251,6 @@ main{
     gap: 4px;
     width: 100%;
     height: 45px;
-    left: 0px;
-    /* Additional Color/White */
     background: #FFFFFF;
 }
 
@@ -407,29 +258,20 @@ main{
 .cardsInfo>div{
     width: 92.6%;
     height: 25px;
-    /* Inside auto layout */
     flex: none;
-    order: 0;
-    flex-grow: 0; 
     display:flex; justify-content:space-between;
-    
 }
 
 /* 公共藝術 */
 .cardsInfo>div>div:nth-child(2){
     width: 125px;
     height: 25px;
-    /* Body - Med 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 13px;
-    /* or 83% */
     display: flex;
     align-items: center;
     text-align: right;
-    /* Secondary Color/Gray 50 */
     color: #757575;
 }
 .cardsInfo>div>div:nth-child(2)>div{
@@ -441,17 +283,12 @@ main{
 .cardsInfo>div>div:nth-child(1){
     width: 125px;
     height: 25px;
-    /* Body - Med 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 13px;
-    /* or 83% */
     display: flex;
     align-items: center;
     text-align: left;
-    /* Secondary Color/Gray 50 */
     color: #757575;
 }
 
@@ -479,7 +316,6 @@ main{
     position: absolute;
     width: 100%;
     height: 40px;
-    /* Additional Color/Black */
     background: #000000;
     opacity: 0.6;
 }
@@ -489,16 +325,11 @@ main{
     position: absolute;
     width: 92.6%;
     height: 20px;
-    /* Body - Bold 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;
-    /* or 83% */
     display: flex;
     align-items: center;
-    /* Additional Color/White */
     color: #FFFFFF;
     letter-spacing: 1px;
     z-index: 10;
@@ -521,50 +352,6 @@ main{
     height: 250px;
     object-fit: cover;
 }
-
-/*----------------------------------------------------------*/
-
-/* footer */
-footer{
-    /* Auto layout */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 104px;
-    /* Gray 700 */
-    background: #757575;    
-}
-
-/* div */
-footer>div{
-    width: 234px;
-    height: 24px;
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    display: flex;align-items: center;justify-content: center;
-}
-
-/* COPYRIGHT © 2021 台北一日遊 */
-footer>div>div{
-    width: 234px;
-    height: 14px;
-    /* Body - Bold 16(13.3) */
-    font-family: 'Noto Sans TC';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 13px;
-    /* identical to box height, or 83% */
-    display: flex;
-    align-items: center;
-    /* Additional Color/White */
-    color: #FFFFFF; 
-}
-
 
 /*-------------------------------------------------------------------------*/
 

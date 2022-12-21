@@ -11,10 +11,10 @@ const cancelButton = document.getElementsByClassName("cancelButton")
 const logoutButton = document.getElementById("logoutButton")
 const memberCenterButton = document.getElementById("memberCenterButton")
 let memberName
-let pathname = location.pathname
+const pathname = location.pathname
 
-let bookingMessage = document.getElementById("bookingMessage")
-let goBookingButton = document.getElementById("goBookingButton")
+const bookingMessage = document.getElementById("bookingMessage")
+
 
 window.addEventListener("load", () => {
     checkLogin()
@@ -26,23 +26,21 @@ window.addEventListener("load", () => {
 
 export async function checkLogin(){
     try{
-        let access_token = getAccessToken()
-        let headers = {
+        const access_token = getAccessToken()
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization" : `Bearer ${access_token}`
         }
-        let config = {
+        const config = {
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/api/user/auth",config)
-        let fetchMemberData = await response.json()
-        console.log("後端login回傳的資料",fetchMemberData)
+        const response = await fetch("/api/user/auth",config)
+        const fetchMemberData = await response.json()
         if(fetchMemberData["message"] == "⚠ 請換發token"){
-            let fetchRefreshAccessToken = refreshAccessToken()
+            const fetchRefreshAccessToken = refreshAccessToken()
             fetchRefreshAccessToken.then(res =>{
-                console.log(res)
                 if(res == "error"){
                     logout()
                 }else{
@@ -65,7 +63,6 @@ export async function checkLogin(){
         }else{
             goLoginButton.classList.remove("none")
             deleteAccessToken()
-            console.log(fetchMemberData["message"])
             if(pathname == "/user"){
                 logoutButton.classList.add("none")
                 location.href = "/"
@@ -149,12 +146,12 @@ function cancelLoginBox(){
     //清空提醒訊息
     clearErrorMessage()
 }
-let loginEmail = document.getElementById("loginEmail")
-let loginPassword = document.getElementById("loginPassword")
-let registerName = document.getElementById("registerName")
-let registerEmail = document.getElementById("registerEmail")
-let registerPassword = document.getElementById("registerPassword")
-let errorMessage = document.getElementsByClassName("errorMessage")
+const loginEmail = document.getElementById("loginEmail")
+const loginPassword = document.getElementById("loginPassword")
+const registerName = document.getElementById("registerName")
+const registerEmail = document.getElementById("registerEmail")
+const registerPassword = document.getElementById("registerPassword")
+const errorMessage = document.getElementsByClassName("errorMessage")
 
 /* 拿取登入輸入值 + 準備登入 */
 let loginEmailInputValue 
@@ -165,7 +162,7 @@ let registerPasswordInputValue
 let isValidEmail
 let isValidPassword
 
-document.addEventListener("input", ()=>{
+document.addEventListener("input", () => {
     checkLoginInput()
     checkRegisterInput()
     checkConfirmEmailButton()
@@ -173,9 +170,8 @@ document.addEventListener("input", ()=>{
 
 loginButton.addEventListener("click",() => {
     // login api + 顯示登入結果
-    let fetchLoginMessage = login(loginEmailInputValue,loginPasswordInputValue)
-    fetchLoginMessage.then(res=>{
-        console.log(res)
+    const fetchLoginMessage = login(loginEmailInputValue,loginPasswordInputValue)
+    fetchLoginMessage.then(res => {
         if(res[1] == "⚠ 未註冊的信箱，或是輸入錯誤"){
             errorMessage[0].classList.remove("none")
             errorMessage[0].textContent = res[1]
@@ -228,10 +224,8 @@ function checkLoginInput(){
 /* 拿取註冊輸入值 + 準備註冊 */
 registerButton.addEventListener("click",() => {
     // login api
-    let fetchRegisterMessage = register(registerNameInputValue,registerEmailInputValue,registerPasswordInputValue)
-
+    const fetchRegisterMessage = register(registerNameInputValue,registerEmailInputValue,registerPasswordInputValue)
     fetchRegisterMessage.then(res=>{
-        console.log(res)
         if(res[1] == "⚠ 信箱已被註冊"){
             errorMessage[2].classList.remove("none")
             errorMessage[2].textContent = res[1]
@@ -380,22 +374,21 @@ function clearErrorMessage(){
 /* 換發access_token */
 export async function refreshAccessToken(){
     try{
-        let headers = {
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        let config = {
+        const config = {
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/api/refresh",config)
+        const response = await fetch("/api/refresh",config)
         if(response.status == 401){
             //以防refresh token過期
             //location.href = pathname
         }
-        let refreshData = await response.json()
-        console.log("後端refresh回傳的資料",refreshData)
-        let access_token = refreshData["access_token"]
+        const refreshData = await response.json()
+        const access_token = refreshData["access_token"]
         if(refreshData["status"] == "success"){
             storeAccessToken(access_token)
             return "success"
@@ -415,23 +408,21 @@ export async function refreshAccessToken(){
 const goBookingNavButton = document.getElementById("goBookingNavButton")
 goBookingNavButton.addEventListener("click",async() => {
     try{
-        let access_token = getAccessToken()
-        let headers = {
+        const access_token = getAccessToken()
+        const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization" : `Bearer ${access_token}`
         }
-        let config = {
+        const config = {
             method: "GET",
             headers: headers,
         }
-        let response = await fetch("/api/user/auth",config)
-        let fetchMemberData = await response.json()
-        console.log("後端login回傳的資料",fetchMemberData)
+        const response = await fetch("/api/user/auth",config)
+        const fetchMemberData = await response.json()
         if(fetchMemberData["message"] == "⚠ 請換發token"){
-            let fetchRefreshAccessToken = refreshAccessToken()
+            const fetchRefreshAccessToken = refreshAccessToken()
             fetchRefreshAccessToken.then(res =>{
-                console.log(res)
                 if(res == "error"){
                     logout()
                 }else{
@@ -511,7 +502,6 @@ function goConfirmEmailButton(){
         const confirmEmailValue = confirmEmail.value
         const fetchConfirmEmailForVerifyCode = confirmEmailForVerifyCode(confirmEmailValue)
         fetchConfirmEmailForVerifyCode.then( res => {
-            console.log(res)
             if(res[0] == "success"){
                 errorMessage[4].classList.remove("none")
                 errorMessage[4].textContent = "✉ 請去信箱收取驗證碼"
@@ -535,12 +525,10 @@ function check_verify_code_button(){
     const findPasswordBox = document.getElementById("findPasswordBox")
     const getBackupPassword = document.getElementById("getBackupPassword")
     verifyButton.addEventListener("click", () => {
-        const verifyCode = document.getElementById("verifyCode")
         const confirmEmailValue = confirmEmail.value
         const verifyCodeValue = verifyCode.value
         const fetchCheckVerifyCode = checkVerifyCode(confirmEmailValue,verifyCodeValue)
         fetchCheckVerifyCode.then( res => {
-            console.log(res)
             if(res["ok"] == "true"){
                 errorMessage[5].classList.add("none")
                 findPasswordBox.classList.add("none")

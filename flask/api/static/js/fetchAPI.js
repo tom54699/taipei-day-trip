@@ -2,7 +2,7 @@
 export async function fetchAttractionPageData(page=0,keyword=""){
     try{
         const response = await fetch(`/api/attractions?page=${page}&keyword=${keyword}`);
-        let data = await response.json()
+        const data = await response.json()
         return data
     }
     catch(err){
@@ -10,10 +10,10 @@ export async function fetchAttractionPageData(page=0,keyword=""){
     }
 }
 
-export async function fetchCategoryData(page=0,keyword=""){
+export async function fetchCategoryData(){
     try{
         const response = await fetch("/api/categories");
-        let data = await response.json()
+        const data = await response.json()
         return data
     }
     catch(err){
@@ -35,7 +35,6 @@ export async function fetchAttraction(id=1){
 
 /* register */
 export async function register(name,email,password){
-    let res = []
     try{
         const headers = {
             "Content-Type": "application/json",
@@ -52,33 +51,20 @@ export async function register(name,email,password){
             body: JSON.stringify(content)
         }
         const response = await fetch("/api/user",config)
-        const registerData = await response.json()
-        console.log("後端login回傳的資料",registerData)
-        if(registerData["ok"] == "true"){
-            const status = registerData["ok"]
-            const message = "註冊成功"
-            res.push(status,message)
-            return res
+        const { ok, message, status } = await response.json()
+        if(ok == "true"){
+            return ["true", "註冊成功"]
         }
         // 回傳資料如果status是error
-        if(registerData["message"] == "⚠ 信箱已被註冊" || registerData["message"] == "⚠ 信箱或密碼格式不正確"){
-            const errorMessage = registerData["message"]
-            const status = registerData["status"]
-            res.push(status,errorMessage)
-            return res
+        if(message === "⚠ 信箱已被註冊" || message === "⚠ 信箱或密碼格式不正確"){
+            return [status, message]
         }else{
-            const errorMessage = registerData["message"]
-            const status = "error"
-            res.push(status,errorMessage)
-            return res
+            return ["error", message];
         }
     }
     catch(err){
         console.log("Something Wrong:",err)
-        const errorMessage = err
-        const status = "error"
-        res.push(status,errorMessage)
-        return res
+        return ["error", err];
     }
 }
 
@@ -87,11 +73,9 @@ export async function register(name,email,password){
 export async function login(email,password){
     let res = []
     try{
-        //let access_token = getAccessToken()
         const headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            //"Authorization" : `Bearer ${access_token}`
         }
         const content = {
             "email": email,
@@ -104,10 +88,8 @@ export async function login(email,password){
         }
         const response = await fetch("/api/user/auth",config)
         const loginData = await response.json()
-        console.log("後端login回傳的資料",loginData)
         if(loginData["ok"] == "true"){
             storeAccessToken(loginData["access_token"])
-            setInterval(( () => console.log("Token has expired") ), 60000)
             const status = loginData["ok"]
             const message = "登入成功"
             res.push(status,message)
@@ -128,10 +110,6 @@ export async function login(email,password){
     }
     catch(err){
         console.log("Something Wrong:",err)
-        const errorMessage = err
-        const status = "error"
-        res.push(status,errorMessage)
-        return res
     }
 }
 
@@ -149,7 +127,6 @@ export async function logout(){
         }
         const response = await fetch("/api/user/auth",config)
         const deleteData = await response.json()
-        console.log("後端login回傳的資料",deleteData)
         if(deleteData["ok"] == "true"){
             return "success"
         }else{
@@ -159,10 +136,6 @@ export async function logout(){
     }
     catch(err){
         console.log("Something Wrong:",err)
-        const errorMessage = err
-        const status = "error"
-        res.push(status,errorMessage)
-        return res
     }
 }
 
@@ -205,7 +178,6 @@ export async function sendBookingData(attractionId,date,time,price){
         }
         const response = await fetch("/api/booking",config)
         const getBookingData = await response.json()
-        console.log("後端getBookingData回傳的資料",getBookingData)
         if(getBookingData["ok"] == "true"){
             const status = "ok"
             const message = "預約成功 ☛"
@@ -222,10 +194,6 @@ export async function sendBookingData(attractionId,date,time,price){
     }
     catch(err){
         console.log("Something Wrong:",err)
-        const errorMessage = err
-        const status = "error"
-        res.push(status,errorMessage)
-        return res
     }
 }
 
@@ -245,7 +213,6 @@ export async function getBookingData(){
         }
         const response = await fetch("/api/booking",config)
         const getBookingData = await response.json()
-        console.log("後端getBookingData回傳的資料",getBookingData)
         if(response.status == 200){
             const status = "success"
             res.push(status,getBookingData)
@@ -268,10 +235,6 @@ export async function getBookingData(){
     }
     catch(err){
         console.log("Something Wrong:",err)
-        const errorMessage = err
-        const status = "error"
-        res.push(status,errorMessage)
-        return res
     }
 }
 
@@ -293,7 +256,6 @@ export async function sendOrderData(orderContent){
         }
         const response = await fetch("/api/orders",config)
         const sendOrderData = await response.json()
-        console.log("後端sendOrderData回傳的資料",sendOrderData)
         if(response.status == 200){
             const status = "success"
             res.push(status,sendOrderData)
@@ -327,10 +289,6 @@ export async function sendOrderData(orderContent){
     }
     catch(err){
         console.log("Something Wrong:",err)
-        const errorMessage = err
-        const status = "error"
-        res.push(status,errorMessage)
-        return res
     }
 }
 
@@ -350,7 +308,6 @@ export async function getMemberCenterData(){
         }
         const response = await fetch("/api/user/membercenter",config)
         const fetchMemberData = await response.json()
-        console.log("後端login回傳的資料",fetchMemberData)
         if(response.status == 200){
             const status = "success"
             res.push(status,fetchMemberData)
@@ -394,7 +351,6 @@ export async function getOrderDataByOrderNumber(orderNumber){
         }
         const response = await fetch(`api/orders/${orderNumber}`,config)
         const fetchOrderDataByOrderNumber = await response.json()
-        console.log("後端login回傳的資料",fetchOrderDataByOrderNumber)
         if(response.status == 200){
             const status = "success"
             res.push(status,fetchOrderDataByOrderNumber)
@@ -445,7 +401,6 @@ export async function updateMemberProfile(newName,newNickName,newBirthday,newPho
         }
         const response = await fetch("/api/user/profile",config)
         const fetchUpdateMemberProfile = await response.json()
-        console.log("後端login回傳的資料",fetchUpdateMemberProfile)
         if(response.status == 200){
             const status = "success"
             res.push(status,fetchUpdateMemberProfile)
@@ -495,7 +450,6 @@ export async function updateMemberPassword(old_password,new_password,check_passw
         }
         const response = await fetch("api/user/password",config)
         const fetchUpdateMemberProfile = await response.json()
-        console.log("後端login回傳的資料",fetchUpdateMemberProfile)
         if(response.status == 200){
             const status = "success"
             res.push(status,fetchUpdateMemberProfile)
@@ -539,7 +493,6 @@ export async function confirmEmailForVerifyCode(confirmEmail){
         }
         const response = await fetch("/api/user/verifycode",config)
         const fetchConfirmEmailForVerifyCode = await response.json()
-        console.log("後端login回傳的資料",fetchConfirmEmailForVerifyCode)
         if(response.status == 200){
             const status = "success"
             res.push(status,fetchConfirmEmailForVerifyCode)
@@ -572,8 +525,7 @@ export async function checkVerifyCode(confirmEmail,verifyCode){
         }
         const response = await fetch("/api/user/verifycode",config)
         const fetchConfirmEmailForVerifyCode = await response.json()
-        console.log("後端login回傳的資料",fetchConfirmEmailForVerifyCode)
-            return fetchConfirmEmailForVerifyCode
+        return fetchConfirmEmailForVerifyCode
     }
     catch(err){
         console.log("Something Wrong:",err)
