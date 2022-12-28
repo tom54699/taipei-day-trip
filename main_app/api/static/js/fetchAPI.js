@@ -486,7 +486,6 @@ export async function confirmEmailForVerifyCode(confirmEmail) {
 /* 驗證碼確認正確與否 */
 export async function checkVerifyCode(confirmEmail, verifyCode) {
     try {
-        const res = []
         const headers = {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -503,6 +502,51 @@ export async function checkVerifyCode(confirmEmail, verifyCode) {
         const response = await fetch("/api/user/verifycode", config)
         const fetchConfirmEmailForVerifyCode = await response.json()
         return fetchConfirmEmailForVerifyCode
+    } catch (err) {
+        console.log("Something Wrong:", err)
+    }
+}
+
+/* S3 get 大頭貼 */
+export async function getMemberHeadShot() {
+    try {
+        const access_token = getAccessToken()
+        const headers = {
+            Accept: "application/json",
+            Authorization: `Bearer ${access_token}`,
+        }
+        const config = {
+            method: "GET",
+            headers: headers,
+        }
+        const response = await fetch("api/user/headshot", config)
+        const fetchGetMemberHeadShot = await response.json()
+        return fetchGetMemberHeadShot
+    } catch (err) {
+        console.log("Something Wrong:", err)
+    }
+}
+
+export async function putMemberHeadShot(image, imageType) {
+    try {
+        const access_token = getAccessToken()
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${access_token}`,
+        }
+        const content = {
+            image_type: imageType,
+            headshot: Array.from(new Uint8Array(image)),
+        }
+        const config = {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(content),
+        }
+        const response = await fetch("api/user/headshot", config)
+        const fetchGetMemberHeadShot = await response.json()
+        return fetchGetMemberHeadShot
     } catch (err) {
         console.log("Something Wrong:", err)
     }

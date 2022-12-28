@@ -6,23 +6,48 @@
     <link rel="stylesheet" type="text/css" href="/static/css/memberCenter.css">
     <link rel="stylesheet" type="text/css" href="/static/css/common.css">
     <link rel="stylesheet" type="text/css" href="/static/css/calendar.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
     <link rel="stylesheet" href="/static/css/phoneFlag.css"/>
     {% endblock %}
 
     {% block main %}
     <hr class="separator1"/>
-    <aside>
+    <aside class="memebercenterLists none">
         <div>
             <div class="memberProfileButton">會員資料</div><div>|</div>
             <div class="memberHistoryOrderButton">歷史訂單</div><div>|</div>
             <div class="calendarButton">行事曆</div>
         </div>
     </aside>
-    <main>
+    <div class="resizeHeadshotBox none">
+        <div></div>
+        <div>
+            <div>編輯圖片</div>
+            <img class="resizeHeadshot"/>
+            <div>
+                <div class="resizeHeadshotCancel">取消</div>
+                <div class="resizeHeadshotConfirm">確認</div>
+            </div>
+        </div>
+    </div>
+    <main class="memebercenterMain none">
         <hr class="separator2"/>
         <section id="memberProfileBox" class=" none">
             <fieldset class="memberProfileField"> 
                 <legend>會員個人資料</legend> 
+                <aside class="headshot">
+                    <img id="preview_img" src=""/>
+                    <div class="chooseHeadshotBox none">
+                        <button>
+                            <label>選擇檔案</label>
+                            <input class="headshot_input" type="file" accept="image/gif, image/jpeg, image/png"/>
+                        </button>
+                    </div>
+                    <div class="loadingBox">
+                        <div class="lds-dual-ring"></div>
+                        <div class="loadingNumber">0 %</div>
+                    </div>
+                </aside>
                 <div>
                     <div>註冊信箱</div>
                     <div class="memberProfile"  id="memberEmail"></div>
@@ -59,6 +84,7 @@
                     <button class="resetProfileButton none">復原</button>
                     <button class="sendProfileButton none" >送出</button>
                 </div>
+
             </fieldset>
             <fieldset class="memberPassword"> 
                 <legend>更改密碼<small>（至少 5 個字元，且禁止非法字元。）</small></legend> 
@@ -156,4 +182,5 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
     {% endblock %}

@@ -16,6 +16,7 @@ class Member(db.Model):
     phone_number = db.Column(db.String(100))
     intro = db.Column(db.String(100))
     verify_code = db.Column(db.String(100))
+    headshot = db.Column(db.String(500))
     bookings = db.relationship("Booking", backref="member")
     orders = db.relationship("Orders", backref="member")
 
@@ -65,6 +66,17 @@ class Member(db.Model):
                 "id": member.id,
                 "name": member.name,
                 "email": member.email,
+            }
+        }
+        return member_data
+
+    def get_member_headshot(member_email):
+        member = Member.query.filter_by(email=member_email).first()
+        if member.headshot == None:
+            return "no_data"
+        member_data = {
+            "data": {
+                "headshot": member.headshot,
             }
         }
         return member_data
@@ -158,6 +170,15 @@ class Member(db.Model):
         member = Member.query.filter_by(email=member_email).update(
             {
                 "verify_code": verify_code,
+            }
+        )
+        db.session.commit()
+        return "ok"
+
+    def update_member_headshot(member_email, headshot):
+        member = Member.query.filter_by(email=member_email).update(
+            {
+                "headshot": headshot,
             }
         )
         db.session.commit()

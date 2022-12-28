@@ -12,6 +12,8 @@ let bookingPriceList = []
 let bookingDateList = []
 let bookingTimeList = []
 let data_length
+const header = document.getElementById("header")
+const main = document.getElementById("main")
 
 window.addEventListener("load", () => {
     checkBookingAuth()
@@ -28,6 +30,8 @@ export function checkBookingAuth() {
                 memberNameNode.textContent = memberName
                 noBookingPage()
             } else {
+                header.classList.remove("none")
+                main.classList.remove("none")
                 data_length = Number(res[1].length)
                 for (let i = 0; i < data_length; i++) {
                     const data = res[1][i].data
@@ -157,8 +161,6 @@ function totalBookingPrice(data_length) {
 /* 沒登入的頁面反應 */
 function noAuthBookingPage() {
     const errorMessage = document.getElementsByClassName("errorMessage")
-    const header = document.getElementById("header")
-    const main = document.getElementById("main")
     const bookingCardBox = document.getElementsByClassName("bookingCardBox")
     // 頁面清除
     bookingCardBox[0].remove()
@@ -423,3 +425,15 @@ function buttonEventSetting() {
         errorMessageBox.classList.add("none")
     })
 }
+
+/*  關閉登入返回首頁 */
+const cancelButton = document.getElementsByClassName("cancelButton")
+cancelButton[0].addEventListener("click", () => {
+    location.href = "/"
+})
+cancelButton[1].addEventListener("click", () => {
+    location.href = "/"
+})
+cancelButton[2].addEventListener("click", () => {
+    location.href = "/"
+})

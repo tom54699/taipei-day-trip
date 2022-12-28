@@ -3,6 +3,8 @@ import {
     getOrderDataByOrderNumber,
     updateMemberProfile,
     updateMemberPassword,
+    getMemberHeadShot,
+    putMemberHeadShot,
 } from "./fetchAPI.js"
 import { refreshAccessToken } from "./member.js"
 import { generateBookingPageStructure } from "./generatePages.js"
@@ -16,7 +18,8 @@ let memberPhoneNumber
 let memberIntro
 let booking_lists = []
 let order_lists = []
-
+const memebercenterMain = document.getElementsByClassName("memebercenterMain")
+const memebercenterLists = document.getElementsByClassName("memebercenterLists")
 /* 載入 */
 window.addEventListener("DOMContentLoaded", () => {
     checkMemberCenterAuth()
@@ -33,6 +36,8 @@ function checkMemberCenterAuth() {
     const fetchGetMemberCenterData = getMemberCenterData()
     fetchGetMemberCenterData.then((res) => {
         if (res[0] == "success") {
+            memebercenterMain[0].classList.remove("none")
+            memebercenterLists[0].classList.remove("none")
             const memberCenterData = res[1].data
             memberName = memberCenterData.member.name
             memberNickName = memberCenterData.member.nick_name
@@ -48,6 +53,7 @@ function checkMemberCenterAuth() {
                 order_lists.push(data)
             }
             // 產生畫面 + 按鈕註冊
+            loadMemberHeadshot()
             calendarAddEvent()
             memberDateShow()
             memberHistoryOrderShow(order_lists)
@@ -434,6 +440,7 @@ function memberProfileEditButton() {
     const errorProfileMessage = document.getElementsByClassName("errorProfileMessage")
     const openEye = document.getElementsByClassName("open-eye")
     const closedEye = document.getElementsByClassName("closed-eye")
+    const chooseHeadshotBox = document.getElementsByClassName("chooseHeadshotBox")
 
     let newPhone
     /* 會員資料修改按鈕 */
@@ -441,6 +448,7 @@ function memberProfileEditButton() {
         editProfileButton[0].classList.add("none")
         sendProfileButton[0].classList.remove("none")
         resetProfileButton[0].classList.remove("none")
+        chooseHeadshotBox[0].classList.remove("none")
         /* 電話區碼下拉 */
         window.intlTelInput(phoneInput, {
             separateDialCode: true,
@@ -469,6 +477,10 @@ function memberProfileEditButton() {
         profileEditInput[4].value = memberIntro
     })
     sendProfileButton[0].addEventListener("click", function sendProfileButtonClick() {
+        if (isMemberHeadshotChange == true) {
+            console.log(arrayBuffer)
+            putMemberHeadShot(arrayBuffer, imageType)
+        }
         const newName = profileEditInput[0].value
         const newNickName = profileEditInput[1].value
         const newBirthday = profileEditInput[2].value
@@ -480,7 +492,7 @@ function memberProfileEditButton() {
             let fetchUpdateMemberProfile = updateMemberProfile(newName, newNickName, newBirthday, newPhone, newIntro)
             fetchUpdateMemberProfile.then((res) => {
                 if (res[0] == "success") {
-                    location.href = "/user"
+                    //location.href = "/user"
                 } else if (res[1] == "⚠ 請登入會員") {
                     location.href = "/"
                 } else if (res[1] == "⚠ 請換發token") {
@@ -704,3 +716,96 @@ function checkNewCheckPassword() {
         errorProfilePassWordMessage[2].classList.add("none")
     }
 }
+const headshot_input = document.getElementsByClassName("headshot_input")
+const preview_img = document.getElementById("preview_img")
+const loadingBox = document.getElementsByClassName("loadingBox")
+const loadingNumber = document.getElementsByClassName("loadingNumber")
+const resizeHeadshot = document.getElementsByClassName("resizeHeadshot")
+const resizeHeadshotBox = document.getElementsByClassName("resizeHeadshotBox")
+const dialogMask = document.getElementById("dialogMask")
+const resizeHeadshotCancel = document.getElementsByClassName("resizeHeadshotCancel")
+const resizeHeadshotConfirm = document.getElementsByClassName("resizeHeadshotConfirm")
+let arrayBuffer
+let imageLoadPercentage = 0
+/* 預設載入大頭貼 */
+function loadMemberHeadshot() {
+    const fetchUpdateMemberPassword = getMemberHeadShot()
+    fetchUpdateMemberPassword.then((res) => {
+        if (res.ok == "true") {
+            preview_img.onload = () => {
+                if (preview_img.complete) {
+                    imageLoadPercentage = 100
+                    loadingNumber[0].textContent = "`${imageLoadPercentage} %`"
+                }
+                if ((imageLoadPercentage = 100)) {
+                    loadingBox[0].classList.add("none")
+                }
+            }
+            preview_img.src = res.headshot
+        } else {
+            loadingBox[0].classList.add("none")
+            preview_img.src = "/static/pic/Anya.png"
+        }
+    })
+}
+let imageType
+let isMemberHeadshotChange = false
+let boundary_width = 560
+if (window.innerWidth <= 600) {
+    boundary_width = 360
+} else {
+    boundary_width = 560
+}
+let vanilla = new Croppie(resizeHeadshot[0], {
+    viewport: { width: 250, height: 200 },
+    boundary: { width: boundary_width, height: 350 },
+    showZoomer: true,
+    enableOrientation: true,
+})
+/* 預覽會員大頭貼 */
+headshot_input[0].addEventListener("change", (e) => {
+    resizeHeadshotBox[0].classList.remove("none")
+    dialogMask.classList.remove("none")
+    const file = e.target.files[0]
+    imageType = e.target.files[0]["type"].slice(6)
+    const reader = new FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onload = () => {
+        const pre_arrayBuffer = reader.result
+        const blob = new Blob([pre_arrayBuffer], { type: `image/${imageType}` })
+        vanilla.bind({
+            url: URL.createObjectURL(blob),
+        })
+    }
+    e.target.value = ""
+})
+
+/* 更新大頭貼 */
+function updateMemberHeadshot() {
+    const fetchUpdateMemberPassword = putMemberHeadShot(arrayBuffer, imageType)
+    fetchUpdateMemberPassword.then((res) => {
+        console.log(res)
+    })
+}
+
+/* 取消resize button */
+resizeHeadshotCancel[0].addEventListener("click", () => {
+    resizeHeadshotBox[0].classList.add("none")
+    dialogMask.classList.add("none")
+})
+
+/* 確認resize */
+resizeHeadshotConfirm[0].addEventListener("click", () => {
+    isMemberHeadshotChange = true
+    vanilla.result("blob").then(function (blob) {
+        const reader = new FileReader()
+        reader.readAsArrayBuffer(blob)
+        reader.onload = () => {
+            arrayBuffer = reader.result
+            const blob = new Blob([arrayBuffer], { type: `image/${imageType}` })
+            preview_img.src = URL.createObjectURL(blob)
+        }
+        resizeHeadshotBox[0].classList.add("none")
+        dialogMask.classList.add("none")
+    })
+})

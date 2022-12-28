@@ -15,6 +15,7 @@ from api.mail.send_mail import *
 from api.utils.utils import check_password_regex, check_email_regex
 from datetime import timedelta
 import redis
+import requests
 
 members = Blueprint("members", __name__, static_folder="static", template_folder="templates")
 
@@ -226,5 +227,44 @@ def check_verify_code_for_password():
         new_password = Email.random_code_generate(8)
         Member.update_member_password(confirm_email, new_password)
         return jsonify(ok="true", data=new_password), 200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"), 500
+
+
+@members.route("api/user/headshot", methods=["PUT"])
+@jwt_required(fresh=True)
+def put_member_headshot():
+    try:
+        data = request.get_json()
+        image_type = data["image_type"]
+        uint8array = data["headshot"]
+        image_binary_data = bytes(uint8array)
+        member_email = get_jwt_identity()
+        member_data = Member.get_member_auth_data(member_email)
+        member_id = member_data["data"]["id"]
+        headers = {
+            "Content-Type": f"image/{image_type}",
+            "x-api-key": os.getenv("AWS_API_KEY"),
+        }
+        api_url = f"https://p61fyrmslb.execute-api.us-west-2.amazonaws.com/v1/wehelp-taipei-day-trip/upload/{member_id}.{image_type}"
+        req = requests.put(api_url, headers=headers, data=image_binary_data, timeout=30)
+        s3_url = f"https://wehelp-taipei-day-trip.s3.us-west-2.amazonaws.com/upload/{member_id}.{image_type}"
+        if req.status_code == 200:
+            Member.update_member_headshot(member_email, s3_url)
+            return jsonify(ok="true"), 200
+    except Exception as ex:
+        return jsonify(error="true", message=f"{ex}"), 500
+
+
+@members.route("api/user/headshot", methods=["GET"])
+@jwt_required(fresh=True)
+def get_member_headshot():
+    try:
+        member_email = get_jwt_identity()
+        member_data = Member.get_member_headshot(member_email)
+        if member_data == "no_data":
+            return jsonify(error="true"), 400
+        member_headshot = member_data["data"]["headshot"]
+        return jsonify(ok="true", headshot=member_headshot), 200
     except Exception as ex:
         return jsonify(error="true", message=f"{ex}"), 500

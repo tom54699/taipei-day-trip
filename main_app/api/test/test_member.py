@@ -4,7 +4,6 @@ from api.mail.send_mail import Email
 from api.models.members_model import Member
 from api import bcrypt
 from flask_jwt_extended import utils
-from flask_jwt_extended import view_decorators
 
 
 @pytest.mark.parametrize(
