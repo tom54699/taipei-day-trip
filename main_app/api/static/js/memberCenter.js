@@ -456,7 +456,7 @@ function memberProfileEditButton() {
     const openEye = document.getElementsByClassName("open-eye")
     const closedEye = document.getElementsByClassName("closed-eye")
     const chooseHeadshotBox = document.getElementsByClassName("chooseHeadshotBox")
-
+    let isValidSubmit = false
     let newPhone
     /* 會員資料修改按鈕 */
     editProfileButton[0].addEventListener("click", () => {
@@ -491,9 +491,10 @@ function memberProfileEditButton() {
         profileEditInput[3].value = memberPhoneNumber
         profileEditInput[4].value = memberIntro
     })
-    sendProfileButton[0].addEventListener("click", function sendProfileButtonClick() {
+
+    sendProfileButton[0].addEventListener("click", async function sendProfileButtonClick() {
         if (isMemberHeadshotChange == true) {
-            putMemberHeadShot(arrayBuffer, imageType)
+            await putMemberHeadShot(arrayBuffer, imageType)
         }
         const newName = profileEditInput[0].value
         const newNickName = profileEditInput[1].value

@@ -236,9 +236,7 @@ def put_member_headshot():
         data = request.get_json()
         image_type = data["image_type"]
         uint8array = data["headshot"]
-        print(uint8array)
         image_binary_data = bytes(uint8array)
-        print(image_binary_data)
         member_email = get_jwt_identity()
         member_data = Member.get_member_auth_data(member_email)
         member_id = member_data["data"]["id"]
