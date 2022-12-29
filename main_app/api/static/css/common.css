@@ -34,7 +34,7 @@ nav {
     left: 0px;
     top: 0px;
     background: #ffffff;
-    z-index: 20;
+    z-index: 40;
     display: flex;
     justify-content: center;
     align-items: center;

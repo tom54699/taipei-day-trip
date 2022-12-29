@@ -268,6 +268,21 @@ function memberHistoryTourShow() {
                 },
             ],
         },
+        options: {
+            scales: {
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1,
+                        },
+                        gridLines: {
+                            display: false,
+                        },
+                    },
+                ],
+            },
+        },
     })
 }
 
@@ -478,7 +493,6 @@ function memberProfileEditButton() {
     })
     sendProfileButton[0].addEventListener("click", function sendProfileButtonClick() {
         if (isMemberHeadshotChange == true) {
-            console.log(arrayBuffer)
             putMemberHeadShot(arrayBuffer, imageType)
         }
         const newName = profileEditInput[0].value
