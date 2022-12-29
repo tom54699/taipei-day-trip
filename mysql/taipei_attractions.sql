@@ -70,7 +70,7 @@ CREATE TABLE `booking` (
   CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`member_email`) REFERENCES `member` (`email`),
   CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attraction` (`id`),
   CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`order_number`) REFERENCES `orders` (`order_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +79,7 @@ CREATE TABLE `booking` (
 
 LOCK TABLES `booking` WRITE;
 /*!40000 ALTER TABLE `booking` DISABLE KEYS */;
+INSERT INTO `booking` VALUES (1,'aniya@gmail.com',1,'20221229082053','2022-12-29','morning',2000),(2,'aniya@gmail.com',7,'20221229082846','2022-12-29','afternoon',2500);
 /*!40000 ALTER TABLE `booking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,9 +127,10 @@ CREATE TABLE `member` (
   `phone_number` varchar(100) DEFAULT NULL,
   `intro` varchar(100) DEFAULT NULL,
   `verify_code` varchar(100) DEFAULT NULL,
+  `headshot` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +139,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'789',NULL,'789@789','$2b$10$RCa1MeleI8/XGQBQWEkTvOAh2wqqw4uXHEqqLkQfkmHI5pbCxatYy',NULL,NULL,NULL,'eyqFEf'),(2,'tom54699',NULL,'tom54699@gmail.com','$2b$10$hwScO5ALDjCyqVLQNbt5Gezd467HP02XCJYOybLL90R0zata1qjaS',NULL,NULL,NULL,'P2Iedz'),(3,'123',NULL,'123@123','$2b$10$mYV/gOHCIm7FHndfrpoqT.1O7qZls.fQZrLGgzrhoVOZl.CgRcwG.',NULL,NULL,NULL,NULL),(4,'11111',NULL,'bqq57832@cdfaq.com','$2b$10$e/X9a77gq.cLFeIY2ddd..SktMjQWcF5LTj0/VEFPU7Uo4yBQhvR6',NULL,NULL,NULL,'zjpV7f');
+INSERT INTO `member` VALUES (1,'aniya','阿妮亞','aniya@gmail.com','$2b$10$3NbPHhLl8QHejEc98NjFDO6VXfEcSV3KzKWp8lsJEVAcFtoe/PCiW','2003-10-26','+886955254525','我是阿妮亞~',NULL,'https://wehelp-taipei-day-trip.s3.us-west-2.amazonaws.com/upload/1.png'),(2,'789','','789@789.com','$2b$10$xlaMrCJg8jT2bjVhwp.NAOUaXCe7iBErcTlHnMufXbXZea7XTnLPe','','','',NULL,'https://wehelp-taipei-day-trip.s3.us-west-2.amazonaws.com/upload/2.png');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,6 +169,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES ('20221229082053','aniya@gmail.com','aniya','aniya@gmail.com','0965254858',2000),('20221229082846','aniya@gmail.com','aniya','aniya@gmail.com','0955254525',2500);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -179,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-17 12:14:08
+-- Dump completed on 2022-12-29 14:45:21
