@@ -51,7 +51,6 @@ def add_init_attractions(db):
                 images=image_urls,
             )
             attractions.append(attraction_data)
-        print(attractions[0].images)
 
         db.session.add_all(attractions)
         db.session.add_all(image_urls)

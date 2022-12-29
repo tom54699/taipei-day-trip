@@ -12,8 +12,6 @@ with app.app_context():
         "D:/Programming/Taipei-day-trip-website/main_app/data/taipei-attractions.json", mode="r", encoding="utf-8"
     ) as file:
         data = json.load(file)
-        # 58筆資料
-        print("總共有", len(data["result"]["results"]), "筆資料")
         # 開始提取資料
         attractions = []
         for i in data["result"]["results"]:
@@ -45,9 +43,7 @@ with app.app_context():
                 lng=lng,
                 images=image_urls,
             )
-            # print(attraction_data.images[0].image_url)
             attractions.append(attraction_data)
-        print(attractions[0].images)
 
         db.session.add_all(attractions)
         db.session.add_all(image_urls)

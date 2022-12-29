@@ -2,8 +2,6 @@ from api import db, bcrypt, jwt
 from .bookings_model import Booking
 from .attractions_model import Attraction
 
-print("db_member 運行")
-
 
 class Member(db.Model):
     __tablename__ = "member"

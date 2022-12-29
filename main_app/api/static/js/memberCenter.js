@@ -506,7 +506,7 @@ function memberProfileEditButton() {
             let fetchUpdateMemberProfile = updateMemberProfile(newName, newNickName, newBirthday, newPhone, newIntro)
             fetchUpdateMemberProfile.then((res) => {
                 if (res[0] == "success") {
-                    //location.href = "/user"
+                    location.href = "/user"
                 } else if (res[1] == "⚠ 請登入會員") {
                     location.href = "/"
                 } else if (res[1] == "⚠ 請換發token") {
@@ -793,14 +793,6 @@ headshot_input[0].addEventListener("change", (e) => {
     }
     e.target.value = ""
 })
-
-/* 更新大頭貼 */
-function updateMemberHeadshot() {
-    const fetchUpdateMemberPassword = putMemberHeadShot(arrayBuffer, imageType)
-    fetchUpdateMemberPassword.then((res) => {
-        console.log(res)
-    })
-}
 
 /* 取消resize button */
 resizeHeadshotCancel[0].addEventListener("click", () => {

@@ -1,8 +1,6 @@
 from api import db
 from sqlalchemy import or_, and_
 
-print("db_attraction 運行")
-
 # description 500不夠
 class Attraction(db.Model):
     __tablename__ = "attraction"

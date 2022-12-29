@@ -10,7 +10,6 @@ import os
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 jwt = JWTManager()
-print("init_run 運行")
 
 
 def create_app():

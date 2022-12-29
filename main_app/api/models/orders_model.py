@@ -1,7 +1,5 @@
 from api import db
 
-print("db_order 運行")
-
 
 class Orders(db.Model):
     __tablename__ = "orders"

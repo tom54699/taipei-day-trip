@@ -2,8 +2,6 @@ from api import db
 from api.models.attractions_model import Attraction
 from api.models.orders_model import Orders
 
-print("db_booking 運行")
-
 
 class Booking(db.Model):
     __tablename__ = "booking"

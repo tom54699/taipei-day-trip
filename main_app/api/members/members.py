@@ -58,7 +58,6 @@ def login():
         login_email = data["email"]
         login_password = data["password"]
         result = Member.check_member_email(login_email)
-        print("篩選結果:", len(result))
         if len(result) == 0:
             return jsonify(error="true", message="⚠ 未註冊的信箱，或是輸入錯誤"), 400
         if bcrypt.check_password_hash(result[0].password, login_password):
@@ -90,7 +89,6 @@ jwt_redis_blocklist = redis.StrictRedis(host="localhost", port=6379, db=0, decod
 
 @jwt.token_in_blocklist_loader
 def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
-    print(jwt_redis_blocklist.ping())
     jti = jwt_payload["jti"]
     token_in_redis = jwt_redis_blocklist.get(jti)
     return token_in_redis is not None
@@ -238,7 +236,9 @@ def put_member_headshot():
         data = request.get_json()
         image_type = data["image_type"]
         uint8array = data["headshot"]
+        print(uint8array)
         image_binary_data = bytes(uint8array)
+        print(image_binary_data)
         member_email = get_jwt_identity()
         member_data = Member.get_member_auth_data(member_email)
         member_id = member_data["data"]["id"]

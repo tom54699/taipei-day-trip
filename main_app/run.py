@@ -6,7 +6,6 @@ app = create_app()
 @app.cli.command("createdb")
 def createdb():
     """Creates db"""
-    print(db)
     db.create_all()
 
 
