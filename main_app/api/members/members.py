@@ -89,6 +89,8 @@ jwt_redis_blocklist = redis.StrictRedis(host="localhost", port=6379, db=0, decod
 
 @jwt.token_in_blocklist_loader
 def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    if os.environ["CONFIG_NAME"] == "testing":
+        return None
     jti = jwt_payload["jti"]
     token_in_redis = jwt_redis_blocklist.get(jti)
     return token_in_redis is not None
