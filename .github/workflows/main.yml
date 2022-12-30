@@ -1,0 +1,21 @@
+name: Test Flask
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install dependencies
+              run: |
+                  pip install -r requirements.txt
+            - name: Run member tests
+              run: |
+                  pytest -vv test_member.py
+            - name: Run attraction tests
+              run: |
+                  pytest -vv test_attraction.py
