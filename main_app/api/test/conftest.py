@@ -92,7 +92,6 @@ def members():
     app = create_app()
     app.config["SERVER_NAME"] = "localhost"
     app.config["JWT_TOKEN_LOCATION"] = "json"
-    app.config["JWT_SECRET_KEY"] = "123456"
 
     with app.test_client() as members:
         with app.app_context():
