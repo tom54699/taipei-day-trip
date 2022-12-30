@@ -16,8 +16,8 @@ jobs:
             - name: Run member tests
               run: |
                   cd  main_app/api/test
-                  pytest -vv test_member.py
+                  pytest -vv test_attraction.py
             - name: Run attraction tests
               run: |
                   cd  main_app/api/test
-                  pytest -vv test_attraction.py
+                  pytest -vv test_member.py
