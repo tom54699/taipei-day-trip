@@ -15,7 +15,9 @@ jobs:
                   pip install -r requirements.txt
             - name: Run member tests
               run: |
+                  cd  main_app/api/test
                   pytest -vv test_member.py
             - name: Run attraction tests
               run: |
+                  cd  main_app/api/test
                   pytest -vv test_attraction.py
