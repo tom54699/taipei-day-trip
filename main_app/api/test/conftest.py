@@ -17,9 +17,7 @@ from flask_jwt_extended import (
 
 
 def add_init_attractions(db):
-    with open(
-        "D:/Programming/Taipei-day-trip-website/main_app/data/taipei-attractions.json", mode="r", encoding="utf-8"
-    ) as file:
+    with open("./data/taipei-attractions.json", mode="r", encoding="utf-8") as file:
         data = json.load(file)
         attractions = []
         for i in data["result"]["results"]:
