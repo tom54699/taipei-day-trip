@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block description %}<meta name="description" content="Taipei Trip 台北一日遊 | 購物車" />{%
+endblock %} {% block title %}<title>Taipei Trip 台北一日遊 | 購物車</title>{% endblock %} {% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/booking.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+{% endblock %} {% block main %}
+<div id="errorMessageBox" class="messageBox none">
+    <div></div>
+    <div class="messageMainBox">
+        <div class="errorMessageCancelButton"></div>
+        <div>錯誤訊息</div>
+        <div id="errorPopup">出現不明異常問題!</div>
+    </div>
+</div>
+<div id="successMessageBox" class="messageBox none">
+    <div></div>
+    <div class="messageMainBox">
+        <div class="successMessageCancelButton"></div>
+        <div>訂購成功</div>
+        <div>祝您旅途愉快✈️</div>
+        <button><a href="/user">查看歷史訂單</a></button>
+        <button><a href="/">返回首頁</a></button>
+    </div>
+</div>
+<hr class="separator1" />
+<header id="header" class="none">
+    <div>您好，</div>
+    <div id="memberName"></div>
+    <div>，待預訂的行程如下：</div>
+</header>
+<section class="bookingCardBox"></section>
+<main id="main" class="none">
+    <hr class="separator2" />
+    <div class="contactForm">
+        <div>您的聯絡資訊</div>
+        <div>
+            <div>聯絡姓名：</div>
+            <input id="contactName" type="text" placeholder="請輸入姓名" oninput="value=value.replace(/\s+/g,'')" />
+            <div class="errorContactMessage none"></div>
+        </div>
+        <div>
+            <div>連絡信箱：</div>
+            <input
+                id="contactEmail"
+                type="email"
+                placeholder="請輸入信箱"
+                pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                oninput="value=value.replace(/\s+/g,'')"
+            />
+        </div>
+        <div class="errorContactMessage none"></div>
+        <div>
+            <div>手機號碼：</div>
+            <input
+                id="contactPhone"
+                type="text"
+                placeholder="請輸入手機號碼"
+                pattern="^09[0-9]{8}$"
+                oninput="value=value.replace(/\s+/g,'')"
+            />
+        </div>
+        <div class="errorContactMessage none"></div>
+        <div>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
+    </div>
+    <hr class="separator2" />
+    <div class="payment">
+        <div>信用卡付款資訊</div>
+        <div>
+            <div>卡片號碼：</div>
+            <div class="tpfield" id="card-number"></div>
+        </div>
+        <div>
+            <div>過期時間：</div>
+            <div class="tpfield" id="card-expiration-date"></div>
+        </div>
+        <div>
+            <div>驗證密碼：</div>
+            <div class="tpfield" id="card-ccv"></div>
+        </div>
+        <div class="errorCardMessage none">⚠ 信用卡付款資訊錯誤，給我乖乖付錢🔪</div>
+    </div>
+    <hr class="separator2" />
+    <div class="confirmBox">
+        <div id="totalBookingPrice">總價：新台幣 2000 元</div>
+        <div id="bookingButton" class="bookingButton">
+            <a>確認訂購並付款</a>
+        </div>
+    </div>
+</main>
+{% endblock %} {% block script %}
+<script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
+<script type="module" src="/static/js/member.js"></script>
+<script type="module" src="/static/js/booking.js"></script>
+{% endblock %}

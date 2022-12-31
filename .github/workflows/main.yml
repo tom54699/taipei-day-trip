@@ -1,0 +1,25 @@
+name: Test Flask
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        env:
+            JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install dependencies
+              run: |
+                  pip install -r requirements.txt
+            - name: Run attraction tests
+              run: |
+                  cd  main_app/api/test
+                  pytest -vv test_attraction.py
+            - name: Run member tests
+              run: |
+                  cd  main_app/api/test
+                  pytest -vv test_member.py

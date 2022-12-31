@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% block description %}<meta
+    name="description"
+    content="Taipei Trip 台北一日遊 | 預定行程"
+/>{% endblock %} {% block title %}<title>Taipei Trip 台北一日遊 | 預定行程</title>{% endblock %} {% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+{% endblock %} {% block main %}
+<hr class="separator1" />
+<main>
+    <section>
+        <!-- 圖片 -->
+        <div class="attractionImgBox">
+            <div id="leftArrow"></div>
+            <div id="rightArrow"></div>
+            <div class="dotBox"></div>
+            <div class="loadingBox">
+                <div class="lds-dual-ring"></div>
+                <div class="loadingNumber">0 %</div>
+            </div>
+        </div>
+        <!-- 預定行程 -->
+        <div class="attractionProfileBox">
+            <div class="attractionName"></div>
+            <div class="attractionCategory"></div>
+            <div>
+                <div>訂購導覽行程</div>
+                <div>以此景點為中心的一日行程，帶您探索城市角落故事</div>
+                <div>
+                    <div>選擇日期：</div>
+                    <input id="bookingDate" type="date" />
+                </div>
+                <div>
+                    <div>選擇時間：</div>
+                    <div>
+                        <input type="radio" id="morning" name="bookingTime" checked />
+                        <label for="morning">上半天</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="afternoon" name="bookingTime" />
+                        <label for="afternoon">下半天</label>
+                    </div>
+                </div>
+                <div>
+                    <div>導覽費用：</div>
+                    <div id="tourFee">新台幣 2000 元</div>
+                </div>
+                <div>
+                    <button id="bookingAttractionButton">
+                        <div>開始預約行程</div>
+                    </button>
+                    <div id="bookingMessage" class="bookingMessage none"></div>
+                    <a href="/booking" id="goBookingButton" class="goBookingButton none"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr class="separator2" />
+    <!-- Info -->
+    <article>
+        <section class="attractionDescription"></section>
+        <div>景點地址：</div>
+        <div class="attractionAddress"></div>
+        <div>交通方式：</div>
+        <div class="attractionTransport"></div>
+        <iframe
+            id="googleMap"
+            class="googleMap"
+            frameborder="0"
+            style="border: 0"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+    </article>
+</main>
+{% endblock %} {% block script %}
+<script rel="preload" as="script" type="module" src="/static/js/attraction.js"></script>
+<script type="module" src="/static/js/member.js"></script>
+{% endblock %}
