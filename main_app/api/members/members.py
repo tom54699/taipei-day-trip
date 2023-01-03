@@ -84,7 +84,7 @@ def get_member():
         return jsonify(error="true", message=f"{ex}"), 500
 
 
-jwt_redis_blocklist = redis.StrictRedis(host="redis", port=6379, db=0, decode_responses=True)
+jwt_redis_blocklist = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
 
 
 @jwt.token_in_blocklist_loader

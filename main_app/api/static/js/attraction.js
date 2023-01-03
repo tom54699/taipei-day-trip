@@ -211,7 +211,7 @@ bookingAttractionButton.addEventListener("click", async function enterBookingPag
                 number--
                 goBookingButton.textContent = number + " ...自動跳轉中"
                 if (number <= 0) {
-                    goBookingButton.textContent = "滾去付錢 🖕"
+                    goBookingButton.textContent = "準備付款"
                     clearInterval(timeout1)
                 }
             }, 1000)

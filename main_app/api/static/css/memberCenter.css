@@ -402,7 +402,7 @@ hr {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    z-index: 3000;
 }
 .popupHistoryOrder > div:nth-child(1) {
     width: 100%;
