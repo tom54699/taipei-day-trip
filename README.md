@@ -58,7 +58,7 @@ Test Card Number: 4761877684267695 / Date: 02/26 / CVV: 517
 - Flask-JWT-Extended
 
 # Architecture
-![structure](https://user-images.githubusercontent.com/108926305/210317038-553001d2-0088-4489-a669-bc8b9a123f85.jpg)
+![image](https://user-images.githubusercontent.com/108926305/210320644-d5a1197b-61c6-40e0-b290-b1430e8fa0d0.png)
 
 # Database Schema
 ![image](https://user-images.githubusercontent.com/108926305/210312094-7d199be4-adc1-4a10-83de-e0eaa2b9360c.png)
