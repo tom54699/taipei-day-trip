@@ -54,10 +54,10 @@ services:
         networks:
             - ttw-network
         environment:
-            - VIRTUAL_HOST=taipeitrip.serveirc.com
+            - VIRTUAL_HOST=taipeidaytrip.moonightowl.com
             - VIRTUAL_NETWORK=nginx-proxy
             - VIRTUAL_PORT=80
-            - LETSENCRYPT_HOST=taipeitrip.serveirc.com
+            - LETSENCRYPT_HOST=taipeidaytrip.moonightowl.com
             - LETSENCRYPT_EMAIL=tom54699@gmail.com
 
     db:
