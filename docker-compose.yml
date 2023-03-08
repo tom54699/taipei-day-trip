@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-    app:
+    main_app:
         build: ./main_app
-        container_name: app
+        container_name: main_app
         restart: always
         env_file: main_app/api/.env
         depends_on:
@@ -20,7 +20,7 @@ services:
             - "80:80"
             - "443:443"
         depends_on:
-            - app
+            - main_app
         networks:
             - ttw-network
 
