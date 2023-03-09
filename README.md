@@ -67,6 +67,7 @@ Test Card Number: 4761877684267695 / Date: 02/26 / CVV: 517
 -   Flask-sqlalchemy
 -   bcrypt
 -   Flask-JWT-Extended
+-   TapPay SDK
 
 # Architecture
 
