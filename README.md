@@ -2,6 +2,8 @@
 
 Taipei Day Trip is a website that allows you to discover and explore special attractions in Taipei city. In addition, the website offers a member center where you can view your past orders and schedule future trips. You can easily plan your trip to Taipei and make the most of your time in the city.
 
+🖥️ Website URL : https://taipeidaytrip.moonightowl.com/
+
 This is my first project in the WeHelp boot camp, and the website designed is base on this [figma prototype](https://www.figma.com/file/MZkYBH31H5gyLoZoZq116j/Taipei-Trip-%E5%8F%B0%E5%8C%97%E4%B8%80%E6%97%A5%E9%81%8A-2.0?t=klEcrdQ8vJZwSQ42-0) and [API documentation](https://app.swaggerhub.com/apis-docs/padax/taipei-day-trip/1.1.0).
 
 Test account and password: aniya@gmail.com / 123456
